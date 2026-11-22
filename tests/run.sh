@@ -89,7 +89,18 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 27 ] && ok "inventario de 27 agentes" || bad "inventario de 27 agentes ($N)"
+[ "$N" = 29 ] && ok "inventario de 29 agentes" || bad "inventario de 29 agentes ($N)"
+for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
+         .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
+         .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
+         .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md \
+         .kaizen/org/knowledge/business/CAPACIDADES.md \
+         docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md; do
+  [ -f "$REPO/$f" ] && ok "existe $f" || bad "falta $f"
+done
+( cd "$REPO" && scripts/kaizen-org research cumplimiento-panama "vigencia normativa" --url https://www.antai.gob.pa/ >/dev/null 2>&1 )
+[ "$(find "$REPO/.kaizen/org/research" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')" -gt 0 ] \
+  && ok "expediente de investigacion" || bad "expediente de investigacion"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
 ( cd "$REPO" && scripts/kaizen-org copy marketing marketing-visual --name "Marketing Visual" >/dev/null 2>&1 )
 [ -f "$REPO/.kaizen/org/prompts/marketing-visual.md" ] && ok "copy crea especialización" || bad "copy crea especialización"

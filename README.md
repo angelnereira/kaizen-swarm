@@ -1,6 +1,6 @@
 # kaizen-swarm
 
-Hogar operativo de una **organización de 27 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
+Hogar operativo de una **organización de 29 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, **cumplimiento normativo**, **capacidades tecnológicas/financieras/mercadeo**, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Los agentes de conocimiento **investigan en internet** normativa y estándares (ISO/NIST/AICPA/PCI) con fuentes oficiales y fecha de corte, y producen guías de implementación detalladas. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
 
 ## Capas
 
@@ -40,7 +40,8 @@ scripts/kaizen-swarm finalize 42 --publish      # push + PR (lo hace el orquesta
 Organización de agentes:
 
 ```bash
-scripts/kaizen-org list                          # inventario de 27 puestos
+scripts/kaizen-org list                          # inventario de 29 puestos
+scripts/kaizen-org research cumplimiento-panama "versión vigente de la Ley 81" --url https://www.antai.gob.pa/
 scripts/kaizen-org copy marketing marketing-visual --name "Marketing Visual"
 scripts/kaizen-org save marketing-visual         # sube versión + diario
 scripts/kaizen-org feed marketing-visual docs/kaizen/org/FORECAST.md
@@ -55,7 +56,9 @@ Instalación en otro repo:
 scripts/bootstrap /ruta/al/otro/repo
 ```
 
-Verificación completa: `bash tests/run.sh`, `scripts/kaizen check` y `scripts/kaizen-org check`. El alcance realista de los modelos actuales y la previsión de evolución están en `docs/kaizen/org/FORECAST.md`.
+Bases de conocimiento especializado: `.kaizen/org/knowledge/` (mapa normativo panameño, checklist, estándares internacionales, guía de implementación ISO, capacidades de negocio y `SOURCES.md`). El protocolo de investigación es `.kaizen/org/RESEARCH.md`.
+
+Verificación completa: `bash tests/run.sh`, `scripts/kaizen check` y `scripts/kaizen-org check`. El alcance realista de los modelos actuales y la previsión de evolución están en `docs/kaizen/org/FORECAST.md`. Los vetos de cumplimiento se regularon en `docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md`.
 
 ## Decisiones humanas pendientes
 

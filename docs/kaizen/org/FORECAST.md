@@ -16,7 +16,7 @@ Con **roles acotados, reglas explícitas, contratos escritos y evidencia verific
 
 ## 3. Por qué esta guía está diseñada así
 
-Ante esa realidad, el diseño no es "un superagente que dirige todo", sino **muchos agentes estrechos + orquestador + puertas**: 17 roles técnicos (`.kaizen/swarm/ROSTER.md`) y los puestos de negocio del inventario (`.kaizen/org/`). Cada uno tiene propósito, entradas, salidas, KPI y veto limitado. La proactividad es **proponer con evidencia**, no actuar sin control.
+Ante esa realidad, el diseño no es "un superagente que dirige todo", sino **muchos agentes estrechos + orquestador + puertas**: 17 roles técnicos (`.kaizen/swarm/ROSTER.md`) y los puestos de negocio del inventario (`.kaizen/org/`), incluidos `cumplimiento-panama` y `capacidades-negocio`. Cada uno tiene propósito, entradas, salidas, KPI y veto limitado. La proactividad es **proponer con evidencia**, no actuar sin control. La investigación en internet se gestiona con `.kaizen/org/RESEARCH.md` (fuentes oficiales, contraste y fecha de corte), porque un modelo sin cita ni fecha no es fiable para normativa ni estándares.
 
 ## 4. Camino de mejora continua de la IA (pronóstico acotado)
 

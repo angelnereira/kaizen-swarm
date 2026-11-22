@@ -8,9 +8,12 @@ La comunidad no es solo ingeniería: es una organización con dirección, negoci
 | --- | --- | --- |
 | **gerencia** | `gerente` (COO), `director-producto` | `gerente`: veto `resource`, administra procesos y escala; `director-producto`: prioriza valor |
 | **producto-negocio** | `analista-negocios` (Analista Oficial de Negocios), `marketing` (visualización/marketing insights), `finanzas-panamas`, `product-owner` | `analista-negocios`: veto `scope`; el resto propone con evidencia |
+| **cumplimiento** | `cumplimiento-panama` (normativa panameña + estándares internacionales, investigación en internet e implementación ISO) | veto `compliance` (ADR-0002) |
 | **tecnologia** | los 17 roles de `.kaizen/swarm/ROSTER.md`: `architect`, `product`, `innovation`, `dev1-core`…`dev5-glue`, `systems`, `lowlevel`, `ai`, `data-expert`, `infra`, `qa`, `security`, `dx`, `finops` | `architect` veto `architecture`; `security` veto `security`; `qa` veto `qa` |
 | **operaciones** | `soporte`, `runbooks` | proponen correcciones y documentan reversibilidad |
-| **conocimiento** | `knowledge-curator`, `researcher` | alimentan y sanean la base de conocimiento; no deciden por otros |
+| **conocimiento** | `knowledge-curator`, `researcher`, `capacidades-negocio` (tecnología, finanzas y mercadeo aplicados) | alimentan y sanean la base de conocimiento; investigan en internet; no deciden por otros |
+
+**Total: 29 agentes activos.** Los puestos con `research-web` en `tools` (`cumplimiento-panama`, `capacidades-negocio`, `researcher`) investigan en internet según `.kaizen/org/RESEARCH.md`: fuentes oficiales primero, contraste mínimo de dos fuentes, fecha de corte y expediente en `.kaizen/org/research/`. Sus resultados alimentan `.kaizen/org/knowledge/` y se regeneran con `kaizen-org digest`.
 
 ## Principios de la organización
 

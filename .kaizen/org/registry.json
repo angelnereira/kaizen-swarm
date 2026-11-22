@@ -33,6 +33,28 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "capacidades-negocio",
+    "name": "Especialista en Capacidades Tecnológicas, Financieras y de Mercadeo",
+    "department": "conocimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[issue.label:capacidades, research.required:*, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "cumplimiento-panama",
+    "name": "Especialista en Cumplimiento y Normativa (Panamá + Estándares Internacionales)",
+    "department": "cumplimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "compliance",
+    "triggers": "[issue.label:cumplimiento, research.required:*, knowledge.updated:*, schedule:weekly, regulatory.change:*]"
+  },
+  {
     "id": "data-expert",
     "name": "Experto en Datos",
     "department": "tecnologia",

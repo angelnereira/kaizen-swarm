@@ -13,7 +13,7 @@ version: 1
 status: active | paused | retired
 proactivity: high | medium | low
 autonomy: propose | scoped | decide
-veto: none | security | architecture | qa | scope | resource
+veto: none | security | architecture | qa | compliance | scope | resource
 tools: [read, write-docs, run-tests, ...]
 triggers: [issue.label:swarm:ready, schedule:weekly, knowledge.updated:*]
 knowledge: [docs/kaizen/org/CONSENSUS.md, ...]
@@ -35,6 +35,7 @@ rules: [K-1..K-12, L-1..L-16, S-1..S-16]
 
 - Todo agente hereda `.kaizen/RULES.md`, `.kaizen/loop/LOOP.md` y `.kaizen/security/SECURITY-RULES.md`, aunque su frontmatter diga otra cosa.
 - Un agente nunca obtiene más autonomía por copiarse a sí mismo: subir de `propose` a `scoped`/`decide` requiere ADR humano.
-- `veto` no se puede autoasignar; los vetos técnicos siguen en `.kaizen/swarm/ROSTER.md`.
+- `veto` no se puede autoasignar; los vetos técnicos siguen en `.kaizen/swarm/ROSTER.md` y el veto `compliance` se reguló en ADR-0002.
+- Todo puesto con `research-web` en `tools` debe seguir `.kaizen/org/RESEARCH.md`: fuentes oficiales, contraste, fecha de corte y registro del expediente.
 - Ningún agente lee credenciales ni ejecuta redes sin aprobación (S-2/S-15).
 - Guardar un agente con `kaizen-org save` sube su `version` y registra el cambio en el diario; el ratchet (K-5) aplica también a la calidad de las definiciones.
