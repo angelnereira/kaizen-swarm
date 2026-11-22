@@ -149,5 +149,19 @@
     ],
     "kpi": "100% de contratos con deliverable, acceptance y evidence.md; 0 integraciones sin verificacion",
     "model": "opencode/hy4-flash-free"
+  },
+  "opencode-local-config": {
+    "goal": "Configurar y validar OpenCode en esta máquina: agentes globales, permisos V2, MCP rea/railway, instrucciones del proyecto y push permitido en ramas kaizen/*",
+    "members": [
+      "facilitador-equipo",
+      "dx",
+      "security",
+      "verificador-evidencias",
+      "qa",
+      "architect",
+      "knowledge-curator"
+    ],
+    "kpi": "47 agentes globales, 0 reglas deny de git push, esquema V2 válido, MCP rea activo",
+    "model": "opencode/hy4-flash-free"
   }
 }

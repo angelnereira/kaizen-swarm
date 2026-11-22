@@ -1,0 +1,27 @@
+[
+  {
+    "task": "Verificar 47 agentes globales y permisos allow de git push",
+    "owner": "qa",
+    "status": "pending"
+  },
+  {
+    "task": "Validar opencode.json V2 (permissions) y denegaciones de secretos",
+    "owner": "security",
+    "status": "pending"
+  },
+  {
+    "task": "Verificar MCP rea y railway activos sin credenciales en repo",
+    "owner": "dx",
+    "status": "pending"
+  },
+  {
+    "task": "Confirmar instrucciones del proyecto y catálogo de roles vigente",
+    "owner": "knowledge-curator",
+    "status": "pending"
+  },
+  {
+    "task": "Emitir dictamen final de configuración local",
+    "owner": "verificador-evidencias",
+    "status": "pending"
+  }
+]
