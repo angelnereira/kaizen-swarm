@@ -23,3 +23,6 @@ worktrees/
 !.kaizen/swarm/issues/.gitkeep
 .kaizen/loop/state/*
 !.kaizen/loop/state/.gitkeep
+
+# Estado efimero de runtime y observabilidad
+.kaizen/team/runtime/

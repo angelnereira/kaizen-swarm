@@ -261,7 +261,7 @@ jq -e '.processes.api_reverse_engineering.stages.authorize.A | index("humano")' 
 ( cd "$REPO" && scripts/kaizen-observability check >/dev/null 2>&1 ) && ok "observabilidad check" || bad "observabilidad check"
 python3 -c "import json,sys; json.load(open('$REPO/observability/grafana/dashboards/kaizen-swarm.json')); print('ok')" >/dev/null 2>&1 \
   && ok "dashboard JSON valido" || bad "dashboard JSON valido"
-python3 -c "import sys; sys.path.insert(0,'$REPO/scripts'); import kaizen_exporter" >/dev/null 2>&1 \
+python3 -c "import importlib.util; s=importlib.util.spec_from_file_location('kzexp','$REPO/scripts/kaizen-exporter.py'); m=importlib.util.module_from_spec(s); s.loader.exec_module(m)" >/dev/null 2>&1 \
   && ok "exporter importable" || bad "exporter importable"
 jq -e '.processes.computer_use.stages.authorize.A | index("humano")' "$REPO/.kaizen/gov/governance.json" >/dev/null 2>&1 \
   && ok "computer_use con humano" || bad "computer_use con humano"

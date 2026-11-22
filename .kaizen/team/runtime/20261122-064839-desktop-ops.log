@@ -1,4 +1,0 @@
-2026-11-22T06:48:39Z ciclo equipo=desktop-ops objetivo=Control visual gobernado: operar la computadora solo con autorizacion humana y verificacion por captura kpi=0 acciones sin captura y recaptura; 0 secretos expuestos
-agente=computer-operator rc=1
-depool-alpha-free
-[91m[1mError: [0mFree usage limit reached. Connect a provider or subscribe to OpenCode Go to keep going, or switch models.

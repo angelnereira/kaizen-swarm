@@ -1,2 +1,0 @@
-[kaizen-exporter] 127.0.0.1:9101 /metrics /health
-[kaizen-exporter] GET /metrics

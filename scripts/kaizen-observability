@@ -46,7 +46,7 @@ cmd_check() {
 cmd_stack() {
   command -v docker >/dev/null 2>&1 || { klog "docker no disponible"; return 2; }
   docker compose -f "$ROOT/observability/docker-compose.yml" up -d
-  klog "Grafana en http://localhost:$KO_GRAFANA_PORT (admin/admin)"
+  klog "Grafana en http://localhost:$KO_GRAFANA_PORT (credenciales por defecto en docker-compose.yml)"
 }
 
 case "${1:-status}" in
