@@ -1,6 +1,6 @@
 # kaizen-swarm
 
-Hogar operativo de una **organización de 29 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, **cumplimiento normativo**, **capacidades tecnológicas/financieras/mercadeo**, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Los agentes de conocimiento **investigan en internet** normativa y estándares (ISO/NIST/AICPA/PCI) con fuentes oficiales y fecha de corte, y producen guías de implementación detalladas. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
+Hogar operativo de una **organización de 32 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, **cumplimiento normativo**, **capacidades tecnológicas/financieras/mercadeo**, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Los agentes de conocimiento **investigan en internet** normativa y estándares (ISO/NIST/AICPA/PCI) con fuentes oficiales y fecha de corte, y producen guías de implementación detalladas. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
 
 ## Capas
 
@@ -11,6 +11,7 @@ Hogar operativo de una **organización de 29 agentes** (17 roles técnicos + ger
 | Loop autónomo | `.kaizen/loop/LOOP.md` (L-1..L-15) | `scripts/kaizen-loop` |
 | Comunidad | `.kaizen/swarm/ROLES.md`, `PROTOCOL.md` | `scripts/kaizen-swarm` |
 | Organización | `.kaizen/org/ORGANIZATION.md`, `AGENT_SCHEMA.md`, `CONSENSUS.md` | `scripts/kaizen-org` |
+| Equipo proactivo | `.kaizen/team/TEAM.md`, `COMUNICACION.md`, `FLUJOS.md`, `EVIDENCIA.md` | `scripts/kaizen-team` |
 
 Arranca en **nivel 3** (ADR-0001) con PAUSA retirada. Los workflows programados están condicionados a `vars.KAIZEN_LOOP_ENABLED == '1'`: el responsable añade `KAIZEN_TOKEN` y la clave del modelo antes de activarlos. Ningún agente recibe secretos (S-2).
 
@@ -40,7 +41,7 @@ scripts/kaizen-swarm finalize 42 --publish      # push + PR (lo hace el orquesta
 Organización de agentes:
 
 ```bash
-scripts/kaizen-org list                          # inventario de 29 puestos
+scripts/kaizen-org list                          # inventario de 32 puestos
 scripts/kaizen-org research cumplimiento-panama "versión vigente de la Ley 81" --url https://www.antai.gob.pa/
 scripts/kaizen-org copy marketing marketing-visual --name "Marketing Visual"
 scripts/kaizen-org save marketing-visual         # sube versión + diario
@@ -56,7 +57,9 @@ Instalación en otro repo:
 scripts/bootstrap /ruta/al/otro/repo
 ```
 
-Bases de conocimiento especializado: `.kaizen/org/knowledge/` (mapa normativo panameño, checklist, estándares internacionales, guía de implementación ISO, capacidades de negocio y `SOURCES.md`). El protocolo de investigación es `.kaizen/org/RESEARCH.md`.
+Equipo proactivo: `scripts/kaizen-team init <slug> --goal "..." --kpi "..."`, luego `standup`, `assign`, `handoff`, `ack`, `sync`, `decide --sources PA-001,ISO-001`, `verify`, `advance`, `retro`. Los proyectos avanzan por estados con puertas y ninguna decisión se da por tomada sin fuentes verificadas en `SOURCES.md` (Gaceta Oficial incluida).
+
+Bases de conocimiento especializado: `.kaizen/org/knowledge/` (mapa normativo panameño, contextos de negocio/tecnología, reglas REG-01..15, rutas de Gaceta Oficial, checklist, estándares internacionales, guía de implementación ISO, capacidades de negocio y `SOURCES.md`). El protocolo de investigación es `.kaizen/org/RESEARCH.md`.
 
 Verificación completa: `bash tests/run.sh`, `scripts/kaizen check` y `scripts/kaizen-org check`. El alcance realista de los modelos actuales y la previsión de evolución están en `docs/kaizen/org/FORECAST.md`. Los vetos de cumplimiento se regularon en `docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md`.
 

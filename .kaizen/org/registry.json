@@ -143,6 +143,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "facilitador-equipo",
+    "name": "Facilitador de Equipo",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "resource",
+    "triggers": "[project.created, schedule:daily, knowledge.updated:*, handoff.pending:*]"
+  },
+  {
     "id": "finanzas-panamas",
     "name": "Analista Financiero Panama",
     "department": "producto-negocio",
@@ -231,6 +242,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "monitor-gaceta",
+    "name": "Monitor de Gaceta Oficial y Normativa Panameña",
+    "department": "cumplimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[schedule:daily, regulatory.change:*, research.required:*]"
+  },
+  {
     "id": "product",
     "name": "Analista de Producto y Alcance",
     "department": "tecnologia",
@@ -317,5 +339,16 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "verificador-evidencias",
+    "name": "Verificador de Evidencias",
+    "department": "conocimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "none",
+    "triggers": "[decision.proposed, source.stale, schedule:weekly, regulatory.change:*]"
   }
 ]

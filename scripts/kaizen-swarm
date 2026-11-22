@@ -239,7 +239,8 @@ cmd_check() {
            .kaizen/loop/LOOP.md .kaizen/loop/loop.env \
            .kaizen/swarm/swarm.env .kaizen/swarm/ROLES.md .kaizen/swarm/PROTOCOL.md .kaizen/swarm/ROSTER.md \
            .kaizen/org/org.env .kaizen/org/ORGANIZATION.md .kaizen/org/AGENT_SCHEMA.md .kaizen/org/CONSENSUS.md \
-           docs/kaizen/org/FORECAST.md; do
+           docs/kaizen/org/FORECAST.md \
+           .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md; do
     [ -f "$KSW_ROOT/$f" ] || fail "falta $f"
   done
   for f in scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/bootstrap; do
@@ -251,6 +252,7 @@ cmd_check() {
   command -v jq >/dev/null 2>&1 || fail "jq requerido para leases/ownership"
   [ -f "$KSW_ROOT/docs/kaizen/adr/0001-autonomia-nivel-3.md" ] || fail "falta ADR-0001 (autonomia nivel 3)"
   "$KSW_ROOT/scripts/kaizen-org" check >/dev/null 2>&1 || fail "kaizen-org check en rojo"
+  "$KSW_ROOT/scripts/kaizen-team" check >/dev/null 2>&1 || fail "kaizen-team check en rojo"
   [ $FAIL = 0 ] || { kfail "kaizen-swarm check: FALLO"; return 1; }
   klog "kaizen-swarm check: todo en verde"
 }

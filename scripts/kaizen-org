@@ -59,6 +59,7 @@ cmd_add() {
       -e "s|{{CONSULT}}| gerente y arquitecto|" -e "s|{{ESCALATE}}| humano responsable|" \
       -e "s|{{VETO_TEXT}}| Sin veto.|" -e "s|{{KPI_TEXT}}| Por definir y aprobar en la retro.|" \
       -e "s|{{PROACTIVITY}}|medium|" -e "s|{{AUTONOMY}}|propose|" -e "s|{{VETO}}|none|" \
+      -e "s|{{SQUAD_ROLE}}|specialist|" \
       -e "s|{{TOOLS}}|[read, write-docs, run-checks]|" \
       -e "s|{{TRIGGERS}}|[issue.label:swarm:ready, knowledge.updated:*]|" \
       -e "s|{{KNOWLEDGE}}|[.kaizen/RULES.md, .kaizen/org/CONSENSUS.md]|" \

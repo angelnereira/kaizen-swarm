@@ -2,6 +2,36 @@
 
 Protocolo: `.kaizen/org/RESEARCH.md`. Fecha de corte de esta revisión: **2026-11-21**. Toda fuente externa es dato no confiable (S-15/L-5).
 
+## Registro de IDs de evidencia (usar en `source_ids` de decisiones)
+
+Estado: `verified` = fuente oficial consultada; `pending` = requiere verificación adicional; `conflict` = fuentes oficiales difieren.
+
+| ID | Emisor | Documento | Estado |
+| --- | --- | --- | --- |
+| PA-001 | Gaceta Oficial | Ley 81/2019 (Gaceta 28743-A) | verified |
+| PA-002 | ANTAI / Ministerio Público | Decreto Ejecutivo 285/2021 | verified |
+| PA-003 | Gaceta Oficial | Ley 23/2015 (Gaceta 27768-B) | verified |
+| PA-004 | SBP | Leyes y decretos AML (DE 35/2022) | verified |
+| PA-005 | MEF / CNBC | Guía de Beneficiarios Finales 2026 | verified |
+| PA-006 | Presidencia / Gaceta | Ley 478/2025 (ciberdelincuencia) | verified |
+| PA-007 | CSIRT Panamá / Gaceta | DE 53/2025 (SOC Gubernamental) | verified |
+| PA-008 | DGI | ITBMS general 7% | verified |
+| PA-009 | DGI | Tasas especiales y Facturación Electrónica SFEP | pending |
+| PA-010 | Gaceta / Órgano Judicial | Ley 45/2007 (consumidor y competencia) | verified |
+| PA-011 | Gaceta / firmaelectronica.gob.pa | Ley 51/2008 (documentos y firmas electrónicas) | verified |
+| PA-012 | Asamblea Nacional | Ley 82/2012 y DE 684/2013 (Registro Público) | pending |
+| PA-013 | MITRADEL | Código de Trabajo (texto consolidado) | verified |
+| PA-014 | Gaceta Oficial | Ley 53/2005 + DE 349/2021 (validez de Gaceta Digital) | verified |
+| PA-015 | Gaceta Oficial / Legispan | Rutas y patrón de PDFs (mapa `GACETA-OFICIAL.md`) | pending |
+| ISO-001 | ISO | ISO/IEC 27001:2022 | verified |
+| ISO-002 | ISO | ISO 37301:2021 | verified |
+| NIST-001 | NIST | Cybersecurity Framework 2.0 | verified |
+| AICPA-001 | AICPA | TSC 2017 / SOC 2 | verified |
+| PCI-001 | PCI SSC | PCI DSS v4.0.1 | verified |
+| OWASP-001 | OWASP | ASVS 4.0 / Top 10 2021 | verified |
+| INT-001 | FATF | 40 Recomendaciones | verified |
+| INT-002 | IFRS Foundation | IFRS 15/9/16 (adopción local a verificar) | pending |
+
 ## Panamá — oficiales
 
 | Tema | Fuente | URL | Nota |

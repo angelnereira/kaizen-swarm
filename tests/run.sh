@@ -89,7 +89,7 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 29 ] && ok "inventario de 29 agentes" || bad "inventario de 29 agentes ($N)"
+[ "$N" = 32 ] && ok "inventario de 32 agentes" || bad "inventario de 32 agentes ($N)"
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
@@ -97,8 +97,13 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          .kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md \
          .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md \
          .kaizen/org/knowledge/business/CAPACIDADES.md \
+         .kaizen/org/knowledge/panama-compliance/GACETA-OFICIAL.md \
+         .kaizen/org/prompts/facilitador-equipo.md .kaizen/org/prompts/verificador-evidencias.md \
+         .kaizen/org/prompts/monitor-gaceta.md \
+         .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md \
          docs/kaizen/org/CATALOGO-AGENTES.md .kaizen/org/catalog.json \
-         docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md; do
+         docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
+         docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md; do
   [ -f "$REPO/$f" ] && ok "existe $f" || bad "falta $f"
 done
 ( cd "$REPO" && scripts/kaizen-org research cumplimiento-panama "vigencia normativa" --url https://www.antai.gob.pa/ >/dev/null 2>&1 )
@@ -106,7 +111,7 @@ done
   && ok "expediente de investigacion" || bad "expediente de investigacion"
 ( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
 C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
-[ "$C" = 29 ] && ok "catalogo consistente (29)" || bad "catalogo consistente ($C)"
+[ "$C" = 32 ] && ok "catalogo consistente (32)" || bad "catalogo consistente ($C)"
 grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
   && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
@@ -130,6 +135,26 @@ DG="$REPO/.kaizen/org/knowledge/digests/marketing-visual.md"
 ( cd "$REPO" && scripts/kaizen-org disable marketing-visual >/dev/null 2>&1 )
 S=$(sed -n 's/^status: //p' "$REPO/.kaizen/org/prompts/marketing-visual.md" | head -1)
 [ "$S" = paused ] && ok "disable pausa agente" || bad "disable pausa agente"
+
+# equipo: flujo completo con evidencia verificada y bloqueo sin fuentes
+( cd "$REPO" && scripts/kaizen-team check >/dev/null 2>&1 ) && ok "kaizen-team check" || bad "kaizen-team check"
+( cd "$REPO" && scripts/kaizen-team init demo --goal "Probar equipo" --kpi "Decisiones verificadas" >/dev/null 2>&1 )
+ST="$(jq -r .stage "$REPO/.kaizen/team/projects/demo/state.json" 2>/dev/null || echo 0)"
+[ "$ST" = intake ] && ok "team init" || bad "team init ($ST)"
+( cd "$REPO" && scripts/kaizen-team standup demo >/dev/null 2>&1 )
+[ "$(find "$REPO/.kaizen/team/projects/demo/standups" -name '*.md' | wc -l | tr -d ' ')" -gt 0 ] \
+  && ok "standup" || bad "standup"
+( cd "$REPO" && scripts/kaizen-team assign demo "Revisar norma" cumplimiento-panama >/dev/null 2>&1 )
+[ "$(jq 'length' "$REPO/.kaizen/team/projects/demo/tasks.json" 2>/dev/null || echo 0)" -ge 1 ] \
+  && ok "assign" || bad "assign"
+( cd "$REPO" && scripts/kaizen-team decide demo "Sin evidencia" >/dev/null 2>&1 ) \
+  && bad "decision sin fuentes debe bloquear" || ok "decision sin fuentes bloquea"
+BL=$(grep -l '^status: blocked$' "$REPO"/.kaizen/team/projects/demo/decisions/*.md 2>/dev/null | wc -l | tr -d ' ')
+[ "$BL" -ge 1 ] && ok "decision marcada blocked" || bad "decision marcada blocked"
+( cd "$REPO" && scripts/kaizen-team decide demo "Con evidencia" --sources PA-001,ISO-001 >/dev/null 2>&1 )
+( cd "$REPO" && scripts/kaizen-team verify demo >/dev/null 2>&1 ) && ok "verify con fuentes" || bad "verify con fuentes"
+( cd "$REPO" && scripts/kaizen-team sync demo >/dev/null 2>&1 ) && ok "sync" || bad "sync"
+( cd "$REPO" && scripts/kaizen-team retro demo >/dev/null 2>&1 ) && ok "retro" || bad "retro"
 
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]

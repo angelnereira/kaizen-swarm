@@ -18,7 +18,10 @@ tools: [read, write-docs, run-tests, ...]
 triggers: [issue.label:swarm:ready, schedule:weekly, knowledge.updated:*]
 knowledge: [docs/kaizen/org/CONSENSUS.md, ...]
 kpis: [criterio verificable 1, criterio verificable 2]
-rules: [K-1..K-12, L-1..L-16, S-1..S-16]
+rules: [K-1..K-14, L-1..L-17, S-1..S-16]
+channels: [broadcast, direct, review, decision]   # alert solo para seguridad/cumplimiento
+squad_role: facilitator | evidence | monitor | architect | reviewer | builder | specialist
+decision_authority: propose | scoped | decide
 ---
 ```
 
@@ -30,6 +33,7 @@ rules: [K-1..K-12, L-1..L-16, S-1..S-16]
 4. `## Comportamiento proactivo` — disparadores, qué propone sin que se lo pidan, y límites.
 5. `## Decisiones y consenso` — qué puede decidir, a quién consulta, cuándo escala.
 6. `## Evidencia y KPI` — cómo se demuestra que funcionó (comandos, métricas, decisiones).
+7. `## Colaboración` — canales, sobre del mensaje, handoffs con ack, verdad compartida y proactividad acotada (`.kaizen/team/COMUNICACION.md`).
 
 ## Reglas duras
 
