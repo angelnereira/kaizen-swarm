@@ -137,6 +137,55 @@ cmd_digest() {
   done
 }
 
+cmd_catalog() {
+  rebuild_registry
+  local out="$ROOT/docs/kaizen/org/CATALOGO-AGENTES.md" f id purpose
+  mkdir -p "$(dirname "$out")"
+  {
+    printf '# Catálogo consistente de agentes\n\n'
+    printf 'Fuente única: `.kaizen/org/prompts/<id>.md`. Generado por `scripts/kaizen-org catalog`; no editar a mano.\n\n'
+    printf 'Registro: `%s` | Fecha: %s | Total: %s agentes\n\n' "$KO_REGISTRY" "$(date -u +%Y-%m-%d)" "$(jq 'length' "$REG")"
+    printf '## Resumen por departamento\n\n| Departamento | Agentes | Activos | Veto |\n| --- | ---: | ---: | --- |\n'
+    jq -r 'group_by(.department)[] | [.[0].department, (length|tostring), ([.[]|select(.status=="active")]|length|tostring), ([.[].veto]|unique|join(", "))] | @tsv' "$REG" \
+      | awk -F'\t' '{printf "| %s | %s | %s | %s |\n",$1,$2,$3,$4}'
+    printf '\n## Inventario\n\n'
+    printf '| ID | Nombre | Departamento | Estado | Proactividad | Autonomía | Veto | Versión | Herramientas | Disparadores | Conocimiento | KPI |\n'
+    printf '| --- | --- | --- | --- | --- | --- | --- | ---: | --- | --- | ---: | --- |\n'
+    while IFS= read -r f; do
+      id="$(fval "$f" id)"; [ -n "$id" ] || continue
+      local name dept st pro auto veto ver tools trig know kpi
+      name="$(fval "$f" name)"; dept="$(fval "$f" department)"; st="$(fval "$f" status)"
+      pro="$(fval "$f" proactivity)"; auto="$(fval "$f" autonomy)"; veto="$(fval "$f" veto)"
+      ver="$(fval "$f" version)"; tools="$(fval "$f" tools)"; trig="$(fval "$f" triggers)"
+      know="$(fval "$f" knowledge | tr ',' '\n' | grep -c . || :)"; kpi="$(fval "$f" kpis)"
+      printf '| `%s` | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |\n' \
+        "$id" "$name" "$dept" "$st" "$pro" "$auto" "$veto" "$ver" "$tools" "$trig" "$know" "$kpi"
+    done < <(files)
+    printf '\n## Fichas por departamento\n\n'
+    local d
+    while IFS= read -r d; do
+      [ -z "$d" ] && continue
+      printf '### %s\n\n' "$d"
+      while IFS= read -r f; do
+        [ "$(fval "$f" department)" = "$d" ] || continue
+        purpose="$(sed -n '/^## Propósito$/,/^## /p' "$f" | sed -n '2p')"
+        printf -- '- **`%s`** — %s. Propósito: %s. Reglas: %s.\n' \
+          "$(fval "$f" id)" "$(fval "$f" name)" "$purpose" "$(fval "$f" rules)"
+      done < <(files)
+      printf '\n'
+    done < <(jq -r '.[].department' "$REG" | sort -u)
+    printf '## Reglas del catálogo\n\n'
+    printf '1. El catálogo se **genera**, nunca se edita a mano.\n'
+    printf '2. `id` único; campos obligatorios validados por `kaizen-org check`.\n'
+    printf '3. Copiar un agente (`kaizen-org copy`) crea una ficha nueva; el original no se modifica.\n'
+    printf '4. Cambiar autonomía o veto requiere ADR humano, no edición del catálogo.\n'
+    printf '5. `enable|disable` y `save` se reflejan aquí tras `catalog`.\n'
+  } > "$out"
+  jq -c '{generated_from:"agent definitions", count:length, by_department:(group_by(.department)|map({department:.[0].department,count:length})), agents:map({id,name,department,status,autonomy,veto,version})}' "$REG" \
+    > "$ROOT/.kaizen/org/catalog.json"
+  klog "catálogo generado: $out (+ .kaizen/org/catalog.json)"
+}
+
 cmd_research() {
   local id="${1:?uso: research <id> <tema> [--url URL]}" topic="$2"; shift 2
   local url=""; while [ $# -gt 0 ]; do case "$1" in --url) url="$2"; shift;; esac; shift; done
@@ -224,6 +273,12 @@ cmd_check() {
   local tmp; tmp="$(mktemp)"; rebuild_registry; cp "$REG" "$tmp"; rebuild_registry
   cmp -s "$tmp" "$REG" || kfail "registry no idempotente"
   rm -f "$tmp"
+  [ -f "$ROOT/docs/kaizen/org/CATALOGO-AGENTES.md" ] || kfail "falta el catálogo (kaizen-org catalog)"
+  [ -f "$ROOT/.kaizen/org/catalog.json" ] || kfail "falta catalog.json"
+  if [ -f "$ROOT/.kaizen/org/catalog.json" ]; then
+    local cn rn; cn="$(jq -r '.count' "$ROOT/.kaizen/org/catalog.json" 2>/dev/null)"; rn="$(jq 'length' "$REG")"
+    [ "$cn" = "$rn" ] || kfail "catálogo desc.sincronizado ($cn vs $rn)"
+  fi
   [ $FAIL = 0 ] || { kfail "kaizen-org check: FALLO"; return 1; }
   klog "kaizen-org check: todo en verde"
 }
@@ -236,7 +291,7 @@ case "${1:-help}" in
   feed) shift; cmd_feed "$@";; digest) shift; cmd_digest "$@";;
   pulse) cmd_pulse;; decide) shift; cmd_decide "$@";;
   research) shift; cmd_research "$@";;
-  status) cmd_status;; check) cmd_check;; registry) rebuild_registry;;
+  status) cmd_status;; check) cmd_check;; registry) rebuild_registry;; catalog) cmd_catalog;;
   *) cat <<'EOF'
 kaizen-org <comando>
   list [--dept D] [--status S]   inventario de agentes
@@ -250,6 +305,7 @@ kaizen-org <comando>
   pulse                          emite propuestas proactivas a decisions/inbox/
   research <id> <tema> [--url U] abre expediente de investigacion en internet (S-15)
   decide <tema> [--owner ID]     abre decision con revision y protocolo de consenso
+  catalog                        genera CATALOGO-AGENTES.md y catalog.json desde las definiciones
   status | check | registry      estado, validacion y regeneracion del inventario
 EOF
   ;;

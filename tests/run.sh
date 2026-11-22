@@ -93,14 +93,22 @@ N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr 
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
+         .kaizen/org/knowledge/panama-compliance/CONTEXTOS.md \
+         .kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md \
          .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md \
          .kaizen/org/knowledge/business/CAPACIDADES.md \
+         docs/kaizen/org/CATALOGO-AGENTES.md .kaizen/org/catalog.json \
          docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md; do
   [ -f "$REPO/$f" ] && ok "existe $f" || bad "falta $f"
 done
 ( cd "$REPO" && scripts/kaizen-org research cumplimiento-panama "vigencia normativa" --url https://www.antai.gob.pa/ >/dev/null 2>&1 )
 [ "$(find "$REPO/.kaizen/org/research" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')" -gt 0 ] \
   && ok "expediente de investigacion" || bad "expediente de investigacion"
+( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
+C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
+[ "$C" = 29 ] && ok "catalogo consistente (29)" || bad "catalogo consistente ($C)"
+grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
+  && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
 ( cd "$REPO" && scripts/kaizen-org copy marketing marketing-visual --name "Marketing Visual" >/dev/null 2>&1 )
 [ -f "$REPO/.kaizen/org/prompts/marketing-visual.md" ] && ok "copy crea especialización" || bad "copy crea especialización"

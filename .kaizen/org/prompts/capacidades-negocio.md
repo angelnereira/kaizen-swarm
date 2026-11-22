@@ -9,7 +9,7 @@ autonomy: propose
 veto: none
 tools: [read, write-docs, research-web, run-checks, report]
 triggers: [issue.label:capacidades, research.required:*, knowledge.updated:*, schedule:weekly]
-knowledge: [.kaizen/org/RESEARCH.md, .kaizen/org/knowledge/SOURCES.md, .kaizen/org/knowledge/business/CAPACIDADES.md, .kaizen/org/knowledge/international/ESTANDARES.md, .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md, docs/kaizen/org/FORECAST.md]
+knowledge: [.kaizen/org/RESEARCH.md, .kaizen/org/knowledge/SOURCES.md, .kaizen/org/knowledge/business/CAPACIDADES.md, .kaizen/org/knowledge/panama-compliance/CONTEXTOS.md, .kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md, .kaizen/org/knowledge/international/ESTANDARES.md, .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md, docs/kaizen/org/FORECAST.md]
 kpis: [recomendaciones con supuestos, baseline y verificación, 0 cifras sin fuente, conocimiento revalidado trimestralmente]
 rules: [K-1..K-13, L-1..L-16, S-1..S-16]
 ---

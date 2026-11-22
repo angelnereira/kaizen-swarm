@@ -14,6 +14,11 @@ Protocolo: `.kaizen/org/RESEARCH.md`. Fecha de corte de esta revisión: **2026-1
 | Ciberdelincuencia (Ley 478/2025) | Presidencia | https://www.presidencia.gob.pa/publicacion/presidente-mulino-sanciona-leyes-que-fortalecen-el-marco-legal-contra-la-ciberdelincuencia | Sancionada 2025-08-04 |
 | CSIRT y SOC | CSIRT Panamá / Gaceta 30524-B | https://cert.pa | DE 53 de 2025 crea SOC Gubernamental |
 | ITBMS | DGI | https://dgi.mef.gob.pa/itbms/Itbms | Tasa general 7%; verificar especiales |
+| Protección al consumidor y competencia (Ley 45/2007) | Gaceta 25914 / Órgano Judicial | https://gacetaoficial.gob.pa/pdfTemp/25914/7277.pdf | Texto único consolidado; autoridad APCDC |
+| Firma electrónica y comercio electrónico (Ley 51/2008) | Gaceta 26090 / firmaelectronica.gob.pa | https://gacetaoficial.gob.pa/pdfTemp/26090/GacetaNo_26090_20080724.pdf | Reglamentada por DE 40/2009; Ley 82/2012 y DE 684/2013 (Registro Público) |
+| Código de Trabajo | MITRADEL | https://www.mitradel.gob.pa/trabajadores/codigo-detrabajo/ | Texto consolidado; verificar modificaciones |
+| Consulta normativa oficial | Legispan / Infojurídica | https://legispan.asamblea.gob.pa | Texto íntegro, vigencia y modificaciones |
+| Validez de Gaceta Oficial digital | Ley 53/2005 + DE 349/2021 | https://www.gacetaoficial.gob.pa | Fuente de publicación con validez jurídica |
 
 ## Internacionales — oficiales
 

@@ -21,14 +21,15 @@ for f in \
   .kaizen/loop/LOOP.md .kaizen/loop/loop.env \
   .kaizen/swarm/swarm.env .kaizen/swarm/ROLES.md .kaizen/swarm/PROTOCOL.md .kaizen/swarm/ROSTER.md \
   .kaizen/org/org.env .kaizen/org/ORGANIZATION.md .kaizen/org/AGENT_SCHEMA.md .kaizen/org/CONSENSUS.md .kaizen/org/RESEARCH.md \
-  .kaizen/org/registry.json .kaizen/org/knowledge/manifest.jsonl .kaizen/org/knowledge/SOURCES.md \
+  .kaizen/org/registry.json .kaizen/org/catalog.json .kaizen/org/knowledge/manifest.jsonl .kaizen/org/knowledge/SOURCES.md \
   .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md .kaizen/org/knowledge/panama-compliance/CHECKLIST.md \
+  .kaizen/org/knowledge/panama-compliance/CONTEXTOS.md .kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md \
   .kaizen/org/knowledge/international/ESTANDARES.md .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md \
   .kaizen/org/knowledge/business/CAPACIDADES.md \
   .kaizen/org/prompts/_template.md .kaizen/org/prompts/gerente.md .kaizen/org/prompts/analista-negocios.md \
   .kaizen/org/prompts/marketing.md .kaizen/org/prompts/finanzas-panamas.md .kaizen/org/prompts/knowledge-curator.md \
   .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
-  docs/kaizen/org/FORECAST.md \
+  docs/kaizen/org/FORECAST.md docs/kaizen/org/CATALOGO-AGENTES.md \
   docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
