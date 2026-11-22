@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# kaizen-welcome: camping de bienvenida a El Presidente con reintento hasta confirmación.
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
+[ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
+S="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/whatsapp"
+mkdir -p "$S"
+STATE="$S/welcome-state.json"
+TEMPLATE="welcome_kaizen_v1"
+: "${KW_INTERVAL_SEC:=120}" "${KW_MAX_ATTEMPTS:=720}"
+klog() { printf '[kaizen-welcome] %s\n' "$*"; }
+
+state_init() {
+  [ -f "$STATE" ] || jq -n --arg ts "$(date -u +%FT%TZ)" --arg t "$TEMPLATE" \
+    '{status:"pending",attempts:0,created:$ts,template:$t,confirmed_at:null}' > "$STATE"
+}
+
+cmd_status() { state_init; jq -c . "$STATE"; }
+
+cmd_send() {
+  state_init
+  local st; st="$(jq -r .status "$STATE")"
+  [ "$st" = confirmed ] && { klog "ya confirmado: no se reenvía"; return 0; }
+  if [ -z "${!KN_WEBHOOK_URL_VAR:-}" ]; then
+    jq --arg ts "$(date -u +%FT%TZ)" '.status="blocked" | .last_attempt=$ts | .reason="webhook no configurado"' "$STATE" > "$STATE.tmp" && mv "$STATE.tmp" "$STATE"
+    klog "CANAL NO CONFIGURADO: no se inventa envío; se reporta en outbox y se reintentará"
+    cat > "$ROOT/.kaizen/loop/outbox/whatsapp-sin-webhook.md" <<'EOF'
+kind: failure
+title: No se puede enviar la bienvenida: webhook de WhatsApp no configurado
+fingerprint: whatsapp-sin-webhook
+---
+## Qué pasó
+La campaña de bienvenida no pudo enviarse. `KAZEN_WEBHOOK_URL` no está configurada en la máquina local; el skill `kaizen-whatsapp` exige Cloud API oficial vía BSP/n8n (ADR-0025).
+
+## Impacto
+El equipo NO se detiene: la campaña reintentará hasta que El Presidente confirme recepción.
+
+## Evidencia
+scripts/kaizen-welcome status; sin secretos ni número completo.
+
+## Propuesta
+Configurar en el entorno local `KAZEN_WEBHOOK_URL` (n8n → BSP) y `KAZEN_WEBHOOK_SECRET`; luego `kaizen-welcome watch`.
+EOF
+    return 2
+  fi
+  local tpl="$ROOT/.kaizen/team/whatsapp/templates/$TEMPLATE.json"
+  [ -f "$tpl" ] || { klog "plantilla no existe: $TEMPLATE"; return 2; }
+  local payload; payload="$(jq -cn --arg t "$TEMPLATE" --arg body "$(jq -r .body "$tpl")" --arg ts "$(date -u +%FT%TZ)" \
+    '{type:"whatsapp_welcome",template:$t,text:$body,ts:$ts,source:"kaizen-swarm"}')"
+  "$ROOT/scripts/kaizen-notify" send --title "Bienvenido a Kaizen" --body "$(jq -r .body "$tpl")" --level info >/dev/null 2>&1 || : #25
+  curl -sS --max-time 15 -H 'Content-Type: application/json' -d "$payload" "${!KN_WEBHOOK_URL_VAR}" >/dev/null 2>&1 || : #25
+  local a; a="$(jq -r .attempts "$STATE")"; a=$((a + 1))
+  jq --argjson a "$a" --arg ts "$(date -u +%FT%TZ)" '.status="sent_pending_confirmation" | .attempts=$a | .last_attempt=$ts | .reason="webhook enviado; esperando confirmación"' "$STATE" > "$STATE.tmp" && mv "$STATE.tmp" "$STATE"
+  klog "intento $a enviado por webhook (pendiente de confirmación)"
+}
+
+cmd_confirm() {
+  state_init
+  jq --arg ts "$(date -u +%FT%TZ)" '.status="confirmed" | .confirmed_at=$ts' "$STATE" > "$STATE.tmp" && mv "$STATE.tmp" "$STATE"
+  klog "confirmado por El Presidente: la campaña termina"
+}
+
+cmd_watch() {
+  local i=0
+  while [ $i -lt "$KW_MAX_ATTEMPTS" ]; do
+    local st; st="$(jq -r .status "$STATE")"
+    [ "$st" = confirmed ] && { klog "confirmado: se detiene el equipo de bienvenida"; return 0; }
+    cmd_send || : #25
+    i=$((i + 1))
+    sleep "$KW_INTERVAL_SEC"
+  done
+  klog "presupuesto agotado ($KW_MAX_ATTEMPTS intentos): escalar a humano"
+}
+
+case "${1:-status}" in
+  status) cmd_status;;
+  send) shift; TEMPLATE="welcome_kaizen_v1"; cmd_send;;
+  confirm) cmd_confirm;;
+  watch) cmd_watch;;
+  *) echo "uso: kaizen-welcome status|send [template]|confirm|watch";;
+esac

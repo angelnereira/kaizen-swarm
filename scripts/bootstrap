@@ -55,7 +55,7 @@ for f in \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
   .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
   .kaizen/observability/observability.env .kaizen/finops/tokens.env .kaizen/knowledge/sources.json \
-  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge scripts/kaizen-workspace scripts/kaizen-peer scripts/kaizen-remote scripts/kaizen-whatsapp \
+  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge scripts/kaizen-workspace scripts/kaizen-peer scripts/kaizen-remote scripts/kaizen-whatsapp scripts/kaizen-welcome \
   observability/prometheus.yml observability/docker-compose.yml \
   observability/grafana/dashboards/kaizen-swarm.json \
   observability/grafana/provisioning/datasources/prometheus.yml \

@@ -118,5 +118,17 @@
     ],
     "kpi": "100% de normas citadas con source_id nivel V, 0 fuentes críticas vencidas, 0 citas inválidas en entregables",
     "model": "opencode/hy4-flash-free"
+  },
+  "whatsapp-onboarding": {
+    "goal": "Lograr que el mensaje de bienvenida llegue al numero de El Presidente y mantener interacciones y reportes hasta que confirme recepcion; no detenerse ante fallos de canal",
+    "members": [
+      "facilitador-equipo",
+      "verificador-evidencias",
+      "qa",
+      "dx",
+      "monitor-gaceta"
+    ],
+    "kpi": "1 mensaje entregado y confirmado por El Presidente; 0 SILENCIOS: cada fallo documentado en outbox",
+    "model": "opencode/hy4-flash-free"
   }
 }
