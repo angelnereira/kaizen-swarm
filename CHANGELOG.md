@@ -2,7 +2,7 @@
 
 ## v1.2.0 — 2026-11-22
 
-Fecha: 2026-11-22 | ADRs: 9 | Agentes: 45 | Pruebas: 144/144 en verde
+Fecha: 2026-11-22 | ADRs: 9 | Agentes: 45 | Pruebas: 191/191 en verde
 
 ## Cambios desde v1.1.1
 
@@ -24,7 +24,7 @@ git clone --depth 1 https://github.com/angelnereira/kaizen-swarm /tmp/kaizen-swa
 
 ## v1.1.1 — 2026-11-22
 
-Fecha: 2026-11-22 | ADRs: 9 | Agentes: 45 | Pruebas: 144/144 en verde
+Fecha: 2026-11-22 | ADRs: 9 | Agentes: 45 | Pruebas: 191/191 en verde
 
 ## Cambios desde v1.1.0
 
@@ -44,7 +44,7 @@ git clone --depth 1 https://github.com/angelnereira/kaizen-swarm /tmp/kaizen-swa
 
 ## v1.1.0 — 2026-11-22
 
-Fecha: 2026-11-22 | ADRs: 9 | Agentes: 45 | Pruebas: 144/144 en verde
+Fecha: 2026-11-22 | ADRs: 9 | Agentes: 45 | Pruebas: 191/191 en verde
 
 ## Cambios desde v1.0.0
 
@@ -65,7 +65,7 @@ git clone --depth 1 https://github.com/angelnereira/kaizen-swarm /tmp/kaizen-swa
 
 ## v1.0.0 — 2026-11-22
 
-Fecha: 2026-11-22 | ADRs: 9 | Agentes: 43 | Pruebas: 144/144 en verde
+Fecha: 2026-11-22 | ADRs: 9 | Agentes: 43 | Pruebas: 191/191 en verde
 
 ## Cambios desde el inicio
 

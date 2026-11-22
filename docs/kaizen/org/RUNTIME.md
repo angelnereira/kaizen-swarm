@@ -6,7 +6,7 @@
 ./scripts/kaizen-start start
 ```
 
-Ese comando: instala los **44 agentes** en OpenCode (`~/.config/opencode/agents/`), crea/enlaza `kaizen-start` en `~/.local/bin`, instala una unidad `systemd --user` (o `nohup` si no hay systemd), arranca el runtime y el buzón de entrada, y envía el primer reporte.
+Ese comando: instala **45 definiciones (47 archivos generados)** en OpenCode (`~/.config/opencode/agents/`), crea/enlaza `kaizen-start` en `~/.local/bin`, instala una unidad `systemd --user` (o `nohup` si no hay systemd), arranca el runtime y el buzón de entrada, y envía el primer reporte.
 
 ```bash
 kaizen-start status     # estado de agentes, runtime y buzón

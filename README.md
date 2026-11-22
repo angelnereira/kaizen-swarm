@@ -1,179 +1,179 @@
 # kaizen-swarm
 
-Hogar operativo de una **organización de 45 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, **cumplimiento normativo**, **capacidades tecnológicas/financieras/mercadeo**, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Los agentes de conocimiento **investigan en internet** normativa y estándares (ISO/NIST/AICPA/PCI) con fuentes oficiales y fecha de corte, y producen guías de implementación detalladas. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
+**Una organización de agentes para OpenCode que convierte instrucciones en trabajo verificable: por issue, con gobernanza, evidencia y mejora medible.**
 
-## Instalación en un paso (para un agente CLI)
+![Definiciones: 45](https://img.shields.io/badge/definiciones-45-blue)
+![Generados: 47](https://img.shields.io/badge/generados-47-blue)
+![Procesos RACI: 12](https://img.shields.io/badge/procesos_RACI-12-teal)
+![Herramientas REA: 263](https://img.shields.io/badge/herramientas_REA-263-orange)
+![Pruebas: 191](https://img.shields.io/badge/pruebas-191-brightgreen)
+![Versión: v1.2.0](https://img.shields.io/badge/version-v1.2.0-grey)
+![Corte: 2026-11-22](https://img.shields.io/badge/corte-2026--11--22-lightgrey)
 
-**Repositorio:** https://github.com/angelnereira/kaizen-swarm
+> Badges estáticos con fecha de corte: se actualizan al cortar release. No representan CI remoto. Las mismas cifras están en la tabla siguiente para leer sin red.
 
-Abre tu agente CLI en el directorio donde quieres trabajar y pégale **solo** el enlace con una de estas instrucciones:
+---
 
-### OpenCode
+## Panorama en cifras
+
+| Lo que importa | Valor | Fuente de verdad |
+| --- | ---: | --- |
+| Definiciones de puestos | 45 | `docs/kaizen/org/CATALOGO-AGENTES.md` |
+| Archivos de agente generados | 47 | `.opencode/agents/` y `~/.config/opencode/agents/` |
+| Procesos de gobernanza RACI | 12 | `docs/kaizen/org/GOBIERNO.md` |
+| Equipos proactivos | 8 | `.kaizen/team/teams.json` |
+| Rieles de reglas | K-1..K-14 · S-1..S-16 · L-1..L-17 | `.kaizen/RULES.md`, `.kaizen/security/SECURITY-RULES.md`, `.kaizen/loop/LOOP.md` |
+| Herramientas REA catalogadas | 263 (11 familias) | `docs/kaizen/org/CATALOGO-TECNOLOGIAS.md` |
+| Calidad media de definiciones | 100.0/100 | `scripts/kaizen-eval check` |
+| Pruebas en verde (última corrida local) | 191/191 | `bash tests/run.sh` |
+| Versión | v1.2.0 | `VERSION` |
+
+---
+
+## Qué es
+
+**kaizen-swarm** es una plantilla instalable y una comunidad de agentes para OpenCode (también utilizable desde Claude Code y Codex CLI). Los 45 puestos se instalan como 47 archivos de agente; cada uno declara propósito, herramientas, KPI, autonomía y veto limitado. El trabajo se organiza por issue en worktrees aislados, con buzón numerado, dueños de ruta explícitos y handoffs que requieren acuse.
+
+Tres ideas lo definen:
+
+1. **Reglas antes que intuición.** Gobernanza, seguridad y loop son archivos versionados con identificadores citables (K, S, L). Nada de decisiones de arquitectura sin ADR (K-1).
+2. **Proponer con evidencia.** La proactividad (`kaizen-org pulse`) emite propuestas con `source_ids` verificados. Ningún agente decide en seguridad, dinero, datos ni cumplimiento sin humano (K-14, ADR-0003).
+3. **Aprender sin degradar.** `kaizen-learn` convierte fallos en lecciones con fingerprint; `kaizen-eval` y el ratchet impiden que una definición empeore sin ADR (ADR-0006/0007).
+
+La autoridad final es **El Presidente**, dueño del negocio y del proyecto (`.kaizen/team/OWNER.md`). El orquestador —no el agente— hace push y abre PR (K-12, L-3).
+
+## Qué no es
+
+| No es | En su lugar |
+| --- | --- |
+| Un superagente que decide por El Presidente | Muchos roles acotados, orquestador y puertas; humano en decisiones sensibles |
+| Asesoría legal, fiscal ni financiera | Mapas de obligaciones con fuente oficial y fecha de corte; firma un humano |
+| CI en la nube ni badge de build remoto | Verificación local reproducible: `bash tests/run.sh`, `scripts/kaizen check` |
+| Un auditor infalible | Escáneres con falsos negativos; la barrera es CI + protección de rama + CODEOWNERS |
+| Control de escritorio activo por defecto | `computer-operator` en `paused` + `KO_DESKTOP_ENABLED=0`, humano como A |
+| Algo que hace push o PR por iniciativa propia | `finalize --publish` lo ejecuta el orquestador |
+| Una fuente normativa | `monitor-gaceta` reporta cambios con URL oficial; los bloqueos se documentan, nunca se inventa un «sin cambios» |
+
+## Beneficios
+
+| Beneficio | Cómo se materializa |
+| --- | --- |
+| Arranque predecible | `kaizen-installer all <repo>` es idempotente: fusiona sin sobrescribir y no toca `opencode.json` ni credenciales |
+| Decisiones trazables | 12 procesos RACI, retador obligatorio, memorial y verificación (`DECISIONES.md`, ADR-0019) |
+| Visibilidad operativa | Grafana 100 % local: `:9101` exporter, `:9090` Prometheus, `:3000` Grafana, 12 paneles |
+| Mejora acumulativa | Lecciones con fingerprint y ratchet de calidad: lo aprendido sube de versión la definición |
+| Alcance especializado | 10 especialistas por tecnología; si no hay especialista, contrato con `evidence.md` verificable |
+| Puente con El Presidente | Reportes por webhook n8n → WhatsApp; instrucciones entrantes por `kaizen-inbox` |
+
+---
+
+## Cómo se configura
+
+### Para una persona
+
+```bash
+git clone --depth 1 https://github.com/angelnereira/kaizen-swarm /tmp/kaizen-swarm
+cd /tmp/kaizen-swarm
+./scripts/kaizen-installer all /ruta/a/tu/proyecto
+./scripts/kaizen-start status
+./scripts/kaizen-start start      # runtime persistente y buzón
+```
+
+`all` genera los 47 agentes, fusiona sin sobrescribir y no modifica tu `opencode.json` ni tus credenciales.
+
+### Para un agente CLI (solo pasar el enlace)
 
 ```text
 Instala la comunidad de este repositorio: https://github.com/angelnereira/kaizen-swarm
 
 1) Clónalo en /tmp/kaizen-swarm (git clone --depth 1).
 2) Ejecuta: /tmp/kaizen-swarm/scripts/kaizen-installer all <directorio-destino>
-   (instala el framework en el repo destino, los 47 agentes en .opencode/agents y en ~/.config/opencode/agents).
-3) Verifica con: /tmp/kaizen-swarm/scripts/kaizen-start status y bash tests/run.sh.
-4) Reporta qué archivos creó, qué omitió por existir y qué decisiones humanas quedan pendientes.
+3) Verifica: /tmp/kaizen-swarm/scripts/kaizen-start status y bash tests/run.sh.
+4) Reporta qué creó, qué omitió por existir y qué decisiones humanas quedan pendientes.
 No escribas secretos, no modifiques opencode.json sin permiso y no hagas git push.
 ```
 
-Equivalente si ya tienes el repo clonado: `./scripts/kaizen-installer all .` y luego `./scripts/kaizen-start status`.
+| CLI | Ajuste |
+| --- | --- |
+| Claude Code | «Lee e instala siguiendo las instrucciones de <URL>». El script es la fuente de verdad |
+| Codex CLI | «Install the agent community from <URL>». Mismo clone + `kaizen-installer all <target>` |
+| Humano | Usa el bloque anterior; no se necesita agente previo |
 
-### Claude Code
+### Verificación
+
+```bash
+scripts/kaizen-swarm check     # instalación, propiedad y vetos
+scripts/kaizen check           # gobernanza, seguridad, eval, aprendizaje y ratchet
+bash tests/run.sh              # 191 pruebas
+scripts/kaizen-observability check
+```
+
+---
+
+## Flujo de trabajo
 
 ```text
-Lee e instala siguiendo las instrucciones de https://github.com/angelnereira/kaizen-swarm
-
-Clona el repo, ejecuta scripts/kaizen-installer all <directorio-destino>, luego scripts/kaizen-start status.
-El script es la fuente de verdad: no improvises archivos. Instala los agentes en ~/.config/opencode/agents
-sin sobrescribir opencode.json. No pulses credenciales ni hagas push. Reporta el resultado real de los comandos.
+intake → plan → squad → execute → review → decide → deliver → verify → closed
+   ↑                                                              │
+   └───────────── needs-human / regression-suspect ───────────────┘
 ```
 
-### Codex CLI
+- Cada rol escribe solo sus rutas (`contracts/ownership.json`); los leases caducan y se reasignan.
+- Los mensajes llevan `seq`, `from`, `to`, `intent`, `expects_ack` y `source_ids`; sin ack no hay handoff cerrado.
+- `architect`, `security`, `qa`, `compliance`, `scope` y `resource` pueden vetar con evidencia.
+- `kaizen-swarm finalize` no integra con BLOCK abierto, acuses pendientes ni propiedad violada.
 
-```text
-Install the agent community from https://github.com/angelnereira/kaizen-swarm
+---
 
-Run: git clone --depth 1 <url> /tmp/kaizen-swarm && /tmp/kaizen-swarm/scripts/kaizen-installer all <target>
-Then verify with /tmp/kaizen-swarm/scripts/kaizen-start status and bash /tmp/kaizen-swarm/tests/run.sh.
-Do not add secrets, do not edit opencode.json without approval, do not push. Report created/skipped files.
-```
+## Supervisión local (Grafana)
 
-### Humano (sin agente)
+Grafana es la **capa de monitoreo**, 100 % en tu máquina: Prometheus `:9090`, Grafana `:3000`, exporter `:9101`. Muestra en tiempo real qué agente trabaja, en qué equipo, cuánto dura su evento y si terminó en verde. La **fuente** es persistente (archivos del repo) y el histórico se conserva en volúmenes locales de Prometheus y Grafana. No hay telemetría externa.
 
 ```bash
-git clone --depth 1 https://github.com/angelnereira/kaizen-swarm /tmp/kaizen-swarm
-cd /tmp/kaizen-swarm
-./scripts/kaizen-installer all /ruta/a/tu/proyecto
-kaizen-start status          # o: ./scripts/kaizen-start status
-kaizen-start start           # activa runtime + buzón con un solo comando
+scripts/kaizen-observability stack       # Prometheus + Grafana (Docker)
+scripts/grafana-bootstrap apply          # usuario kaizen-agent (Viewer)
+scripts/kaizen-feedback all              # informe + lecciones
 ```
 
-`all` es idempotente: fusiona sin sobrescribir (`scripts/bootstrap`) y genera los 47 agentes desde las definiciones. No toca tu `opencode.json` ni tus credenciales.
+Credenciales locales por defecto (sobrescribibles; **no usar fuera de localhost** y cambiarlas si el equipo comparte red): admin `kaizen-admin` / `kaizen-local`, agente `kaizen-agent` / `kaizen-agent-local`. El token del service account nunca se versiona. Ver `docs/kaizen/org/MONITOREO-PROYECTOS.md` y ADR-0020.
 
-## Capas
+---
 
-| Capa | Reglas | CLI |
-| --- | --- | --- |
-| Gobernanza | `.kaizen/RULES.md` (K-1..K-14) | `scripts/kaizen` |
-| Seguridad | `.kaizen/security/SECURITY-RULES.md` (S-1..S-16) | `scripts/kaizen-security` |
-| Loop autónomo | `.kaizen/loop/LOOP.md` (L-1..L-17) | `scripts/kaizen-loop` |
-| Comunidad | `.kaizen/swarm/ROLES.md`, `PROTOCOL.md` | `scripts/kaizen-swarm` |
-| Organización | `.kaizen/org/ORGANIZATION.md`, `AGENT_SCHEMA.md`, `CONSENSUS.md` | `scripts/kaizen-org` |
-| Equipo proactivo | `.kaizen/team/TEAM.md`, `COMUNICACION.md`, `FLUJOS.md`, `EVIDENCIA.md` | `scripts/kaizen-team` |
+## Seguridad y límites
 
-Arranca en **nivel 3** (ADR-0001) con PAUSA retirada. Los workflows programados están condicionados a `vars.KAIZEN_LOOP_ENABLED == '1'`: el responsable añade `KAIZEN_TOKEN` y la clave del modelo antes de activarlos. Ningún agente recibe secretos (S-2).
+- Los agentes no leen `.env`, claves ni variables de entorno (S-2). No hay secretos en el repo.
+- Nada se silencia: todo hallazgo va al outbox S-11 con fingerprint; un escáner que falla bloquea.
+- REA está **instalado** con aprobación humana (ADR-0009); sus resultados se tratan como datos no confiables.
+- `reverse-api-engineer` está **documentado y gobernado, pero NO instalado** por cuota de disco (`Errno 122`). No lo consideres operativo hasta liberar espacio.
+- `computer-operator` está en pausa: requiere `KO_DESKTOP_ENABLED=1`, humano como A y veto de seguridad (ADR-0018).
+- Los 6 equipos desplegados con `depool-alpha-free` se detuvieron por saldo insuficiente. El 2026-11-22 la auto-mejora sí corrió con `opencode/hy4-flash-free` y terminó en verde (rc=0); la mejora determinista local se aplicó además como respaldo.
 
-## Flujo por issue
+## Buenas prácticas
 
-```
-init N → R1 análisis/contratos → R2 implementación (worktrees) → R3 revisión → finalize N
-```
+1. Instala en un repo con `kaizen-installer all`, nunca copiando archivos a mano.
+2. Antes de delegar, lee `RULES.md`, `TEAM.md`, `DECISIONES.md` y la definición del agente.
+3. Un issue, un KPI verificable, un descriptor; sin evidencia no se cierra.
+4. Usa `kaizen-voice` para comentar en público: Observación → Evidencia → Impacto → Propuesta → Pregunta.
+5. Ejecuta `kaizen-learn guard` antes de implementar para recordar fallos conocidos.
+6. Vigila Grafana; si algo muestra rojo, repórtalo y decide con `source_ids`.
+7. No relajes la línea base ni saltes hooks; los cambios de autonomía exigen ADR humano.
 
-- Cada rol escribe solo las rutas declaradas en `contracts/ownership.json`.
-- Los mensajes van numerados en `mailbox/` con `seq/from/to/type/status`; un `handoff` necesita `ack`.
-- `architect` y `security` (y `qa` por tests) pueden `BLOCK`; `finalize` no integra con BLOCK abierto.
-- Los leases caducan: `reap` reporta y reasigna, de modo que un agente caído no detiene el issue.
-- Buzón híbrido: `mailbox/` ignorado por git; `export.md` saneado se copia al descriptor del PR.
+---
 
-## Uso rápido
+## Piloto recomendado
 
-```bash
-scripts/kaizen-swarm check                      # valida la instalación
-KSW_DRY_RUN=1 scripts/kaizen-swarm init 42 --slug mi-cambio
-scripts/kaizen-swarm init 42 --slug mi-cambio
-scripts/kaizen-swarm run 42 --round 1
-scripts/kaizen-swarm status 42
-scripts/kaizen-swarm finalize 42 --publish      # push + PR (lo hace el orquestador)
-```
+**Auditoría exprés de cumplimiento DGI/Ley 81 sobre un proyecto propio**, 7 días. Equipos `cumplimiento` + `plataforma`, KPI: **0 normas sin fuente verificada** y primer reporte en <24 h. Arranca con `kaizen-start start` y una instrucción por WhatsApp: *«Audita DGI y datos personales y envíame el resumen con fuentes»*.
 
-Organización de agentes:
+---
 
-```bash
-scripts/kaizen-org list                          # inventario de 45 puestos
-scripts/kaizen-org research cumplimiento-panama "versión vigente de la Ley 81" --url https://www.antai.gob.pa/
-scripts/kaizen-org copy marketing marketing-visual --name "Marketing Visual"
-scripts/kaizen-org save marketing-visual         # sube versión + diario
-scripts/kaizen-org feed marketing-visual docs/kaizen/org/FORECAST.md
-scripts/kaizen-org digest marketing-visual
-scripts/kaizen-org pulse                         # propuestas proactivas
-scripts/kaizen-org decide "reducir tiempo de feedback" --owner gerente
-```
+## Documentación y fuentes
 
-Instalación en otro repo:
+- Gobernanza: `.kaizen/RULES.md`, `.kaizen/security/SECURITY-RULES.md`, `.kaizen/loop/LOOP.md`
+- Organización: `.kaizen/org/ORGANIZATION.md`, `AGENT_SCHEMA.md`, `CONSENSUS.md`, `OUTSOURCING.md`
+- Equipo: `.kaizen/team/TEAM.md`, `COMUNICACION.md`, `FLUJOS.md`, `EVIDENCIA.md`, `DECISIONES.md`, `OWNER.md`
+- Calidad: `docs/kaizen/org/EVALUACION.md`, `APRENDIZAJE.md`, `CATALOGO-TECNOLOGIAS.md`, `MONITOREO-PROYECTOS.md`
+- Decisiones: `docs/kaizen/adr/` (15 ADRs: 0001–0010 y 0016–0020; los ADR-0011..0015 siguen **propuestos** por arquitectura y sin escribir, ver outbox)
+- Normativa verificada: `.kaizen/org/knowledge/SOURCES.md` (PA-001, PA-003, ISO-001, NIST-001, AICPA-001, OWASP-001)
+- Release: https://github.com/angelnereira/kaizen-swarm/releases/tag/v1.2.0
 
-```bash
-scripts/bootstrap /ruta/al/otro/repo
-```
-
-Especialistas y outsourcing: 10 agentes por tecnología (GCP, RAG, .NET bancario, plataforma, Rust/WASI, fiscal DGI/HKA, Flutter M3E, perfiles de negocio, identidad y verticales) según `CAPACIDADES-REFERENCIA.md`. Si una tecnología queda fuera del equipo, `scripts/kaizen-org outsource <slug> --tech … --deliverable … --acceptance …` abre un contrato; `outsource-accept` solo cierra con `evidence.md` verificable (`.kaizen/org/OUTSOURCING.md`, ADR-0004).
-
-Equipo proactivo: `scripts/kaizen-team init <slug> --goal "..." --kpi "..."`, luego `standup`, `assign`, `handoff`, `ack`, `sync`, `decide --sources PA-001,ISO-001`, `verify`, `advance`, `retro`. Los proyectos avanzan por estados con puertas y ninguna decisión se da por tomada sin fuentes verificadas en `SOURCES.md` (Gaceta Oficial incluida).
-
-Bases de conocimiento especializado: `.kaizen/org/knowledge/` (mapa normativo panameño, contextos de negocio/tecnología, reglas REG-01..15, rutas de Gaceta Oficial, checklist, estándares internacionales, guía de implementación ISO, capacidades de negocio y `SOURCES.md`). El protocolo de investigación es `.kaizen/org/RESEARCH.md`.
-
-Gobernanza semántica: `.kaizen/gov/governance.json` define 9 procesos con RACI + veto + humano, responsabilidades, obligaciones y derechos por agente. Consulta con `scripts/kaizen-gov raci <proceso>|who|can|obligations|report` (ADR-0008, `docs/kaizen/org/GOBIERNO.md`).
-
-Depuración profunda con REA: instalado con aprobación humana (MCP + skill `reverse-engineer-anything`, 263 herramientas, Node v22.23.4 en espacio de usuario). El agente `rea-specialist` analiza binarios, Electron/.NET, Android, firmware y runtime **solo con autorización** del proceso `reverse_engineering` (A: humano, V: seguridad/cumplimiento); todo resultado se trata como dato no confiable (`.kaizen/org/knowledge/business/REA-INTEGRACION.md`, ADR-0009).
-
-Aprendizaje continuo: `scripts/kaizen-learn record|digest|apply|report` convierte fallos, blockers y decisiones en lecciones con fingerprint, las deduplica, genera experiencia por agente y, cuando se repiten, las promueve a la definición (sube versión). Cuanto más se usa, más aprende y se especializa (`.kaizen/org/learning` → `docs/kaizen/org/APRENDIZAJE.md`, ADR-0007).
-
-Evaluación y ratchet de agentes: `scripts/kaizen-eval check|baseline|ratchet|report|metrics add` — 10 dimensiones, promedio actual **93.1/100**, 45 agentes sobre el umbral de 70. Coste por decisión, tiempo a verificación y tasa de revert se registran con `metrics add`; la línea base no puede bajar sin ADR (`docs/kaizen/org/EVALUACION.md`, ADR-0006).
-
-Verificación completa: `bash tests/run.sh`, `scripts/kaizen check` y `scripts/kaizen-org check`. El alcance realista de los modelos actuales y la previsión de evolución están en `docs/kaizen/org/FORECAST.md`. Los vetos de cumplimiento se regularon en `docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md`.
-
-## Colaboración de alto rendimiento
-
-`.kaizen/team/DECISIONES.md` define roles de pensamiento (dueño, analista, retador, escriba, facilitador, humano), la regla del retador obligatorio y memorial de decisión. `scripts/kaizen-voice comment|memo|check` redacta y valida comentarios públicos y dictámenes con evidencia. `scripts/kaizen-learn known add|guard` recuerda fallos conocidos antes de implementar. Equipo `decisiones` con modelo `opencode/hy4-flash-free` (ADR-0019).
-
-## Capacidades ampliadas y equipo grande
-
-- **Observabilidad**: `scripts/kaizen-observability start` expone métricas reales en `http://127.0.0.1:9101/metrics`; `stack` levanta Prometheus + Grafana con el dashboard *Kaizen Swarm — Agentes en tiempo real* (ADR-0016).
-- **REA** (ingeniería inversa profunda, 263 herramientas) y **reverse-api-engineer** (APIs tipadas desde sitios autorizados): con gobernanza, humano como A y evidencia (ADR-0009/0017).
-- **Computer Use**: `scripts/kaizen-desktop` (X11 + `xdotool`/`import`), desactivado por defecto; requiere aprobación humana del proceso `computer_use` (ADR-0018).
-- **Despliegue grande**: 6 equipos en paralelo (`equipo-central`, `cumplimiento`, `plataforma`, `producto`, `api-recon`, `desktop-ops`) con `kaizen-runtime deploy`, `KR_MAX_TEAMS_PARALLEL=6` y recursión controlada `KR_MAX_DEPTH=3`.
-
-Nota operativa real: el último despliegue fue detenido por el **límite gratuito de OpenCode** (`depool-alpha-free`); requiere proveedor/suscripción o cambio de modelo (registrado en outbox S-11).
-
-## Arranque en un comando y WhatsApp
-
-```bash
-./scripts/kaizen-start start      # instala 47 agentes, runtime persistente y buzón
-kaizen-start status               # estado
-kaizen-start stop                 # pausa total
-```
-
-Los reportes llegan a El Presidente (`.kaizen/team/OWNER.md`) por webhook n8n → WhatsApp, correo o archivo; las instrucciones de WhatsApp vuelven por `kaizen-inbox` y `kaizen-equipo` las convierte en trabajo verificable. Sin credenciales en el repo: `docs/kaizen/org/RUNTIME.md`.
-
-## Versión, catálogo y propagación
-
-Versión actual: **v1.0.0**. Catálogo de capacidades: `docs/kaizen/org/CATALOGO-TECNOLOGIAS.md` (263 herramientas REA en familias + skills del framework).
-
-```bash
-scripts/kaizen-release status
-scripts/kaizen-release cut 1.0.1              # regenera, commitea, taggea y publica GitHub Release
-scripts/kaizen-release install --global --projects-all   # OpenCode global + proyectos con .kaizen
-```
-
-`install --project` solo reemplaza `.opencode/agents/*.md` generados: no toca `opencode.json` ni archivos propios del proyecto (ADR-0010).
-
-## Primer objetivo (piloto recomendado, 7 días)
-
-**Auditoría exprés de cumplimiento fiscal y de datos en PlentyPay.**
-
-- Equipo: `cumplimiento` + `plataforma`, coordinado por `kaizen-equipo`.
-- Entregable: mapa de obligaciones DGI/Ley 81 con `source_ids` verificados, checklist accionable, 3 hallazgos con evidencia y un ADR de decisión.
-- KPI: **0 normas sin fuente verificada** y primer reporte en menos de 24 h.
-- Arranque: `kaizen-start start` y, desde WhatsApp, «Audita DGI y datos personales de PlentyPay y envíame el resumen con fuentes».
-
-## Decisiones humanas pendientes
-
-Secret scanning y push protection, Dependabot/CodeQL, reporte privado de vulnerabilidades, protección de rama con los checks Kaizen, CODEOWNERS sobre los rieles, permisos de workflows, token de granularidad fina, 2FA y límite de gasto del proveedor. Ver `.github/SECURITY.md`.
-
-## Límites honestos
-
-Los escáneres tienen falsos negativos; los hooks locales se pueden saltar. La barrera real es CI obligatorio + protección de rama + CODEOWNERS. El agente no es auditor y no tiene tokens. Ver KAIZEN-SECURITY.md §11 en la documentación de origen.
+> Los borradores que originaron este README están en `docs/kaizen/org/README_DRAFT_*.md` (estética, coherencia y crítica) y sus hallazgos en `.kaizen/loop/outbox/`.

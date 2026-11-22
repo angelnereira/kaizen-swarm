@@ -1,5 +1,16 @@
 # Monitoreo de proyectos hermanos y feedback
 
+## Qué es esta capa (aclaración para todos los agentes)
+
+Grafana **no es decoración ni un dashboard opcional**: es la capa de supervisión de la comunidad. Está **100 % en local**: Prometheus en `:9090`, Grafana en `:3000` y el exporter leyendo archivos en `:9101`. No se envía nada a servicios externos. Sirve para responder, en tiempo real y de forma persistente:
+
+- ¿Qué agente está trabajando y en qué equipo? → `kaizen_agent_events_total`, `kaizen_agent_last_rc`.
+- ¿Cuánto tarda cada evento? → `kaizen_agent_event_duration_seconds`.
+- ¿Hay un ciclo colgado? → `kaizen_team_log_age_seconds`, `kaizen_runtime_cycle_rc` (detecta rc 124/143).
+- ¿Qué hallazgos hay abiertos? → `kaizen_outbox_findings` y `kaizen_sibling_outbox_findings`.
+
+La **fuente** vive en archivos del repo (`state.json`, `handoffs.jsonl`, logs de runtime, `notifications.jsonl`), así que se puede auditar después. El histórico de Prometheus y la base de Grafana se conservan en los volúmenes `prometheus-data` y `grafana-data` del compose; sin esos volúmenes se perderían al recrear contenedores. El monitoreo es para **supervisar y mejorar**, no para vigilar personas; lo que muestre rojo se reporta por S-11 y se decide con `source_ids`.
+
 ## Acceso a Grafana
 
 ```bash

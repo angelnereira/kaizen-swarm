@@ -17,12 +17,12 @@ Los agentes también se degradan: definiciones incompletas, KPI no medibles, kno
 | `seguridad` | No credenciales y contenido externo datado/no confiable (S-1/S-15) |
 | `reglas_vigentes` | Reglas K-1..K-14, L-1..L-17 y S-1..S-16 |
 
-Umbral aprobado: **70/100** (`KE_MIN_SCORE`). Estado actual: 42 agentes, promedio 93.1.
+Umbral aprobado: **70/100** (`KE_MIN_SCORE`). Estado actual: 45 agentes, promedio 100.0.
 
 ## 2. Comandos
 
 ```bash
-scripts/kaizen-eval check                 # puntúa los 42 agentes y falla si alguno < umbral
+scripts/kaizen-eval check                 # puntúa los 45 agentes y falla si alguno < umbral
 scripts/kaizen-eval baseline --force      # fija la línea base tras mejora o ADR
 scripts/kaizen-eval ratchet               # falla si cualquier agente empeoró
 scripts/kaizen-eval report                # reporte por departamento + métricas

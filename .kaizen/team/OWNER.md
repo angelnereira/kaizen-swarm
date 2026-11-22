@@ -26,6 +26,14 @@ Toda la comunidad trabaja **para** y **en nombre de** El Presidente: la persona 
 4. Los datos del Presidente (número, correo, tokens) **nunca** se versionan: solo variables de entorno (S-1/S-2).
 5. El Presidente puede pausar/reanudar todo con `scripts/kaizen-runtime down|up` o `scripts/kaizen-start stop|start`.
 
+## Supervisión (transparencia, no vigilancia)
+
+Toda la actividad del equipo es observable **en local** con Grafana (`:3000`) y Prometheus (`:9090`) sobre el exporter (`:9101`). Puedes ver en tiempo real qué agente está activo, en qué equipo, cuándo empezó, cuánto duró su evento y si terminó en verde o con incidencia. Los datos se guardan en archivos del repositorio (`state.json`, `handoffs.jsonl`, logs de runtime y `notifications.jsonl`): son persistentes, auditables y nunca salen de tu máquina. No hay telemetría externa ni nube.
+
+Los paneles *Eventos de agentes por equipo y RC* y *Duración de eventos por agente* muestran el comportamiento; `kaizen-feedback snapshot` convierte lo observado en un informe y `learn` en lecciones. Si un panel muestra rojo, se reporta por outbox S-11 y se decide con evidencia; nunca se oculta.
+
+El monitoreo existe para **supervisar y mejorar el sistema**, no para vigilar a personas ni para sancionar. La autonomía 3 sigue sujeta a L-3/L-4 y al humano en decisiones sensibles.
+
 ## Reporte mínimo esperado (formato)
 
 ```
