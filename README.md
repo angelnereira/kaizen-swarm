@@ -125,6 +125,10 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
+## WhatsApp oficial
+
+El puente usa **solo Cloud API oficial vía BSP/n8n**: ventana de 24 h, plantillas aprobadas, opt-in explícito y webhooks idempotentes con firma HMAC. `kaizen-whatsapp templates|window|optin|check` aplica la política localmente; Baileys/whatsapp-web.js está prohibido (`KN_WHATSAPP_ALLOW_UNOFFICIAL=0`). Credenciales en n8n/Vault, nunca en el repo (ADR-0025).
+
 ## Instalación no invasiva y comunidad de pares
 
 La comunidad se instala en la **máquina y sus herramientas** (agentes globales + `~/.local/share/kaizen-swarm/workspaces/`), no dentro del código del proyecto: `kaizen-installer repo <destino>` solo registra un workspace externo; `--embedded` es explícito y opcional. Los agentes se organizan con `kaizen-peer request-review|comment|validate`, investigan en internet y participan en issues/PR remotos con `kaizen-remote` auditado (`--dry-run` por defecto). Ninguna credencial se guarda en el repo (ADR-0024, K-15).

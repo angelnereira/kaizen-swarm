@@ -55,7 +55,7 @@ for f in \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
   .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
   .kaizen/observability/observability.env .kaizen/finops/tokens.env .kaizen/knowledge/sources.json \
-  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge scripts/kaizen-workspace scripts/kaizen-peer scripts/kaizen-remote \
+  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge scripts/kaizen-workspace scripts/kaizen-peer scripts/kaizen-remote scripts/kaizen-whatsapp \
   observability/prometheus.yml observability/docker-compose.yml \
   observability/grafana/dashboards/kaizen-swarm.json \
   observability/grafana/provisioning/datasources/prometheus.yml \
@@ -79,6 +79,7 @@ for f in \
   docs/kaizen/adr/0022-corpus-normativo-y-citas-verificadas.md docs/kaizen/org/CORPUS-NORMATIVO.md \
   docs/kaizen/adr/0023-autonomia-de-push-y-correccion.md \
   docs/kaizen/adr/0024-instalacion-no-invasiva-y-gobernanza-de-pares.md \
+  docs/kaizen/adr/0025-whatsapp-oficial-via-bsp.md docs/kaizen/org/WHATSAPP-OFICIAL.md \
   .kaizen/knowledge/cards/README.md .kaizen/knowledge/golden/README.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \

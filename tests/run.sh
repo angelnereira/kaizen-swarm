@@ -312,6 +312,10 @@ bash -n "$REPO/scripts/kaizen-workspace" "$REPO/scripts/kaizen-peer" "$REPO/scri
 ( cd "$REPO" && scripts/kaizen-workspace init "$REPO" >/dev/null 2>&1 && scripts/kaizen-workspace check "$REPO" >/dev/null 2>&1 ) \
   && ok 'workspace externo' || bad 'workspace externo'
 grep -q 'K-15' "$REPO/.kaizen/RULES.md" && ok 'regla no invasiva' || bad 'regla no invasiva'
+for s in kaizen-whatsapp; do [ -x "$REPO/scripts/$s" ] && ok "script $s" || bad "script $s"; done
+( cd "$REPO" && scripts/kaizen-whatsapp check >/dev/null 2>&1 ) && ok 'whatsapp oficial' || bad 'whatsapp oficial'
+grep -q 'KN_WHATSAPP_ALLOW_UNOFFICIAL=0' "$REPO/.kaizen/team/notify.env" && ok 'sin cliente no oficial' || bad 'sin cliente no oficial'
+grep -q 'ADR-0025' "$REPO/.opencode/agents/qa.md" 2>/dev/null && ok 'agente con política WhatsApp' || bad 'agente con política WhatsApp'
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \
