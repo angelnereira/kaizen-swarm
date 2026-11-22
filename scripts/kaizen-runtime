@@ -5,7 +5,7 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/config.env" ] && . "$ROOT/.kaizen/config.env"
 [ -f "$ROOT/.kaizen/team/runtime.env" ] && . "$ROOT/.kaizen/team/runtime.env"
 : "${KR_AGENT_CMD:=opencode}" "${KR_INTERVAL_SEC:=900}" "${KR_MAX_RUNS_PER_DAY:=24}"
-: "${KR_TIMEOUT_SEC:=900}" "${KR_DRY_RUN:=0}" "${KR_PAUSE_FILE:=.kaizen/loop/PAUSE}"
+: "${KR_TIMEOUT_SEC:=900}" "${KR_DRY_RUN:=0}" "${KR_PAUSE_FILE:=.kaizen/loop/PAUSE}" "${KR_MAX_DEPTH:=1}"
 : "${KR_STATE_DIR:=.kaizen/team/runtime}" "${KR_TEAMS_FILE:=.kaizen/team/teams.json}"
 S="$ROOT/$KR_STATE_DIR"; mkdir -p "$S"
 FAIL=0
@@ -26,12 +26,19 @@ budget_ok() {
 
 cmd_once() {
   local team="$1" goal kpi member prompt rc=0 n=0 log
+  # Un solo ciclo a la vez: evita que dos runtime se lancen entre sí.
+  exec 9>"$S/ciclo.lock"
+  flock -n 9 || { klog "ya hay un ciclo en curso: se omite (anti-recursividad)"; return 0; }
   if paused; then klog "PAUSA activa: no se ejecuta"; return 0; fi
   budget_ok || return 0
   team_names | grep -qx "$team" || { kfail "equipo desconocido: $team"; return 2; }
   goal="$(team_field "$team" goal)"; kpi="$(team_field "$team" kpi)"
   local inbox_file=""; inbox_file="$(find "$ROOT/.kaizen/team/inbox" -name '*.md' -print 2>/dev/null | sort | head -1)"
   local instruction=""; [ -n "$inbox_file" ] && instruction="$(sed '1,/^---$/d' "$inbox_file" | head -30)"
+  # Marcar como procesado: si no, el mismo mensaje se reinyecta en cada ciclo (recursión).
+  if [ -n "$inbox_file" ]; then
+    sed -i 's/^status: pending$/status: processed/' "$inbox_file"
+  fi
   log="$S/$(date -u +%Y%m%d-%H%M%S)-$team.log"
   {
     echo "$(date -u +%FT%TZ) ciclo equipo=$team objetivo=$goal kpi=$kpi"
@@ -49,7 +56,7 @@ $instruction"
         continue
       fi
       command -v "$KR_AGENT_CMD" >/dev/null 2>&1 || { echo "AGENTE_NO_DISPONIBLE $KR_AGENT_CMD"; rc=1; break; }
-      timeout "$KR_TIMEOUT_SEC" "$KR_AGENT_CMD" run --agent "$member" --archived "$prompt" >> "$log" 2>&1 || rc=$?
+      KAZEN_AGENT_DEPTH="$KR_MAX_DEPTH" timeout "$KR_TIMEOUT_SEC" "$KR_AGENT_CMD" run --agent "$member" --archived "$prompt" >> "$log" 2>&1 || rc=$?
       echo "agente=$member rc=$rc"
     done < <(team_members "$team")
   } > "$log"

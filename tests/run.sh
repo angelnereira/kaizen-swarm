@@ -177,6 +177,12 @@ grep -q '^status: accepted$' "$REPO/.kaizen/org/outsourcing/wasm-spike/contract.
 ( cd "$REPO" && scripts/kaizen-runtime check >/dev/null 2>&1 ) && ok "runtime check" || bad "runtime check"
 ( cd "$REPO" && KR_DRY_RUN=1 scripts/kaizen-runtime once equipo-central >/dev/null 2>&1 )
 [ -f "$REPO/.kaizen/team/runtime/last.json" ] && ok "runtime ciclo dry-run" || bad "runtime ciclo dry-run"
+mkdir -p "$REPO/.kaizen/team/inbox"
+printf -- '---\nfrom: angel\nchannel: whatsapp\nstatus: pending\n---\n\nInstrucción de prueba\n' > "$REPO/.kaizen/team/inbox/20261121-000000-whatsapp-angel.md"
+( cd "$REPO" && KR_DRY_RUN=1 scripts/kaizen-runtime once equipo-central >/dev/null 2>&1 )
+grep -q '^status: processed$' "$REPO/.kaizen/team/inbox/20261121-000000-whatsapp-angel.md" \
+  && ok "buzón marcado procesado (sin bucle)" || bad "buzón marcado procesado"
+grep -q 'KR_MAX_DEPTH=3' "$REPO/.kaizen/team/runtime.env" && ok "recursión acotada" || bad "recursión acotada"
 NA="$TMP/agents"; ( cd "$REPO" && scripts/kaizen-installer opencode --project "$NA" >/dev/null 2>&1 )
 AG=$(find "$NA" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
 [ "$AG" -ge 40 ] && ok "agentes OpenCode generados ($AG)" || bad "agentes OpenCode generados ($AG)"

@@ -50,6 +50,19 @@ El mensaje se sanea con `kaizen-security redact` y se escribe en `.kaizen/team/i
 
 Si n8n corre en otra máquina, publica el webhook local con un túnel (Cloudflared/Tailscale) y restringe el acceso por secreto e IP. No expongas el puerto sin autenticación.
 
+## Recursión controlada (proactividad en cadena)
+
+La delegación entre agentes es intencional: `kaizen-equipo` convoca especialistas, y cada especialista puede volver a delegar en otro. Eso permite que un solo mensaje de El Presidente se convierta en investigación → análisis → decisión → reporte sin que él coordine cada paso.
+
+Reglas para que la recursión sea una ventaja y no un bucle:
+
+- `KR_MAX_DEPTH=3` (`.kaizen/team/runtime.env`): cada agente recibe `KAZEN_AGENT_DEPTH` y lo incrementa al delegar; al llegar al tope, **consolida y reporta** en vez de seguir delegando.
+- Un agente **nunca se lanza a sí mismo** ni a `kaizen-installer`: eso es un ciclo, no colaboración.
+- Un solo ciclo del runtime a la vez (`flock`), y un mensaje del buzón se marca `processed` tras usarse: evita reinyectar la misma instrucción infinitamente.
+- Presupuesto diario, PAUSA y `source_ids` verificados siguen siendo frenos duros (L-3/L-4, REG-EV-01).
+
+Prueba del comportamiento: `KR_DRY_RUN=1 scripts/kaizen-runtime once equipo-central` imprime la cadena de delegación prevista sin ejecutar modelos.
+
 ## Seguridad de la integración
 
 - El número de WhatsApp y correos de El Presidente **nunca** se versionan: solo en n8n/variables de entorno.
