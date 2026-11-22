@@ -108,7 +108,7 @@ lease_reap() { # ISSUE -> tareas reasignadas
   if is_dry; then klog "[dry-run] reap leases expirados antes de $now"; printf '0\n'; return 0; fi
   while IFS=$'\t' read -r t o; do
     [ -z "$t" ] && continue
-    mail_send "$issue" orchestrator all blocker "Lease caducado: $t (antes $o). Se libera y reasigna." || :
+    mail_send "$issue" orchestrator all blocker "Lease caducado: $t (antes $o). Se libera y reasigna." >/dev/null || :
     n=$((n + 1))
   done < <(jq -r --arg now "$now" '.[] | select(.status=="active" and .expires_at < $now) | [.task,.owner] | @tsv' "$f")
   jq --arg now "$now" 'map(if .status=="active" and .expires_at < $now then .status="reaped" else . end)' "$f" > "$f.tmp" && mv "$f.tmp" "$f"

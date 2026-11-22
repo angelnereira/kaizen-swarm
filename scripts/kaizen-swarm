@@ -240,12 +240,14 @@ cmd_check() {
            .kaizen/swarm/swarm.env .kaizen/swarm/ROLES.md .kaizen/swarm/PROTOCOL.md .kaizen/swarm/ROSTER.md; do
     [ -f "$KSW_ROOT/$f" ] || fail "falta $f"
   done
-  for f in scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/lib/swarm-common.sh scripts/bootstrap; do
+  for f in scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/bootstrap; do
     [ -x "$KSW_ROOT/$f" ] || fail "$f no es ejecutable"
     bash -n "$KSW_ROOT/$f" 2>/dev/null || fail "sintaxis invalida: $f"
   done
+  [ -f "$KSW_ROOT/scripts/lib/swarm-common.sh" ] || fail "falta scripts/lib/swarm-common.sh"
+  bash -n "$KSW_ROOT/scripts/lib/swarm-common.sh" 2>/dev/null || fail "sintaxis invalida: swarm-common.sh"
   command -v jq >/dev/null 2>&1 || fail "jq requerido para leases/ownership"
-  [ -f "$KSW_ROOT/.kaizen/adr/0001-autonomia-nivel-3.md" ] || fail "falta ADR-0001 (autonomia nivel 3)"
+  [ -f "$KSW_ROOT/docs/kaizen/adr/0001-autonomia-nivel-3.md" ] || fail "falta ADR-0001 (autonomia nivel 3)"
   [ $FAIL = 0 ] || { kfail "kaizen-swarm check: FALLO"; return 1; }
   klog "kaizen-swarm check: todo en verde"
 }

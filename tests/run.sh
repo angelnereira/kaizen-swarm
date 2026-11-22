@@ -25,7 +25,7 @@ check python3 -m py_compile "$ROOT/scripts/kaizen-insights.py"
 check jq -n '{}'
 
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
-git clone -q --local "$ROOT" "$TMP/repo" || { bad "clon de prueba"; exit 1; }
+git clone -q --local --no-hardlinks "$ROOT" "$TMP/repo" || { bad "clon de prueba"; exit 1; }
 REPO="$TMP/repo"
 export KSW_ROOT="$REPO"
 
@@ -34,7 +34,7 @@ export KSW_ROOT="$REPO"
 # init idempotente y sala completa
 ( cd "$REPO" && scripts/kaizen-swarm init 101 --slug prueba >/dev/null 2>&1 )
 for f in brief.md plan.md journal.md mailbox contracts/ownership.json contracts/leases.json; do
-  [ -f "$REPO/.kaizen/swarm/issues/101/$f" ] && ok "sala 101/$f" || bad "sala 101/$f"
+  [ -e "$REPO/.kaizen/swarm/issues/101/$f" ] && ok "sala 101/$f" || bad "sala 101/$f"
 done
 ( cd "$REPO" && scripts/kaizen-swarm init 101 --slug prueba 2>&1 | grep -q 'ya existe' ) \
   && ok "init idempotente" || bad "init idempotente"
