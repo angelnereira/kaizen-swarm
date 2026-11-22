@@ -1,0 +1,14 @@
+{
+  "slug": "equipo-central",
+  "goal": "Coordinar la comunidad y cerrar un objetivo verificable por ciclo",
+  "kpi": "Una decisión verificada por ciclo",
+  "facilitator": "facilitador-equipo",
+  "members": [
+    "kaizen-equipo",
+    "facilitador-equipo",
+    "verificador-evidencias"
+  ],
+  "stage": "intake",
+  "created": "2026-11-22T06:21:09Z",
+  "updated": "2026-11-22T06:21:14Z"
+}

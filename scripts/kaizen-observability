@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# kaizen-observability: exporter Prometheus + dashboard Grafana para la comunidad.
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
+[ -f "$ROOT/.kaizen/observability/observability.env" ] && . "$ROOT/.kaizen/observability/observability.env"
+: "${KO_EXPORTER_PORT:=9101}" "${KO_EXPORTER_BIND:=127.0.0.1}" "${KO_GRAFANA_PORT:=3000}"
+S="$ROOT/.kaizen/team/runtime"; mkdir -p "$S"
+klog() { printf '[kaizen-observability] %s\n' "$*"; }
+alive() { [ -f "$S/exporter.pid" ] && kill -0 "$(cat "$S/exporter.pid")" 2>/dev/null; }
+
+cmd_start() {
+  alive && { klog "exporter ya activo (PID $(cat "$S/exporter.pid"))"; return 0; }
+  KAZEN_ROOT="$ROOT" KO_EXPORTER_PORT="$KO_EXPORTER_PORT" KO_EXPORTER_BIND="$KO_EXPORTER_BIND" \
+    nohup python3 "$ROOT/scripts/kaizen-exporter.py" >> "$S/exporter.log" 2>&1 &
+  echo $! > "$S/exporter.pid"
+  klog "exporter en http://$KO_EXPORTER_BIND:$KO_EXPORTER_PORT/metrics"
+}
+
+cmd_stop() {
+  alive && { kill "$(cat "$S/exporter.pid")" 2>/dev/null || true; rm -f "$S/exporter.pid"; klog "exporter detenido"; } \
+    || klog "exporter no activo"
+}
+
+cmd_status() {
+  if alive; then echo "exporter: ACTIVO (PID $(cat "$S/exporter.pid")) http://$KO_EXPORTER_BIND:$KO_EXPORTER_PORT/metrics"; else echo "exporter: inactivo"; fi
+  echo "dashboard: observability/grafana/dashboards/kaizen-swarm.json"
+  echo "stack: docker compose -f observability/docker-compose.yml up -d (Grafana :$KO_GRAFANA_PORT)"
+  echo "series: kaizen_agents_total, kaizen_agent_last_rc, kaizen_team_log_age_seconds, kaizen_outbox_findings, kaizen_eval_score"
+}
+
+cmd_check() {
+  local fail=0
+  for f in scripts/kaizen-exporter.py observability/prometheus.yml observability/docker-compose.yml \
+           observability/grafana/dashboards/kaizen-swarm.json \
+           observability/grafana/provisioning/datasources/prometheus.yml \
+           observability/grafana/provisioning/dashboards/dashboards.yml \
+           .kaizen/observability/observability.env; do
+    [ -f "$ROOT/$f" ] || { printf 'FALLA: falta %s\n' "$f" >&2; fail=1; }
+  done
+  python3 -m py_compile "$ROOT/scripts/kaizen-exporter.py" 2>/dev/null || fail=1
+  jq -e '.panels | length > 0' "$ROOT/observability/grafana/dashboards/kaizen-swarm.json" >/dev/null 2>&1 || fail=1
+  [ $fail = 0 ] || { klog "check: FALLO"; return 1; }
+  klog "check: todo en verde"
+}
+
+cmd_stack() {
+  command -v docker >/dev/null 2>&1 || { klog "docker no disponible"; return 2; }
+  docker compose -f "$ROOT/observability/docker-compose.yml" up -d
+  klog "Grafana en http://localhost:$KO_GRAFANA_PORT (admin/admin)"
+}
+
+case "${1:-status}" in
+  start) cmd_start;; stop) cmd_stop;; status) cmd_status;; check) cmd_check;; stack) cmd_stack;;
+  *) echo "uso: kaizen-observability start|stop|status|check|stack";;
+esac

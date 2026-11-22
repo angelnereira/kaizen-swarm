@@ -136,6 +136,31 @@ PROCESS_DEFS = {
             "learn": {"R": ["rea-specialist", "knowledge-curator"], "I": ["*"]},
         },
     },
+    "api_reverse_engineering": {
+        "name": "Ingeniería inversa de APIs web (RAE-API)",
+        "gate": "sitio autorizado + HAR y run_id conservados + cliente revisado con security check",
+        "stages": {
+            "authorize": {"R": ["reverse-api-specialist"], "A": ["humano"],
+                          "V": ["security", "cumplimiento-panama"]},
+            "capture": {"R": ["reverse-api-specialist"], "C": ["qa"],
+                        "V": ["security"]},
+            "generate": {"R": ["reverse-api-specialist"]},
+            "verify": {"R": ["security", "verificador-evidencias", "qa"], "A": ["humano"]},
+            "integrate": {"R": ["dev2-api", "dev5-glue"], "A": ["architect"], "I": ["*"]},
+            "learn": {"R": ["reverse-api-specialist", "knowledge-curator"], "I": ["*"]},
+        },
+    },
+    "computer_use": {
+        "name": "Control visual de escritorio (Computer Use)",
+        "gate": "KO_DESKTOP_ENABLED=1 + humano como A + veto de seguridad + captura y recaptura",
+        "stages": {
+            "authorize": {"R": ["computer-operator"], "A": ["humano"], "V": ["security"]},
+            "observe": {"R": ["computer-operator"], "C": ["qa"]},
+            "act": {"R": ["computer-operator"], "V": ["security"]},
+            "verify": {"R": ["qa", "verificador-evidencias"], "A": ["humano"]},
+            "learn": {"R": ["computer-operator", "knowledge-curator"], "I": ["*"]},
+        },
+    },
 }
 
 
@@ -172,6 +197,10 @@ def participation(fields):
         parts += ["agent_lifecycle"]
     if aid == "rea-specialist":
         parts += ["reverse_engineering", "research"]
+    if aid == "reverse-api-specialist":
+        parts += ["api_reverse_engineering", "research"]
+    if aid == "computer-operator":
+        parts += ["computer_use", "change"]
     return sorted(set(parts))
 
 

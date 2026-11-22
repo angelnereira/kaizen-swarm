@@ -2,7 +2,7 @@
 
 Fuente única: `.kaizen/org/prompts/<id>.md`. Generado por `scripts/kaizen-org catalog`; no editar a mano.
 
-Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-22 | Total: 43 agentes
+Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-22 | Total: 45 agentes
 
 ## Resumen por departamento
 
@@ -11,9 +11,9 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-22 | Total: 43 agentes
 | conocimiento | 4 | 4 | none |
 | cumplimiento | 3 | 3 | compliance, none |
 | gerencia | 3 | 3 | none, resource |
-| operaciones | 2 | 2 | none |
+| operaciones | 3 | 2 | none |
 | producto-negocio | 6 | 6 | none, scope |
-| tecnologia | 25 | 25 | architecture, none, qa, security |
+| tecnologia | 26 | 26 | architecture, none, qa, security |
 
 ## Inventario
 
@@ -25,6 +25,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-22 | Total: 43 agentes
 | `architect` | Arquitecto de Software | tecnologia | active | high | scoped | architecture | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Contratos documentados y sin deuda arquitectural] |
 | `business-profiles-architect` | Arquitecto de Perfiles de Negocio | producto-negocio | active | high | scoped | scope | 1 | [read, write-docs, run-checks, report] | [research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista] | 1 | [verticales sin condicionales y capacidades documentadas] |
 | `capacidades-negocio` | Especialista en Capacidades Tecnológicas, Financieras y de Mercadeo | conocimiento | active | high | propose | none | 1 | [read, write-docs, research-web, run-checks, report] | [issue.label:capacidades, research.required:*, knowledge.updated:*, schedule:weekly] | 8 | [recomendaciones con supuestos, baseline y verificación, 0 cifras sin fuente, conocimiento revalidado trimestralmente] |
+| `computer-operator` | Operador de Escritorio (Computer Use) | operaciones | paused | medium | scoped | none | 1 | [read, write-docs, report, desktop-control] | [computer_use.authorized:*, issue.label:desktop] | 3 | [0 acciones sin captura previa, 100% de acciones confirmadas por recaptura, 0 secretos en pantalla] |
 | `cumplimiento-panama` | Especialista en Cumplimiento y Normativa (Panamá + Estándares Internacionales) | cumplimiento | active | high | scoped | compliance | 1 | [read, write-docs, research-web, run-checks, report] | [issue.label:cumplimiento, research.required:*, knowledge.updated:*, schedule:weekly, regulatory.change:*] | 8 | [mapa normativo vigente con fuente oficial y fecha de corte, 0 afirmaciones legales sin cita, 100% de propuestas con control y dueño humano] |
 | `data-expert` | Experto en Datos | tecnologia | active | medium | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Telemetria saneada y conforme a L-12] |
 | `dev1-core` | Dev Core y Dominio | tecnologia | active | medium | scoped | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Pruebas de dominio en verde] |
@@ -55,6 +56,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-22 | Total: 43 agentes
 | `qa` | Equipo de QA | tecnologia | active | high | scoped | qa | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Toda correccion con prueba que falla primero] |
 | `rea-specialist` | Especialista en Ingeniería Inversa y Depuración Profunda (REA) | tecnologia | active | high | scoped | none | 1 | [read, write-docs, research-web, run-checks, report, rea-mcp] | [research.required:*, issue.label:depuracion, reverse_engineering.authorized:*, knowledge.updated:*] | 4 | [hallazgos con evidencia reproducible, 0 análisis sin autorización escrita, 0 secretos en reportes] |
 | `researcher` | Investigador de Tecnologia | conocimiento | active | medium | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Experimentos con numeros reales y decision registrada] |
+| `reverse-api-specialist` | Especialista en Ingeniería Inversa de APIs Web | tecnologia | active | high | scoped | none | 1 | [read, write-docs, research-web, run-checks, report, rae-api-cli] | [issue.label:api-recon, api_reverse_engineering.authorized:*, research.required:*, knowledge.updated:*] | 5 | [0 capturas sin autorización, 100% de clientes generados con run_id y HAR, 0 secretos en HAR versionado] |
 | `runbooks` | Responsable de Runbooks | operaciones | active | medium | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Runbooks probados y al dia] |
 | `rust-systems-specialist` | Especialista en Rust y Sistemas | tecnologia | active | medium | propose | none | 1 | [read, write-docs, run-checks, report] | [research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista] | 1 | [benchmarks reproducibles y cero regresiones] |
 | `security` | Seguridad y Auditoria | tecnologia | active | high | propose | security | 1 | [read, audit, report] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [0 secretos y 0 supresiones sin issue] |
@@ -86,6 +88,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-22 | Total: 43 agentes
 
 ### operaciones
 
+- **`computer-operator`** — Operador de Escritorio (Computer Use). Propósito: Operar la computadora del usuario —ver pantalla, mover ratón, escribir— cuando la configuración disponible no alcanza y el humano lo autoriza, verificando cada paso visualmente.. Reglas: [K-1..K-14, L-1..L-17, S-1..S-16].
 - **`runbooks`** — Responsable de Runbooks. Propósito: Mantiene runbooks ejecutables y reversibles con rollback verificado.. Reglas: [K-1..K-12, L-1..L-17, S-1..S-16].
 - **`soporte`** — Especialista de Soporte y Respuesta. Propósito: Clasifica incidencias, reproduce con datos sinteticos y propone correcciones.. Reglas: [K-1..K-12, L-1..L-17, S-1..S-16].
 
@@ -122,6 +125,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-22 | Total: 43 agentes
 - **`product`** — Analista de Producto y Alcance. Propósito: Valida criterios y alcance minimo del issue.. Reglas: [K-1..K-12, L-1..L-17, S-1..S-16].
 - **`qa`** — Equipo de QA. Propósito: Escribe pruebas de reproduccion, regresion e integracion.. Reglas: [K-1..K-12, L-1..L-17, S-1..S-16].
 - **`rea-specialist`** — Especialista en Ingeniería Inversa y Depuración Profunda (REA). Propósito: Profundizar en el análisis de sistemas —binarios, Electron/.NET, Android, firmware, tráfico y comportamiento en runtime— usando REA cuando el humano lo autoriza, para convertir hallazgos difíciles en evidencia verificable y cambios seguros.. Reglas: [K-1..K-14, L-1..L-17, S-1..S-16].
+- **`reverse-api-specialist`** — Especialista en Ingeniería Inversa de APIs Web. Propósito: Convertir sitios web autorizados en clientes de API tipados con `reverse-api-engineer`, entregando código revisado, evidencia de la captura (HAR + `run_id`) y成本控制 bajo supervisión humana.. Reglas: [K-1..K-14, L-1..L-17, S-1..S-16].
 - **`rust-systems-specialist`** — Especialista en Rust y Sistemas. Propósito: Trabaja en runtime WebAssembly, WASI, no_std, C FFI y audio de baja latencia con benchmarks.. Reglas: [K-1..K-14, L-1..L-17, S-1..S-16].
 - **`security`** — Seguridad y Auditoria. Propósito: Audita secretos, supresiones y privilegios; bloquea riesgos.. Reglas: [K-1..K-12, L-1..L-17, S-1..S-16].
 - **`systems`** — Ingeniero de Sistemas. Propósito: Resuelve concurrencia, resiliencia y flujos transversales.. Reglas: [K-1..K-12, L-1..L-17, S-1..S-16].

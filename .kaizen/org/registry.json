@@ -66,6 +66,17 @@
     "triggers": "[issue.label:capacidades, research.required:*, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "computer-operator",
+    "name": "Operador de Escritorio (Computer Use)",
+    "department": "operaciones",
+    "version": 1,
+    "status": "paused",
+    "proactivity": "medium",
+    "autonomy": "scoped",
+    "veto": "none",
+    "triggers": "[computer_use.authorized:*, issue.label:desktop]"
+  },
+  {
     "id": "cumplimiento-panama",
     "name": "Especialista en Cumplimiento y Normativa (Panamá + Estándares Internacionales)",
     "department": "cumplimiento",
@@ -394,6 +405,17 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "reverse-api-specialist",
+    "name": "Especialista en Ingeniería Inversa de APIs Web",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "none",
+    "triggers": "[issue.label:api-recon, api_reverse_engineering.authorized:*, research.required:*, knowledge.updated:*]"
   },
   {
     "id": "runbooks",

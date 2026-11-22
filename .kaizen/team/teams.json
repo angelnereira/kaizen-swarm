@@ -1,22 +1,64 @@
 {
   "equipo-central": {
     "goal": "Coordinar la comunidad y cerrar un objetivo verificable por ciclo",
-    "members": ["kaizen-equipo", "facilitador-equipo", "verificador-evidencias"],
+    "members": [
+      "facilitador-equipo",
+      "verificador-evidencias",
+      "gerente"
+    ],
     "kpi": "Una decisión verificada por ciclo"
   },
   "cumplimiento": {
     "goal": "Vigilar Gaceta Oficial y normativa panameña; convertir cambios en reglas y acciones",
-    "members": ["monitor-gaceta", "cumplimiento-panama", "verificador-evidencias", "fiscal-integration-specialist"],
+    "members": [
+      "monitor-gaceta",
+      "cumplimiento-panama",
+      "verificador-evidencias",
+      "fiscal-integration-specialist"
+    ],
     "kpi": "0 normas sin source_id verificado"
   },
   "plataforma": {
     "goal": "Mantener CI/CD, nube, observabilidad y Rust/WASI con despliegues reversibles",
-    "members": ["platform-engineer", "gcp-cloud-architect", "rust-systems-specialist", "dotnet-banking-integrator"],
+    "members": [
+      "platform-engineer",
+      "gcp-cloud-architect",
+      "rust-systems-specialist",
+      "dotnet-banking-integrator"
+    ],
     "kpi": "Despliegues con rollback y tests verdes"
   },
   "producto": {
     "goal": "Convertir necesidades de negocio en capacidades, diseño Flutter y modelos de acceso",
-    "members": ["business-profiles-architect", "identity-access-specialist", "vertical-domain-specialist", "flutter-m3-design-specialist", "ai-rag-engineer"],
+    "members": [
+      "business-profiles-architect",
+      "identity-access-specialist",
+      "vertical-domain-specialist",
+      "flutter-m3-design-specialist",
+      "ai-rag-engineer"
+    ],
     "kpi": "Propuestas con evidencia y métrica antes/después"
+  },
+  "api-recon": {
+    "goal": "Instalar y operar reverse-api-engineer como extension de capacidades: cuando la configuracion disponible no alcanza, generar clientes API tipados desde sitios autorizados con evidencia",
+    "members": [
+      "reverse-api-specialist",
+      "security",
+      "qa",
+      "verificador-evidencias",
+      "facilitador-equipo"
+    ],
+    "kpi": "0 capturas sin autorización; 100% de clientes con run_id, HAR y revisión de seguridad"
+  },
+  "desktop-ops": {
+    "goal": "Control visual gobernado: operar la computadora solo con autorizacion humana y verificacion por captura",
+    "members": [
+      "computer-operator",
+      "security",
+      "qa",
+      "verificador-evidencias",
+      "facilitador-equipo"
+    ],
+    "kpi": "0 acciones sin captura y recaptura; 0 secretos expuestos"
   }
 }

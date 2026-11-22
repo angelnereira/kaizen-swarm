@@ -1,0 +1,98 @@
+{
+  "uid": "kaizen-swarm",
+  "title": "Kaizen Swarm — Agentes en tiempo real",
+  "tags": ["kaizen", "agents", "swarm"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "refresh": "5s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Agentes definidos",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "targets": [{ "expr": "kaizen_agents_total", "refId": "A" }],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Herramientas REA",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "targets": [{ "expr": "kaizen_rea_tools_total", "refId": "A" }],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Proyectos activos",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "targets": [{ "expr": "kaizen_projects_total", "refId": "A" }],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Hallazgos outbox",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "targets": [{ "expr": "sum(kaizen_outbox_findings)", "refId": "A" }],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Score calidad agentes",
+      "gridPos": { "h": 4, "w": 8, "x": 16, "y": 0 },
+      "targets": [{ "expr": "kaizen_eval_baseline_average", "refId": "A" }],
+      "fieldConfig": { "defaults": { "unit": "none", "thresholds": { "steps": [
+        { "color": "red", "value": null }, { "color": "green", "value": 70 }
+      ] } } },
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Edad del último ciclo por equipo (s)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [{ "expr": "kaizen_team_log_age_seconds", "legendFormat": "{{team}}", "refId": "A" }],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "RC del último ciclo por equipo",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [{ "expr": "kaizen_runtime_cycle_rc", "legendFormat": "{{team}}", "refId": "A" }],
+      "fieldConfig": { "defaults": { "thresholds": { "steps": [
+        { "color": "green", "value": null }, { "color": "red", "value": 1 }
+      ] } } },
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 8,
+      "type": "table",
+      "title": "Última actividad por agente",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 12 },
+      "targets": [{ "expr": "kaizen_agent_last_rc", "format": "table", "refId": "A" }],
+      "transformations": [{ "id": "organize", "options": { "excludeNames": ["Time"] } }],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 9,
+      "type": "bargauge",
+      "title": "Handoffs por estado",
+      "gridPos": { "h": 9, "w": 6, "x": 12, "y": 12 },
+      "targets": [{ "expr": "sum by (status) (kaizen_handoffs)", "legendFormat": "{{status}}", "refId": "A" }],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 10,
+      "type": "bargauge",
+      "title": "Lecciones aprendidas por agente",
+      "gridPos": { "h": 9, "w": 6, "x": 18, "y": 12 },
+      "targets": [{ "expr": "kaizen_learning_lessons", "legendFormat": "{{agent}}", "refId": "A" }],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+# Observabilidad opcional: Prometheus + Grafana + exporter Kaizen.
+# El exporter corre en el host (127.0.0.1:9101) leyendo archivos del repo;
+# Prometheus lo consulta como host.docker.internal.
+services:
+  prometheus:
+    image: prom/prometheus:v3.6.0
+    container_name: kaizen-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:12.3.0
+    container_name: kaizen-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus

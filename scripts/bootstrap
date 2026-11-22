@@ -27,6 +27,8 @@ for f in \
   .kaizen/org/knowledge/panama-compliance/GACETA-OFICIAL.md \
   .kaizen/org/knowledge/business/CAPACIDADES-REFERENCIA.md \
   .kaizen/org/knowledge/business/REA-INTEGRACION.md \
+  .kaizen/org/knowledge/business/REVERSE-API-ENGINEER.md \
+  .kaizen/org/knowledge/business/COMPUTER-USE.md \
   .kaizen/org/OUTSOURCING.md \
   .kaizen/org/knowledge/international/ESTANDARES.md .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md \
   .kaizen/org/knowledge/business/CAPACIDADES.md \
@@ -40,15 +42,21 @@ for f in \
   .kaizen/org/prompts/rust-systems-specialist.md .kaizen/org/prompts/fiscal-integration-specialist.md \
   .kaizen/org/prompts/flutter-m3-design-specialist.md .kaizen/org/prompts/business-profiles-architect.md \
   .kaizen/org/prompts/identity-access-specialist.md .kaizen/org/prompts/vertical-domain-specialist.md \
-  .kaizen/org/prompts/rea-specialist.md \
+  .kaizen/org/prompts/rea-specialist.md .kaizen/org/prompts/reverse-api-specialist.md \
+  .kaizen/org/prompts/computer-operator.md \
   .kaizen/team/team.env .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md \
   .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md .kaizen/team/OWNER.md \
   .kaizen/team/runtime.env .kaizen/team/teams.json .kaizen/team/notify.env \
   scripts/kaizen-team scripts/kaizen-runtime scripts/kaizen-notify scripts/kaizen-inbox \
-  scripts/kaizen-inbox.py scripts/lib/opencode_agents.py scripts/kaizen-installer scripts/kaizen-start scripts/kaizen-eval scripts/kaizen-learn \
+  scripts/kaizen-inbox.py scripts/lib/opencode_agents.py scripts/kaizen-installer scripts/kaizen-start scripts/kaizen-eval scripts/kaizen-learn scripts/kaizen-desktop \
   scripts/kaizen-gov scripts/lib/gov_seed.py .kaizen/gov/governance.json \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
   .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
+  .kaizen/observability/observability.env scripts/kaizen-exporter.py scripts/kaizen-observability \
+  observability/prometheus.yml observability/docker-compose.yml \
+  observability/grafana/dashboards/kaizen-swarm.json \
+  observability/grafana/provisioning/datasources/prometheus.yml \
+  observability/grafana/provisioning/dashboards/dashboards.yml \
   .kaizen/evals/eval.env .kaizen/evals/baseline.json .kaizen/learning/learning.env \
   docs/kaizen/org/FORECAST.md docs/kaizen/org/CATALOGO-AGENTES.md \
   docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
@@ -59,7 +67,9 @@ for f in \
   docs/kaizen/adr/0007-aprendizaje-continuo-de-agentes.md docs/kaizen/org/APRENDIZAJE.md \
   docs/kaizen/adr/0008-gobernanza-semantica-de-roles.md docs/kaizen/org/GOBIERNO.md \
   docs/kaizen/adr/0009-integracion-rea-gobernada.md docs/kaizen/adr/0010-versionado-y-propagacion.md \
-  docs/kaizen/org/CATALOGO-TECNOLOGIAS.md \
+  docs/kaizen/org/CATALOGO-TECNOLOGIAS.md docs/kaizen/org/OBSERVABILIDAD.md \
+  docs/kaizen/adr/0016-observabilidad-grafana.md docs/kaizen/adr/0017-integracion-reverse-api-engineer.md \
+  docs/kaizen/adr/0018-computer-use-gobernado.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \
@@ -75,7 +85,7 @@ mkdir -p "$TARGET/.kaizen/loop/state" "$TARGET/.kaizen/swarm/issues" \
          "$TARGET/.kaizen/org/research" \
          "$TARGET/.kaizen/team/projects" "$TARGET/.kaizen/team/evidence" "$TARGET/.kaizen/evals" \
          "$TARGET/.kaizen/learning/lessons" "$TARGET/.kaizen/learning/experience" "$TARGET/.kaizen/gov" \
-         "$TARGET/.kaizen/release" "$TARGET/.kaizen/catalog" \
+         "$TARGET/.kaizen/release" "$TARGET/.kaizen/catalog" "$TARGET/.kaizen/observability" \
          "$TARGET/.kaizen/org/knowledge/panama-compliance" "$TARGET/.kaizen/org/knowledge/international" \
          "$TARGET/.kaizen/org/knowledge/business" \
          "$TARGET/docs/kaizen/loop/prompts" "$TARGET/docs/kaizen/swarm/prompts" "$TARGET/docs/kaizen/org" \

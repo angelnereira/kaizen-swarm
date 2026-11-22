@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# kaizen-desktop: control de escritorio local (X11) con xdotool + ImageMagick import.
+# Requiere KO_DESKTOP_ENABLED=1 y el proceso de gobernanza `computer_use` aprobado por humano.
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
+[ -f "$ROOT/.kaizen/config.env" ] && . "$ROOT/.kaizen/config.env"
+[ -f "$ROOT/.kaizen/observability/observability.env" ] && . "$ROOT/.kaizen/observability/observability.env"
+: "${KO_DESKTOP_ENABLED:=0}" "${DISPLAY:=:0}"
+export DISPLAY
+S="$ROOT/.kaizen/team/runtime"; mkdir -p "$S"
+klog() { printf '[kaizen-desktop] %s\n' "$*"; }
+gate() {
+  [ "$KO_DESKTOP_ENABLED" = 1 ] || { klog "desactivado (KO_DESKTOP_ENABLED=0): requiere aprobación humana"; return 1; }
+  command -v xdotool >/dev/null 2>&1 || { klog "xdotool no disponible"; return 1; }
+  command -v import >/dev/null 2>&1 || { klog "ImageMagick import no disponible"; return 1; }
+}
+log_action() { printf '%s %s\n' "$(date -u +%FT%TZ)" "$*" >> "$S/desktop.log"; }
+
+cmd_capture() {
+  gate || return 1
+  local out="$1"; mkdir -p "$(dirname "$out")"
+  import -window root "$out" 2>/dev/null || { klog "captura falló"; return 1; }
+  log_action "capture $out"; klog "captura: $out"
+}
+cmd_click() { gate || return 1; local x="$1" y="$2"; xdotool mousemove "$x" "$y" click 1; log_action "click $x $y"; klog "click $x,$y"; }
+cmd_type() { gate || return 1; local text="$1"; case "$text" in *[!A-Za-z0-9\ ._-]*) klog "texto rechazado (caracteres no permitidos)"; return 2;; esac; xdotool type --delay 40 "$text"; log_action "type <texto>"; klog "texto escrito"; }
+cmd_key() { gate || return 1; local k="$1"; case "$k" in Return|Escape|Tab|space|ctrl+*|alt+*|shift+*) xdotool key "$k"; log_action "key $k"; klog "tecla $k";; *) klog "tecla no permitida: $k"; return 2;; esac; }
+cmd_windows() { gate || return 1; xdotool search --onlyvisible --name '.' getwindowname %@ 2>/dev/null | head -20; }
+
+case "${1:-status}" in
+  capture) shift; cmd_capture "$@";; click) shift; cmd_click "$@";; type) shift; cmd_type "$@";;
+  key) shift; cmd_key "$@";; windows) cmd_windows;;
+  check) gate && { echo "X11 DISPLAY=$DISPLAY | $(xdotool getdisplaygeometry 2>/dev/null) | xdotool+import disponibles"; };;
+  status) echo "KO_DESKTOP_ENABLED=${KO_DESKTOP_ENABLED:-0} DISPLAY=${DISPLAY:-?} | $(command -v xdotool >/dev/null 2>&1 && echo xdotool:si || echo xdotool:no) $(command -v import >/dev/null 2>&1 && echo import:si || echo import:no)";;
+  *) echo "uso: kaizen-desktop check|capture <archivo>|click <x> <y>|type <texto>|key <tecla>|windows|status";;
+esac

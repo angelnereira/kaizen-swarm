@@ -35,6 +35,8 @@ Estado: `verified` = fuente oficial consultada; `pending` = requiere verificaci�
 | LOCAL-002 | Documento interno | CV DevOps / Platform Engineering (Ángel Nereira) | verified |
 | LOCAL-003 | Documento interno | gravital-experience-ui (plan de diseño Flutter M3E) | verified |
 | LOCAL-004 | Documento interno | PlentyPay: perfiles de negocio, módulos, roles y permisos | verified |
+| TOOL-001 | Repositorio oficial | morluto/rea — Reverse Engineer Anything (MIT) | verified |
+| TOOL-002 | Repositorio oficial | kalil0321/reverse-api-engineer (MIT) | verified |
 
 ## Panamá — oficiales
 

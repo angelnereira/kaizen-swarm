@@ -6,7 +6,7 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/team/runtime.env" ] && . "$ROOT/.kaizen/team/runtime.env"
 [ -f "$ROOT/.kaizen/learning/learning.env" ] && . "$ROOT/.kaizen/learning/learning.env"
 : "${KR_AGENT_CMD:=opencode}" "${KR_INTERVAL_SEC:=900}" "${KR_MAX_RUNS_PER_DAY:=24}"
-: "${KR_TIMEOUT_SEC:=900}" "${KR_DRY_RUN:=0}" "${KR_PAUSE_FILE:=.kaizen/loop/PAUSE}" "${KR_MAX_DEPTH:=1}"
+: "${KR_TIMEOUT_SEC:=900}" "${KR_DRY_RUN:=0}" "${KR_PAUSE_FILE:=.kaizen/loop/PAUSE}" "${KR_MAX_DEPTH:=3}" "${KR_MAX_TEAMS_PARALLEL:=6}"
 : "${KR_STATE_DIR:=.kaizen/team/runtime}" "${KR_TEAMS_FILE:=.kaizen/team/teams.json}"
 S="$ROOT/$KR_STATE_DIR"; mkdir -p "$S"
 FAIL=0
@@ -27,9 +27,9 @@ budget_ok() {
 
 cmd_once() {
   local team="$1" goal kpi member prompt rc=0 n=0 log
-  # Un solo ciclo a la vez: evita que dos runtime se lancen entre sí.
-  exec 9>"$S/ciclo.lock"
-  flock -n 9 || { klog "ya hay un ciclo en curso: se omite (anti-recursividad)"; return 0; }
+  # Un ciclo por equipo: permite equipos en paralelo sin repetir el mismo equipo.
+  exec 9>"$S/ciclo-$team.lock"
+  flock -n 9 || { klog "ya hay un ciclo de $team en curso: se omite (anti-recursividad)"; return 0; }
   if paused; then klog "PAUSA activa: no se ejecuta"; return 0; fi
   budget_ok || return 0
   team_names | grep -qx "$team" || { kfail "equipo desconocido: $team"; return 2; }
@@ -98,6 +98,23 @@ cmd_down() {
   rm -f "$S/pid"; klog "runtime detenido"
 }
 
+cmd_deploy() {
+  local t running=0 n=0 teams=()
+  if paused; then klog "PAUSA activa: no se despliega"; return 0; fi
+  while IFS= read -r t; do teams+=("$t"); done < <(team_names)
+  klog "despliegue paralelo: ${#teams[@]} equipos, tope=$KR_MAX_TEAMS_PARALLEL, profundidad=$KR_MAX_DEPTH"
+  for t in "${teams[@]}"; do
+    cmd_once "$t" &
+    running=$((running + 1)); n=$((n + 1))
+    if [ "$running" -ge "$KR_MAX_TEAMS_PARALLEL" ]; then wait; running=0; fi
+  done
+  wait
+  printf '%s deploy teams=%s parallel=%s\n' "$(date -u +%FT%TZ)" "$n" "$KR_MAX_TEAMS_PARALLEL" > "$S/deploy.json"
+  [ -x "$ROOT/scripts/kaizen-notify" ] && "$ROOT/scripts/kaizen-notify" send \
+    --title "Equipos desplegados" --body "Equipos: ${teams[*]}. Paralelismo: $KR_MAX_TEAMS_PARALLEL. Profundidad: $KR_MAX_DEPTH." --level info >/dev/null 2>&1 || true
+  klog "despliegue completado: $n equipos"
+}
+
 cmd_status() {
   echo "pausa: $(paused && echo SI || echo no) | agente: $KR_AGENT_CMD | dry-run: $KR_DRY_RUN"
   echo "equipos:"; team_names | sed 's/^/  /'
@@ -118,11 +135,13 @@ cmd_check() {
 case "${1:-help}" in
   install) shift; "$ROOT/scripts/kaizen-installer" "${@:-opencode --global}";;
   once) shift; cmd_once "${1:?uso: once <equipo>}";;
+  deploy) cmd_deploy;;
   up) cmd_up;; down) cmd_down;; status) cmd_status;; check) cmd_check;;
   *) cat <<'EOF'
 kaizen-runtime <comando>
   install                    instala agentes en OpenCode (global)
   once <equipo>              un ciclo proactivo del equipo (equipos en teams.json)
+  deploy                     despliega todos los equipos en paralelo (tope KR_MAX_TEAMS_PARALLEL)
   up | down                  bucle continuo / detener
   status | check             estado y validación
 Variables: KR_DRY_RUN=1 (plan sin ejecutar), KR_INTERVAL_SEC, KR_MAX_RUNS_PER_DAY

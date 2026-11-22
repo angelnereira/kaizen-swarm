@@ -1,0 +1,18 @@
+{
+  "slug": "adopcion-kaizen-opencode",
+  "goal": "Adoptar la comunidad Kaizen en OpenCode con evidencia verificada y operación proactiva",
+  "kpi": "0 normas sin source_id verificado y scripts/kaizen check en verde",
+  "facilitator": "facilitador-equipo",
+  "members": [
+    "facilitador-equipo",
+    "verificador-evidencias",
+    "architect",
+    "qa",
+    "security",
+    "dx",
+    "knowledge-curator"
+  ],
+  "stage": "intake",
+  "created": "2026-11-22T06:22:54Z",
+  "updated": "2026-11-22T06:22:54Z"
+}
