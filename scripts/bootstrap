@@ -43,12 +43,14 @@ for f in \
   .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md .kaizen/team/OWNER.md \
   .kaizen/team/runtime.env .kaizen/team/teams.json .kaizen/team/notify.env \
   scripts/kaizen-team scripts/kaizen-runtime scripts/kaizen-notify scripts/kaizen-inbox \
-  scripts/kaizen-inbox.py scripts/lib/opencode_agents.py scripts/kaizen-installer scripts/kaizen-start \
+  scripts/kaizen-inbox.py scripts/lib/opencode_agents.py scripts/kaizen-installer scripts/kaizen-start scripts/kaizen-eval \
+  .kaizen/evals/eval.env .kaizen/evals/baseline.json \
   docs/kaizen/org/FORECAST.md docs/kaizen/org/CATALOGO-AGENTES.md \
   docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
   docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md \
   docs/kaizen/adr/0004-especialistas-y-outsourcing.md \
   docs/kaizen/adr/0005-runtime-y-presidencia.md docs/kaizen/org/RUNTIME.md \
+  docs/kaizen/adr/0006-evaluacion-y-ratchet-de-agentes.md docs/kaizen/org/EVALUACION.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \
@@ -62,7 +64,7 @@ done
 mkdir -p "$TARGET/.kaizen/loop/state" "$TARGET/.kaizen/swarm/issues" \
          "$TARGET/.kaizen/org/prompts" "$TARGET/.kaizen/org/decisions/inbox" "$TARGET/.kaizen/org/knowledge/digests" \
          "$TARGET/.kaizen/org/research" \
-         "$TARGET/.kaizen/team/projects" "$TARGET/.kaizen/team/evidence" \
+         "$TARGET/.kaizen/team/projects" "$TARGET/.kaizen/team/evidence" "$TARGET/.kaizen/evals" \
          "$TARGET/.kaizen/org/knowledge/panama-compliance" "$TARGET/.kaizen/org/knowledge/international" \
          "$TARGET/.kaizen/org/knowledge/business" \
          "$TARGET/docs/kaizen/loop/prompts" "$TARGET/docs/kaizen/swarm/prompts" "$TARGET/docs/kaizen/org" \

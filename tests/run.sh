@@ -108,6 +108,8 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md \
          .kaizen/org/knowledge/business/CAPACIDADES-REFERENCIA.md .kaizen/org/OUTSOURCING.md \
          docs/kaizen/adr/0004-especialistas-y-outsourcing.md \
+         .kaizen/evals/eval.env .kaizen/evals/baseline.json scripts/kaizen-eval \
+         docs/kaizen/adr/0006-evaluacion-y-ratchet-de-agentes.md docs/kaizen/org/EVALUACION.md \
          .kaizen/org/prompts/gcp-cloud-architect.md .kaizen/org/prompts/ai-rag-engineer.md \
          .kaizen/org/prompts/fiscal-integration-specialist.md .kaizen/org/prompts/flutter-m3-design-specialist.md; do
   [ -f "$REPO/$f" ] && ok "existe $f" || bad "falta $f"
@@ -188,6 +190,18 @@ AG=$(find "$NA" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
 [ "$AG" -ge 40 ] && ok "agentes OpenCode generados ($AG)" || bad "agentes OpenCode generados ($AG)"
 ( cd "$REPO" && KN_CHANNELS=file scripts/kaizen-notify send --title "Prueba" --body "Reporte" >/dev/null 2>&1 )
 [ -f "$REPO/.kaizen/team/runtime/notifications.jsonl" ] && ok "notificacion registrada" || bad "notificacion registrada"
+
+# evaluacion de agentes, ratchet y metricas de decision
+( cd "$REPO" && python3 scripts/kaizen-eval check >/dev/null 2>&1 ) && ok "eval check" || bad "eval check"
+( cd "$REPO" && python3 scripts/kaizen-eval ratchet >/dev/null 2>&1 ) && ok "eval ratchet" || bad "eval ratchet"
+( cd "$REPO" && python3 scripts/kaizen-eval metrics add --agent qa --decision DEC-TEST --cost 0.05 --minutes 7 --reverted 0 >/dev/null 2>&1 )
+[ "$(grep -c 'DEC-TEST' "$REPO/.kaizen/evals/metrics.jsonl" 2>/dev/null || echo 0)" -ge 1 ] \
+  && ok "metrica de decision" || bad "metrica de decision"
+VICTIM="$REPO/.kaizen/org/prompts/ai.md"
+sed -i '/^## Colaboración/,$d' "$VICTIM"
+( cd "$REPO" && python3 scripts/kaizen-eval ratchet >/dev/null 2>&1 ) \
+  && bad "ratchet debe detectar degradacion" || ok "ratchet detecta degradacion"
+( cd "$REPO" && git checkout -- .kaizen/org/prompts/ai.md )
 
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]

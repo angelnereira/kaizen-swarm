@@ -85,6 +85,7 @@ check_security() {
 check_swarm() { "$ROOT/scripts/kaizen-swarm" check >/dev/null 2>&1 || fail "swarm: ver kaizen-swarm check"; }
 check_org() { "$ROOT/scripts/kaizen-org" check >/dev/null 2>&1 || fail "organizacion: ver kaizen-org check"; }
 check_team() { "$ROOT/scripts/kaizen-team" check >/dev/null 2>&1 || fail "equipo: ver kaizen-team check"; }
+check_eval() { python3 "$ROOT/scripts/kaizen-eval" check >/dev/null 2>&1 || fail "evaluación: ver kaizen-eval check"; }
 
 cmd_check() {
   local only=""
@@ -97,8 +98,9 @@ cmd_check() {
     swarm) check_swarm;;
     org) check_org;;
     team) check_team;;
-    "") check_descriptors; check_policy; check_tests; check_security; check_swarm; check_org; check_team; check_ratchet;;
-    *) echo "uso: check [--only descriptors|policy|ratchet|security|swarm|org|team] [--quiet]"; exit 2;;
+    eval) check_eval;;
+    "") check_descriptors; check_policy; check_tests; check_security; check_swarm; check_org; check_team; check_eval; check_ratchet;;
+    *) echo "uso: check [--only descriptors|policy|ratchet|security|swarm|org|team|eval] [--quiet]"; exit 2;;
   esac
   [ $FAIL = 0 ] || { echo "kaizen check: FALLO" >&2; exit 1; }
   ok "kaizen check: todo en verde"
@@ -163,8 +165,8 @@ case "${1:-help}" in
 kaizen <comando>
   init        activa los git hooks
   start <br>  crea rama + descriptor desde la plantilla
-  check       descriptors, politicas, formato/lint/tests, seguridad, swarm, organizacion, equipo y ratchet
-              [--only descriptors|policy|ratchet|security|swarm|org|team] [--quiet]
+  check       descriptors, politicas, formato/lint/tests, seguridad, swarm, organizacion, equipo, eval y ratchet
+              [--only descriptors|policy|ratchet|security|swarm|org|team|eval] [--quiet]
   baseline    escribe/sube la linea base de calidad
   metrics     agrega una linea a docs/kaizen/data/metrics.jsonl
   retro [desde]  resumen de datos para la retrospectiva
