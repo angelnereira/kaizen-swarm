@@ -6,7 +6,13 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
 : "${KN_WHATSAPP_WINDOW_HOURS:=24}" "${KN_WHATSAPP_OPTIN_REQUIRED:=1}" "${KN_WHATSAPP_ALLOW_UNOFFICIAL:=0}"
 : "${KN_WHATSAPP_TEMPLATES_DIR:=.kaizen/team/whatsapp/templates}"
-T="$ROOT/$KN_WHATSAPP_TEMPLATES_DIR"; W="$ROOT/.kaizen/team/whatsapp"; mkdir -p "$T" "$W"
+# Número de El Presidente: solo configuración local de la máquina, nunca en el repo.
+OWNER_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/owner.env"
+[ -f "$OWNER_ENV" ] && . "$OWNER_ENV"
+T="$ROOT/$KN_WHATSAPP_TEMPLATES_DIR"
+# Opt-in y ventana son datos personales: SOLO en la máquina local, nunca en el repo.
+W="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/whatsapp"
+mkdir -p "$T" "$W"
 klog() { printf '[kaizen-whatsapp] %s\n' "$*"; }
 
 cmd_template_add() { # --id ID --category MARKETING|UTILITY|AUTHENTICATION --body T [--vars a,b]
@@ -59,8 +65,18 @@ cmd_check() {
   klog "política oficial OK: modo=$KN_WHATSAPP_MODE ventana=${KN_WHATSAPP_WINDOW_HOURS}h plantillas=$(find "$T" -name '*.json' | wc -l | tr -d ' ')"
 }
 
+cmd_owner() {
+  local p="${KAZEN_OWNER_PHONE:-}"
+  if [ -z "$p" ]; then echo "sin número de El Presidente en $OWNER_ENV"; return 1; fi
+  local digits; digits="$(printf '%s' "$p" | tr -cd '0-9')"
+  local masked="${p:0:4}••••${p: -4}"
+  echo "propietario: $masked | E.164: +$digits"
+  [ -f "$W/optin-$digits.json" ] && echo "opt-in: SI ($(jq -r .source "$W/optin-$digits.json"))" || echo "opt-in: NO"
+}
+
 case "${1:-check}" in
   template) shift; cmd_template_add "$@";; templates) cmd_templates;;
+  owner) cmd_owner;;
   window) shift; cmd_window "$@";; optin) shift; cmd_optin "$@";; check) cmd_check;;
   *) echo "uso: kaizen-whatsapp template|templates|window|optin|check";;
 esac

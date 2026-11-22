@@ -51,6 +51,18 @@ Grafana/local ──► observabilidad       workspaces externos ──► conte
 
 ## Operación
 
+## Número de El Presidente (solo máquina local)
+
+El número se guarda en `~/.config/kaizen-swarm/owner.env` con permisos `600` y **nunca** en el repo ni en el workspace versionado:
+
+```bash
+# KAZEN_OWNER_PHONE="+507XXXXXXXXX"
+scripts/kaizen-whatsapp owner    # muestra el número enmascarado y el estado de opt-in
+scripts/kaizen-whatsapp optin add --phone <digitos> --source "..."
+```
+
+`notify.env` solo declara el **nombre** de la variable (`KN_OWNER_PHONE_VAR=KAZEN_OWNER_PHONE`). Sin interacción reciente registrada, la política exige plantilla aprobada (`kaizen-whatsapp window`).
+
 ```bash
 scripts/kaizen-whatsapp check
 scripts/kaizen-whatsapp templates
