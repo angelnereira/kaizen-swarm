@@ -29,6 +29,8 @@ for f in \
   .kaizen/org/knowledge/business/REA-INTEGRACION.md \
   .kaizen/org/knowledge/business/REVERSE-API-ENGINEER.md \
   .kaizen/org/knowledge/business/COMPUTER-USE.md \
+  Dockerfile docker-compose.yml scripts/kaizen-docker scripts/docker-entrypoint.sh \
+  observability/prometheus-container.yml \
   .kaizen/org/knowledge/business/VOZ-Y-DOCUMENTACION.md \
   .kaizen/team/DECISIONES.md \
   .kaizen/org/OUTSOURCING.md \
@@ -80,6 +82,7 @@ for f in \
   docs/kaizen/adr/0023-autonomia-de-push-y-correccion.md \
   docs/kaizen/adr/0024-instalacion-no-invasiva-y-gobernanza-de-pares.md \
   docs/kaizen/adr/0025-whatsapp-oficial-via-bsp.md docs/kaizen/org/WHATSAPP-OFICIAL.md \
+  docs/kaizen/adr/0026-empaquetado-docker-local.md \
   .kaizen/knowledge/cards/README.md .kaizen/knowledge/golden/README.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \

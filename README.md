@@ -125,6 +125,17 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
+## Despliegue Docker local
+
+```bash
+scripts/kaizen-docker check      # valida compose y sintaxis (sin daemon)
+scripts/kaizen-docker up         # exporter :9101 + Prometheus :9090 + Grafana :3000
+scripts/kaizen-docker status
+scripts/kaizen-docker down       # conserva volúmenes
+```
+
+Imagen base fijada, usuario no root, sin credenciales en la imagen, volúmenes persistentes. Requiere Docker Desktop corriendo; si no está, falla cerrado y documenta en outbox (ADR-0026).
+
 ## WhatsApp oficial
 
 El puente usa **solo Cloud API oficial vía BSP/n8n**: ventana de 24 h, plantillas aprobadas, opt-in explícito y webhooks idempotentes con firma HMAC. `kaizen-whatsapp templates|window|optin|check` aplica la política localmente; Baileys/whatsapp-web.js está prohibido (`KN_WHATSAPP_ALLOW_UNOFFICIAL=0`). Credenciales en n8n/Vault, nunca en el repo (ADR-0025).
