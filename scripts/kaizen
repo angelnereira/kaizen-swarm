@@ -13,8 +13,8 @@ ok()   { [ "${QUIET:-0}" = "1" ] || echo "ok: $*"; }
 
 src_dirs() { for d in $KZ_SRC_GLOBS; do [ -d "$d" ] && printf '%s ' "$d"; done; }
 count_debt() { local d; d="$(src_dirs)"; [ -z "$d" ] && { echo 0; return; }
-  local a b c d; a="TO""DO"; b="FI""XME"; c="HA""CK"; d="$(printf 'X%.0s' 1 2 3)"
-  grep -rEI "$a|$b|$c|$d" $d 2>/dev/null | wc -l | tr -d ' '; }
+  local pa pb pc pd; pa="TO""DO"; pb="FI""XME"; pc="HA""CK"; pd="$(printf 'X%.0s' 1 2 3)"
+  grep -rEI "$pa|$pb|$pc|$pd" $d 2>/dev/null | wc -l | tr -d ' '; }
 count_loc() { local d; d="$(src_dirs)"; [ -z "$d" ] && { echo 0; return; }
   find $d -type f -not -path '*/node_modules/*' -not -path '*/target/*' -exec cat {} + 2>/dev/null | wc -l | tr -d ' '; }
 run_num() { [ -n "${1:-}" ] && bash -c "$1" 2>/dev/null | tail -n1 | tr -d '% ' || echo ""; }
