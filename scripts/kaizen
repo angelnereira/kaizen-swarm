@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # kaizen: CLI de gobernanza y mejora continua (K-1..K-12).
-set -euo pipefail
+set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel)"; cd "$ROOT"
 [ -f .kaizen/config.env ] && . .kaizen/config.env
 KZ_DRAFTS_DIR="${KZ_DRAFTS_DIR:-docs/kaizen/pr-drafts}"
