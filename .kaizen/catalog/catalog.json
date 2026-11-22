@@ -1,0 +1,185 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-11-22T05:16:35.716837+00:00Z",
+  "source": "REA morluto/rea (MIT) + kaizen-swarm",
+  "stats": {
+    "rea_tools": 19,
+    "providers": 4,
+    "families": 5,
+    "framework_skills": 12
+  },
+  "families": {
+    "artifacts": {
+      "label": "Artefactos y datos",
+      "count": 7,
+      "providers": [
+        "native-macos",
+        "rea-artifact-graph",
+        "sqlite"
+      ],
+      "effects": [
+        "launches_process",
+        "may_write_filesystem"
+      ],
+      "operations": [
+        "extract_artifact",
+        "inspect_artifact",
+        "inspect_asset_catalog",
+        "inspect_keyed_archive",
+        "inspect_plist",
+        "inspect_signature",
+        "inspect_sqlite_database"
+      ]
+    },
+    "managed": {
+      "label": "Managed / .NET / Swift / ObjC",
+      "count": 6,
+      "providers": [
+        "native-macos",
+        "rea-artifact-graph",
+        "rea-dotnet-static"
+      ],
+      "effects": [
+        "launches_process",
+        "may_write_filesystem"
+      ],
+      "operations": [
+        "decode_interface_builder",
+        "demangle_swift",
+        "inspect_macho",
+        "inspect_managed_artifact",
+        "inspect_managed_members",
+        "inspect_managed_native_boundaries"
+      ]
+    },
+    "native": {
+      "label": "Binarios nativos y funciones",
+      "count": 2,
+      "providers": [
+        "native-macos"
+      ],
+      "effects": [
+        "launches_process",
+        "may_access_network",
+        "may_show_ui",
+        "may_write_filesystem"
+      ],
+      "operations": [
+        "capture_native_ui_scenario",
+        "inspect_native_dispatch_metadata"
+      ]
+    },
+    "other": {
+      "label": "Inspección general",
+      "count": 1,
+      "providers": [
+        "native-macos"
+      ],
+      "effects": [
+        "launches_process"
+      ],
+      "operations": [
+        "list_architectures"
+      ]
+    },
+    "runtime": {
+      "label": "Runtime, debug e instrumentación",
+      "count": 3,
+      "providers": [
+        "native-macos",
+        "rea-artifact-graph"
+      ],
+      "effects": [
+        "launches_process",
+        "may_access_network",
+        "may_show_ui",
+        "may_write_filesystem"
+      ],
+      "operations": [
+        "observe_native_calls",
+        "observe_native_ui",
+        "trace_dylib_resolution"
+      ]
+    }
+  },
+  "framework_skills": [
+    {
+      "id": "kaizen",
+      "purpose": "Gobernanza, ratchet, PDCA y evidencia",
+      "location": "scripts/kaizen",
+      "owner": "todos"
+    },
+    {
+      "id": "kaizen-security",
+      "purpose": "Secretos, supresiones y SAST",
+      "location": "scripts/kaizen-security",
+      "owner": "seguridad"
+    },
+    {
+      "id": "kaizen-swarm",
+      "purpose": "Comunidad por issue, worktrees y leases",
+      "location": "scripts/kaizen-swarm",
+      "owner": "equipo"
+    },
+    {
+      "id": "kaizen-org",
+      "purpose": "Inventario de agentes, conocimiento y outsourcing",
+      "location": "scripts/kaizen-org",
+      "owner": "equipo"
+    },
+    {
+      "id": "kaizen-team",
+      "purpose": "Escuadras, standups y decisiones",
+      "location": "scripts/kaizen-team",
+      "owner": "equipo"
+    },
+    {
+      "id": "kaizen-eval",
+      "purpose": "Evaluación y ratchet de agentes",
+      "location": "scripts/kaizen-eval",
+      "owner": "calidad"
+    },
+    {
+      "id": "kaizen-learn",
+      "purpose": "Aprendizaje a partir de errores",
+      "location": "scripts/kaizen-learn",
+      "owner": "calidad"
+    },
+    {
+      "id": "kaizen-gov",
+      "purpose": "RACI, obligaciones y derechos",
+      "location": "scripts/kaizen-gov",
+      "owner": "gobernanza"
+    },
+    {
+      "id": "kaizen-runtime",
+      "purpose": "Runtime proactivo y equipos",
+      "location": "scripts/kaizen-runtime",
+      "owner": "operación"
+    },
+    {
+      "id": "kaizen-installer",
+      "purpose": "Instalación en repos y OpenCode",
+      "location": "scripts/kaizen-installer",
+      "owner": "distribución"
+    },
+    {
+      "id": "kaizen-notify / kaizen-inbox",
+      "purpose": "WhatsApp/n8n y correo",
+      "location": "scripts/kaizen-notify",
+      "owner": "comunicación"
+    },
+    {
+      "id": "reverse-engineer-anything",
+      "purpose": "Skill REA de investigación guiada",
+      "location": "~/.agents/skills/reverse-engineer-anything",
+      "owner": "rea-specialist"
+    }
+  ],
+  "self_improvement": [
+    "kaizen-eval mide la definición",
+    "kaizen-learn convierte errores en experiencia",
+    "kaizen-org copy/save especializa agentes",
+    "kaizen-release publica y propaga versiones"
+  ]
+}

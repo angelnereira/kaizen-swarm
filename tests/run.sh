@@ -100,6 +100,10 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          .kaizen/org/knowledge/panama-compliance/GACETA-OFICIAL.md \
          .kaizen/org/knowledge/business/REA-INTEGRACION.md .kaizen/org/prompts/rea-specialist.md \
          docs/kaizen/adr/0009-integracion-rea-gobernada.md \
+         VERSION .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json \
+         .kaizen/catalog/catalog.json docs/kaizen/org/CATALOGO-TECNOLOGIAS.md \
+         scripts/kaizen-release scripts/lib/catalog_skills.py \
+         docs/kaizen/adr/0010-versionado-y-propagacion.md \
          .kaizen/org/prompts/facilitador-equipo.md .kaizen/org/prompts/verificador-evidencias.md \
          .kaizen/org/prompts/monitor-gaceta.md \
          .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md \
@@ -240,6 +244,10 @@ jq -e '.processes.reverse_engineering.stages.authorize.A | index("humano")' "$RE
   && ok "REA requiere humano" || bad "REA requiere humano"
 grep -q '263 herramientas MCP' "$REPO/.kaizen/org/knowledge/business/REA-INTEGRACION.md" \
   && ok "REA documentado instalado" || bad "REA documentado instalado"
+RT=$(jq -r '.stats.rea_tools' "$REPO/.kaizen/catalog/catalog.json" 2>/dev/null || echo 0)
+[ "$RT" -ge 200 ] && ok "catalogo REA ($RT herramientas)" || bad "catalogo REA ($RT)"
+( cd "$REPO" && scripts/kaizen-release status >/dev/null 2>&1 ) && ok "release status" || bad "release status"
+( cd "$REPO" && scripts/kaizen-release notes 1.0.0 >/dev/null 2>&1 ) && ok "release notes" || bad "release notes"
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \

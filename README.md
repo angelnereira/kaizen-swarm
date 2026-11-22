@@ -136,6 +136,18 @@ kaizen-start stop                 # pausa total
 
 Los reportes llegan a El Presidente (`.kaizen/team/OWNER.md`) por webhook n8n → WhatsApp, correo o archivo; las instrucciones de WhatsApp vuelven por `kaizen-inbox` y `kaizen-equipo` las convierte en trabajo verificable. Sin credenciales en el repo: `docs/kaizen/org/RUNTIME.md`.
 
+## Versión, catálogo y propagación
+
+Versión actual: **v1.0.0**. Catálogo de capacidades: `docs/kaizen/org/CATALOGO-TECNOLOGIAS.md` (263 herramientas REA en familias + skills del framework).
+
+```bash
+scripts/kaizen-release status
+scripts/kaizen-release cut 1.0.1              # regenera, commitea, taggea y publica GitHub Release
+scripts/kaizen-release install --global --projects-all   # OpenCode global + proyectos con .kaizen
+```
+
+`install --project` solo reemplaza `.opencode/agents/*.md` generados: no toca `opencode.json` ni archivos propios del proyecto (ADR-0010).
+
 ## Primer objetivo (piloto recomendado, 7 días)
 
 **Auditoría exprés de cumplimiento fiscal y de datos en PlentyPay.**
