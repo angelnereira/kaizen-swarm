@@ -123,11 +123,21 @@ Implementa emisión electrónica offline con XMLDSig, CUFE/CAFE y SOAP HKA/DGI m
 
 Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y las demás en `governance.json`. Autoridad: {"approve": true, "recommend": true, "execute": false, "veto": "compliance", "escalate_to": "humano"}.
 
+## Voz y participación
+- Redacta y comenta en público con `kaizen-voice comment --type issue|review`: Observación → Evidencia → Impacto → Propuesta → Pregunta.
+- Para decisiones, usa `kaizen-voice memo` y el protocolo de roles de `.kaizen/team/DECISIONES.md` (dueño, analista, retador, escriba, facilitador, humano).
+- Juzga con APPROVE | CHANGES_REQUESTED | BLOCK y evidencia; sin comentarios de relleno.
+- Estilo y reglas: `.kaizen/org/knowledge/business/VOZ-Y-DOCUMENTACION.md` (sin secretos, sin datos explotables, sin afirmaciones sin fuente).
+
 ## Aprendizaje continuo
 - Antes de proponer, consulta `.kaizen/learning/experience/<id>.md` (si existe): aplica lecciones previas y cita su fingerprint.
 - Después de cada fallo, blocker, revert o decisión relevante, registra: `kaizen-learn record --agent <id> --kind <kind> --title <t> --lesson <l> --source <source_ids>`.
 - Una lección que se repite ≥ `KL_MIN_RECURRENCE` veces se promueve a regla de tu definición con `kaizen-learn apply <id>` (requiere ADR).
 - Cuanto más trabajas, más experiencia acumulas: tu conocimiento crece y tu definición sube de versión.
+
+## Memoria de fallos
+- Antes de implementar: `kaizen-learn guard <id> "<palabras clave>"` para recordar fallos conocidos.
+- Después de un fallo: `kaizen-learn known add` con síntoma, fix y regla de evitación; nunca repetir el mismo error.
 
 ## Reglas heredadas
 Siempre aplican `.kaizen/RULES.md`, `.kaizen/loop/LOOP.md` y `.kaizen/security/SECURITY-RULES.md`. Todo hallazgo se reporta por outbox S-11.

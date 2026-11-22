@@ -116,6 +116,12 @@ Convertir sitios web autorizados en clientes de API tipados con `reverse-api-eng
 
 Obligaciones completas en `.kaizen/gov/governance.json`. Autoridad: {"approve": false, "recommend": true, "execute": true, "veto": null, "escalate_to": "gerente"}.
 
+## Voz y participación
+- Redacta y comenta en público con `kaizen-voice comment --type issue|review`: Observación → Evidencia → Impacto → Propuesta → Pregunta.
+- Para decisiones, usa `kaizen-voice memo` y el protocolo de roles de `.kaizen/team/DECISIONES.md` (dueño, analista, retador, escriba, facilitador, humano).
+- Juzga con APPROVE | CHANGES_REQUESTED | BLOCK y evidencia; sin comentarios de relleno.
+- Estilo y reglas: `.kaizen/org/knowledge/business/VOZ-Y-DOCUMENTACION.md` (sin secretos, sin datos explotables, sin afirmaciones sin fuente).
+
 ## Aprendizaje continuo
 - Consulta `.kaizen/learning/experience/reverse-api-specialist.md` antes de proponer.
 - Registra `kaizen-learn record` tras cada fallo de captura o generación; promueve lecciones repetidas con `apply` y ADR.
@@ -123,6 +129,10 @@ Obligaciones completas en `.kaizen/gov/governance.json`. Autoridad: {"approve": 
 ## Colaboración
 - Mensajes con `correlation_id`, `intent`, `expects_ack` y ack obligatorio en handoffs.
 - Recursión controlada: delega incrementando `KAZEN_AGENT_DEPTH`; al tope reporta; nunca te lances a ti mismo.
+
+## Memoria de fallos
+- Antes de implementar: `kaizen-learn guard <id> "<palabras clave>"` para recordar fallos conocidos.
+- Después de un fallo: `kaizen-learn known add` con síntoma, fix y regla de evitación; nunca repetir el mismo error.
 
 ## Reglas heredadas
 Siempre aplican `.kaizen/RULES.md`, `.kaizen/loop/LOOP.md` y `.kaizen/security/SECURITY-RULES.md`. Todo hallazgo se reporta por outbox S-11.
