@@ -181,6 +181,22 @@ def collect():
         agents = re.findall(r"agente=(\S+)\s+rc=(-?\d+)", txt)
         for agent, rc in agents:
             r.gauge("kaizen_agent_last_rc", int(rc), {"agent": agent, "team": team}, "Código del último ciclo del agente")
+            r.gauge("kaizen_agent_events_total", 1, {"agent": agent, "team": team, "rc": rc},
+                    "Eventos de agente observados en logs locales")
+        # Duración: desde el inicio del ciclo hasta la línea del agente (solo lectura de timestamps).
+        stamped = re.findall(r"^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ).*?agente=(\S+)\s+rc=(-?\d+)", txt, re.M)
+        for ts, agent, rc in stamped:
+            try:
+                t0 = datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                # La duración se deriva del evento previo del mismo ciclo.
+                prev = re.search(r"^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ).*?ciclo equipo=" + re.escape(team), txt, re.M)
+                if prev:
+                    p0 = datetime.datetime.fromisoformat(prev.group(1).replace("Z", "+00:00"))
+                    dur = max(0, (t0 - p0).total_seconds())
+                    r.gauge("kaizen_agent_event_duration_seconds", dur, {"agent": agent, "team": team},
+                            "Segundos del evento del agente en el ciclo")
+            except Exception:
+                pass
         age = max(0, int(time.time() - os.path.getmtime(lf)))
         r.gauge("kaizen_team_log_age_seconds", age, {"team": team}, "Segundos desde el último log del equipo")
 
