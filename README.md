@@ -2,13 +2,66 @@
 
 Hogar operativo de una **organización de 42 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, **cumplimiento normativo**, **capacidades tecnológicas/financieras/mercadeo**, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Los agentes de conocimiento **investigan en internet** normativa y estándares (ISO/NIST/AICPA/PCI) con fuentes oficiales y fecha de corte, y producen guías de implementación detalladas. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
 
+## Instalación en un paso (para un agente CLI)
+
+**Repositorio:** https://github.com/angelnereira/kaizen-swarm
+
+Abre tu agente CLI en el directorio donde quieres trabajar y pégale **solo** el enlace con una de estas instrucciones:
+
+### OpenCode
+
+```text
+Instala la comunidad de este repositorio: https://github.com/angelnereira/kaizen-swarm
+
+1) Clónalo en /tmp/kaizen-swarm (git clone --depth 1).
+2) Ejecuta: /tmp/kaizen-swarm/scripts/kaizen-installer all <directorio-destino>
+   (instala el framework en el repo destino, los 44 agentes en .opencode/agents y en ~/.config/opencode/agents).
+3) Verifica con: /tmp/kaizen-swarm/scripts/kaizen-start status y bash tests/run.sh.
+4) Reporta qué archivos creó, qué omitió por existir y qué decisiones humanas quedan pendientes.
+No escribas secretos, no modifiques opencode.json sin permiso y no hagas git push.
+```
+
+Equivalente si ya tienes el repo clonado: `./scripts/kaizen-installer all .` y luego `./scripts/kaizen-start status`.
+
+### Claude Code
+
+```text
+Lee e instala siguiendo las instrucciones de https://github.com/angelnereira/kaizen-swarm
+
+Clona el repo, ejecuta scripts/kaizen-installer all <directorio-destino>, luego scripts/kaizen-start status.
+El script es la fuente de verdad: no improvises archivos. Instala los agentes en ~/.config/opencode/agents
+sin sobrescribir opencode.json. No pulses credenciales ni hagas push. Reporta el resultado real de los comandos.
+```
+
+### Codex CLI
+
+```text
+Install the agent community from https://github.com/angelnereira/kaizen-swarm
+
+Run: git clone --depth 1 <url> /tmp/kaizen-swarm && /tmp/kaizen-swarm/scripts/kaizen-installer all <target>
+Then verify with /tmp/kaizen-swarm/scripts/kaizen-start status and bash /tmp/kaizen-swarm/tests/run.sh.
+Do not add secrets, do not edit opencode.json without approval, do not push. Report created/skipped files.
+```
+
+### Humano (sin agente)
+
+```bash
+git clone --depth 1 https://github.com/angelnereira/kaizen-swarm /tmp/kaizen-swarm
+cd /tmp/kaizen-swarm
+./scripts/kaizen-installer all /ruta/a/tu/proyecto
+kaizen-start status          # o: ./scripts/kaizen-start status
+kaizen-start start           # activa runtime + buzón con un solo comando
+```
+
+`all` es idempotente: fusiona sin sobrescribir (`scripts/bootstrap`) y genera los 44 agentes desde las definiciones. No toca tu `opencode.json` ni tus credenciales.
+
 ## Capas
 
 | Capa | Reglas | CLI |
 | --- | --- | --- |
-| Gobernanza | `.kaizen/RULES.md` (K-1..K-12) | `scripts/kaizen` |
+| Gobernanza | `.kaizen/RULES.md` (K-1..K-14) | `scripts/kaizen` |
 | Seguridad | `.kaizen/security/SECURITY-RULES.md` (S-1..S-16) | `scripts/kaizen-security` |
-| Loop autónomo | `.kaizen/loop/LOOP.md` (L-1..L-15) | `scripts/kaizen-loop` |
+| Loop autónomo | `.kaizen/loop/LOOP.md` (L-1..L-17) | `scripts/kaizen-loop` |
 | Comunidad | `.kaizen/swarm/ROLES.md`, `PROTOCOL.md` | `scripts/kaizen-swarm` |
 | Organización | `.kaizen/org/ORGANIZATION.md`, `AGENT_SCHEMA.md`, `CONSENSUS.md` | `scripts/kaizen-org` |
 | Equipo proactivo | `.kaizen/team/TEAM.md`, `COMUNICACION.md`, `FLUJOS.md`, `EVIDENCIA.md` | `scripts/kaizen-team` |
