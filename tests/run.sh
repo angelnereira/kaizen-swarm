@@ -108,6 +108,8 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          docs/kaizen/adr/0017-integracion-reverse-api-engineer.md \
          .kaizen/org/knowledge/business/COMPUTER-USE.md .kaizen/org/prompts/computer-operator.md \
          scripts/kaizen-desktop docs/kaizen/adr/0018-computer-use-gobernado.md \
+         .kaizen/team/DECISIONES.md .kaizen/org/knowledge/business/VOZ-Y-DOCUMENTACION.md \
+         scripts/kaizen-voice docs/kaizen/adr/0019-colaboracion-alta-performance-y-memoria-de-fallos.md \
          .kaizen/observability/observability.env scripts/kaizen-exporter.py scripts/kaizen-observability \
          observability/prometheus.yml observability/docker-compose.yml \
          observability/grafana/dashboards/kaizen-swarm.json \
@@ -267,6 +269,15 @@ jq -e '.processes.computer_use.stages.authorize.A | index("humano")' "$REPO/.kai
   && ok "computer_use con humano" || bad "computer_use con humano"
 grep -q 'KO_DESKTOP_ENABLED=0' "$REPO/.kaizen/org/knowledge/business/COMPUTER-USE.md" \
   && ok "computer use desactivado por defecto" || bad "computer use desactivado por defecto"
+( cd "$REPO" && scripts/kaizen-voice comment --type issue --topic "Prueba" --body "Cuerpo" >/dev/null 2>&1 ) \
+  && ok "voice comment" || bad "voice comment"
+( cd "$REPO" && scripts/kaizen-learn known add --agent qa --title "Fallo de prueba" --symptom "timeout" --fix "reintentar" --avoid "verificar antes" >/dev/null 2>&1 )
+KG=$(cd "$REPO" && scripts/kaizen-learn known guard qa "timeout" 2>/dev/null)
+case "$KG" in *RECUERDA*) ok "memoria de fallos";; *) bad "memoria de fallos";; esac
+jq -e '.processes.decision.stages.challenge' "$REPO/.kaizen/gov/governance.json" >/dev/null 2>&1 \
+  && ok "retador en decision" || bad "retador en decision"
+jq -e '.["decisiones"].model == "opencode/hy4-flash-free"' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 \
+  && ok "equipo decisiones con Hy4" || bad "equipo decisiones con Hy4"
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \

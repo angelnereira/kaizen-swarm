@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+# kaizen-voice: redacción, comentarios públicos, dictámenes y memoriales con evidencia.
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
+[ -f "$ROOT/.kaizen/config.env" ] && . "$ROOT/.kaizen/config.env"
+FAIL=0
+klog() { printf '[kaizen-voice] %s\n' "$*"; }
+kfail() { printf '[kaizen-voice] FALLA: %s\n' "$*" >&2; FAIL=1; }
+
+# Valida que un texto no contenga indicios de secreto ni supresión sin issue.
+validate() {
+  local f="$1"
+  grep -qiE '(gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN .*PRIVATE KEY-----|password[[:space:]]*[:=][[:space:]]*[^[:space:]]{8,})' "$f" \
+    && kfail "posible secreto en el texto (S-1): no se publica"
+  grep -nE '(nosec|noqa|eslint-disable|ts-ignore|\|\|[[:space:]]*true|--no-verify)' "$f" | grep -v '#[0-9]' >/dev/null 2>&1 \
+    && kfail "supresión sin referencia a issue (S-10)"
+  grep -qE 'source_ids?:|Evidencia|comando reproducible' "$f" || kfail "sin evidencia citada (K-10)"
+  [ $FAIL = 0 ]
+}
+
+cmd_comment() {
+  local kind="issue" topic="" body="" out=""
+  while [ $# -gt 0 ]; do case "$1" in
+    --type) kind="$2"; shift;; --topic) topic="$2"; shift;; --body) body="$2"; shift;; --out) out="$2"; shift;;
+  esac; shift; done
+  [ -n "$topic" ] && [ -n "$body" ] || { kfail "--topic y --body son obligatorios"; return 2; }
+  local tmp; tmp="$(mktemp)"
+  case "$kind" in
+    issue)
+      cat > "$tmp" <<EOF
+## Observación
+$topic
+
+## Evidencia
+- source_ids: <completar con IDs de SOURCES.md o comando reproducible>
+
+## Impacto
+<qué cambia>
+
+## Propuesta
+<acción concreta y dueño>
+
+## Pregunta
+<una pregunta verificable>
+---
+$body
+EOF
+      ;;
+    review)
+      cat > "$tmp" <<EOF
+## Hallazgos
+- [severidad] $topic
+
+## Evidencia
+- source_ids: <completar>
+
+## Riesgo
+<qué pasa si no se corrige>
+
+## Recomendación
+<cambio mínimo>
+
+## Dictamen
+APPROVE | CHANGES_REQUESTED | BLOCK
+---
+$body
+EOF
+      ;;
+    *) kfail "tipo desconocido: $kind (issue|review)"; return 2;;
+  esac
+  if [ -n "$out" ]; then mkdir -p "$(dirname "$out")"; cp "$tmp" "$out"; klog "comentario: $out"; else cat "$tmp"; fi
+  validate "$tmp"; rm -f "$tmp"; return $FAIL
+}
+
+cmd_memo() {
+  local id="${1:?uso: memo <decision-id> [--out archivo]}" out=""; shift
+  while [ $# -gt 0 ]; do case "$1" in --out) out="$2"; shift;; esac; shift; done
+  local f; f="$(find "$ROOT/.kaizen/team/projects" -path '*/decisions/*' -name "$id*.md" -print -quit 2>/dev/null)"
+  [ -n "$f" ] || { kfail "decisión no encontrada: $id"; return 2; }
+  local tmp; tmp="$(mktemp)"
+  { printf '# Memorial de decisión %s\n\n' "$id"
+    sed -n '1,/^---$/p' "$f" | sed -n '2,/^---$/p' | head -20
+    printf '\n## Disidentes y contraejemplos\n- <registrar o decir "ninguno, con retador asignado">\n\n'
+    printf '## Incertidumbre\n- <lo no verificado>\n\n'
+    printf '## Dueño, revisión y KPI\n- <de decision.md>\n'
+  } > "$tmp"
+  if [ -n "$out" ]; then mkdir -p "$(dirname "$out")"; cp "$tmp" "$out"; klog "memorial: $out"; else cat "$tmp"; fi
+  validate "$tmp"; rm -f "$tmp"; return $FAIL
+}
+
+case "${1:-help}" in
+  comment) shift; cmd_comment "$@";; memo) shift; cmd_memo "$@";;
+  check) shift; validate "${1:?uso: check <archivo>}";;
+  *) cat <<'EOF'
+kaizen-voice <comando>
+  comment --type issue|review --topic T --body B [--out archivo]
+  memo <decision-id> [--out archivo]
+  check <archivo>   valida evidencia, secretos y supresiones
+EOF
+  ;;
+esac

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-22T12:45:01.608737+00:00Z",
+  "updated": "2026-11-22T13:03:02.201716+00:00Z",
   "owner": "El Presidente (dueño del negocio y del proyecto)",
   "legend": {
     "R": "ejecuta la tarea",
@@ -49,6 +49,20 @@
             "analista-negocios"
           ]
         },
+        "challenge": {
+          "R": [
+            "architect",
+            "qa",
+            "security",
+            "cumplimiento-panama"
+          ],
+          "A": [
+            "architect"
+          ],
+          "I": [
+            "gerente"
+          ]
+        },
         "veto": {
           "V": [
             "security",
@@ -68,13 +82,22 @@
             "verificador-evidencias"
           ]
         },
-        "record": {
+        "memorial": {
           "R": [
-            "verificador-evidencias",
-            "facilitador-equipo"
+            "knowledge-curator",
+            "verificador-evidencias"
           ],
           "I": [
             "*"
+          ]
+        },
+        "verify": {
+          "R": [
+            "qa",
+            "verificador-evidencias"
+          ],
+          "A": [
+            "humano"
           ]
         }
       }

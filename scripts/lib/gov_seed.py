@@ -34,9 +34,12 @@ PROCESS_DEFS = {
             "propose": {"R": ["facilitador-equipo", "analista-negocios", "kaizen-equipo"], "A": ["facilitador-equipo"]},
             "consult": {"C": ["*"]},
             "discuss": {"C": ["architect", "cumplimiento-panama", "finanzas-panamas"], "A": ["architect", "analista-negocios"]},
+            "challenge": {"R": ["architect", "qa", "security", "cumplimiento-panama"],
+                          "A": ["architect"], "I": ["gerente"]},
             "veto": {"V": ["security", "cumplimiento-panama", "qa", "architect", "analista-negocios", "gerente"]},
             "decide": {"A": ["gerente", "humano"], "C": ["verificador-evidencias"]},
-            "record": {"R": ["verificador-evidencias", "facilitador-equipo"], "I": ["*"]},
+            "memorial": {"R": ["knowledge-curator", "verificador-evidencias"], "I": ["*"]},
+            "verify": {"R": ["qa", "verificador-evidencias"], "A": ["humano"]},
         },
     },
     "deployment": {

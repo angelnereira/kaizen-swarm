@@ -1,6 +1,6 @@
 # Catálogo de skills y tecnologías — v1.1.1
 
-Generado: 2026-11-22T12:45:01.589932+00:00Z | Fuente: REA morluto/rea (MIT) + kaizen-swarm
+Generado: 2026-11-22T13:03:02.316288+00:00Z | Fuente: REA morluto/rea (MIT) + kaizen-swarm
 
 Herramientas REA: **263** | Familias: 11 | Proveedores: 5 | Skills del framework: 12
 

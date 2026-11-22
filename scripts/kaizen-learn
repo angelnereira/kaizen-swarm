@@ -143,9 +143,66 @@ cmd_check() {
   klog "kaizen-learn check: todo en verde"
 }
 
+cmd_known_add() {
+  local agent="" title="" symptom="" fix="" avoid="" tags=""
+  while [ $# -gt 0 ]; do case "$1" in
+    --agent) agent="$2"; shift;; --title) title="$2"; shift;; --symptom) symptom="$2"; shift;;
+    --fix) fix="$2"; shift;; --avoid) avoid="$2"; shift;; --tags) tags="$2"; shift;;
+  esac; shift; done
+  [ -n "$agent" ] && [ -n "$title" ] && [ -n "$symptom" ] || { kfail "agent, title y symptom obligatorios"; return 2; }
+  local d="$ROOT/$KL_LESSONS/../known-failures/$agent"; mkdir -p "$d"
+  local fp; fp="$(fingerprint "$agent|$title")"
+  local f="$d/$fp.md"
+  [ -f "$f" ] && { sed -i "s/^seen: .*/seen: $(( $(sed -n 's/^seen: //p' "$f" | head -1) + 1 ))/" "$f"; klog "fallo conocido reincidente: $title"; return 0; }
+  cat > "$f" <<EOF
+---
+fingerprint: $fp
+agent: $agent
+title: $title
+tags: $tags
+seen: 1
+created: $(date -u +%FT%TZ)
+---
+
+# Fallo conocido: $title
+
+## Síntoma
+$symptom
+
+## Causa y fix aplicado
+$fix
+
+## Regla para no repetirlo
+$avoid
+
+## Uso
+Antes de implementar, ejecuta \`kaizen-learn guard $agent "<palabras clave>"\` y aplica la regla.
+EOF
+  klog "fallo conocido registrado: $f"
+}
+
+cmd_known_guard() {
+  local agent="${1:?uso: guard <agente> <palabras clave>}"; shift; local q="$*"
+  local d="$ROOT/$KL_LESSONS/../known-failures/$agent" n=0
+  [ -d "$d" ] || { echo "(sin fallos conocidos para $agent)"; return 0; }
+  local f hay=0
+  for f in "$d"/*.md; do
+    [ -f "$f" ] || continue
+    if grep -qiE "$(printf '%s' "$q" | tr ' ' '|')" "$f"; then
+      echo "RECUERDA: $(sed -n 's/^title: //p' "$f" | head -1)"
+      sed -n '/^## Regla para no repetirlo$/,/^## /p' "$f" | sed -n '2p'
+      hay=1; n=$((n + 1))
+    fi
+  done
+  [ $hay = 0 ] && echo "(sin coincidencias)"
+  klog "guard $agent: $n fallo(s) recordado(s)"
+}
+
 case "${1:-help}" in
   record) shift; cmd_record "$@";; digest) shift; cmd_digest "$@";;
-  apply) shift; cmd_apply "$@";; report) cmd_report;;
+  apply) shift; cmd_apply "$@";;
+  known) shift; case "${1:-list}" in add) shift; cmd_known_add "$@";; guard) shift; cmd_known_guard "$@";; *) echo "uso: known add|guard <agente> ...";; esac;;
+  report) cmd_report;;
   status) echo "lecciones: $(find "$L" -name '*.md' 2>/dev/null | wc -l | tr -d ' ') | experiencias: $(find "$E" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')";;
   check) cmd_check;;
   *) cat <<'EOF'
@@ -153,6 +210,8 @@ kaizen-learn <comando>
   record --agent A --kind failure|blocker|decision|revert|correction --title T --lesson L [--source S]
   digest <agente|all>     convierte lecciones en conocimiento alimentado al agente
   apply <agente>          escribe lecciones en su definición y sube versión (requiere ADR)
+  known add --agent A --title T --symptom S --fix F --avoid R [--tags ...]
+  known guard <agente> <palabras clave>   recuerda fallos conocidos antes de implementar
   report | status | check
 EOF
   ;;

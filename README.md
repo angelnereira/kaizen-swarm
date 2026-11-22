@@ -126,6 +126,10 @@ Evaluación y ratchet de agentes: `scripts/kaizen-eval check|baseline|ratchet|re
 
 Verificación completa: `bash tests/run.sh`, `scripts/kaizen check` y `scripts/kaizen-org check`. El alcance realista de los modelos actuales y la previsión de evolución están en `docs/kaizen/org/FORECAST.md`. Los vetos de cumplimiento se regularon en `docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md`.
 
+## Colaboración de alto rendimiento
+
+`.kaizen/team/DECISIONES.md` define roles de pensamiento (dueño, analista, retador, escriba, facilitador, humano), la regla del retador obligatorio y memorial de decisión. `scripts/kaizen-voice comment|memo|check` redacta y valida comentarios públicos y dictámenes con evidencia. `scripts/kaizen-learn known add|guard` recuerda fallos conocidos antes de implementar. Equipo `decisiones` con modelo `opencode/hy4-flash-free` (ADR-0019).
+
 ## Capacidades ampliadas y equipo grande
 
 - **Observabilidad**: `scripts/kaizen-observability start` expone métricas reales en `http://127.0.0.1:9101/metrics`; `stack` levanta Prometheus + Grafana con el dashboard *Kaizen Swarm — Agentes en tiempo real* (ADR-0016).

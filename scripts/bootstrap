@@ -29,6 +29,8 @@ for f in \
   .kaizen/org/knowledge/business/REA-INTEGRACION.md \
   .kaizen/org/knowledge/business/REVERSE-API-ENGINEER.md \
   .kaizen/org/knowledge/business/COMPUTER-USE.md \
+  .kaizen/org/knowledge/business/VOZ-Y-DOCUMENTACION.md \
+  .kaizen/team/DECISIONES.md \
   .kaizen/org/OUTSOURCING.md \
   .kaizen/org/knowledge/international/ESTANDARES.md .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md \
   .kaizen/org/knowledge/business/CAPACIDADES.md \
@@ -48,7 +50,7 @@ for f in \
   .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md .kaizen/team/OWNER.md \
   .kaizen/team/runtime.env .kaizen/team/teams.json .kaizen/team/notify.env \
   scripts/kaizen-team scripts/kaizen-runtime scripts/kaizen-notify scripts/kaizen-inbox \
-  scripts/kaizen-inbox.py scripts/lib/opencode_agents.py scripts/kaizen-installer scripts/kaizen-start scripts/kaizen-eval scripts/kaizen-learn scripts/kaizen-desktop \
+  scripts/kaizen-inbox.py scripts/lib/opencode_agents.py scripts/kaizen-installer scripts/kaizen-start scripts/kaizen-eval scripts/kaizen-learn scripts/kaizen-desktop scripts/kaizen-voice \
   scripts/kaizen-gov scripts/lib/gov_seed.py .kaizen/gov/governance.json \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
   .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
@@ -70,6 +72,7 @@ for f in \
   docs/kaizen/org/CATALOGO-TECNOLOGIAS.md docs/kaizen/org/OBSERVABILIDAD.md \
   docs/kaizen/adr/0016-observabilidad-grafana.md docs/kaizen/adr/0017-integracion-reverse-api-engineer.md \
   docs/kaizen/adr/0018-computer-use-gobernado.md \
+  docs/kaizen/adr/0019-colaboracion-alta-performance-y-memoria-de-fallos.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \

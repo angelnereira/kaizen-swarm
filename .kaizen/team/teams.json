@@ -73,5 +73,21 @@
     ],
     "kpi": "Promedio eval >= baseline 93.1, 0 regresiones, 100% de hallazgos con leccion o escalado",
     "model": "opencode/hy4-flash-free"
+  },
+  "decisiones": {
+    "goal": "Deliberar como equipo de alto rendimiento: analizar con evidencia, retar con contraejemplos, redactar memoriales y tomar decisiones correctas",
+    "members": [
+      "gerente",
+      "analista-negocios",
+      "architect",
+      "qa",
+      "security",
+      "cumplimiento-panama",
+      "verificador-evidencias",
+      "knowledge-curator",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de decisiones con source_ids, retador asignado y memorial; 0 decisiones sensibles sin humano",
+    "model": "opencode/hy4-flash-free"
   }
 }
