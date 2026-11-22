@@ -8,6 +8,7 @@ import sys
 
 ROOT = os.environ.get("KAZEN_ROOT", os.getcwd())
 CAPS = os.path.join(ROOT, ".kaizen/catalog/rea-capabilities.json")
+TOOLS = os.path.join(ROOT, ".kaizen/catalog/rea-tools.json")
 OUT_JSON = os.path.join(ROOT, ".kaizen/catalog/catalog.json")
 OUT_MD = os.path.join(ROOT, "docs/kaizen/org/CATALOGO-TECNOLOGIAS.md")
 
@@ -42,13 +43,17 @@ FRAMEWORK_SKILLS = [
 
 def main():
     data = json.load(open(CAPS, encoding="utf-8")) if os.path.exists(CAPS) else {"capabilities": []}
-    operations = []
+    effects = {}
+    providers = {}
     for cap in data.get("capabilities", []):
         for group in cap.get("groups", []):
+            prov = cap.get("provider", {}).get("id", "?")
             for op in group.get("operations", []):
-                operations.append({"name": op, "provider": cap.get("provider", {}).get("id", "?"),
-                                   "effects": group.get("effects", []), "available": group.get("available", False)})
-    operations = sorted({o["name"]: o for o in operations}.values(), key=lambda x: x["name"])
+                effects[op] = group.get("effects", [])
+                providers[op] = prov
+    names = json.load(open(TOOLS, encoding="utf-8")) if os.path.exists(TOOLS) else sorted(effects)
+    operations = [{"name": n, "provider": providers.get(n, "rea-mcp"),
+                   "effects": effects.get(n, []), "available": True} for n in sorted(set(names))]
     families = {}
     for op in operations:
         n = op["name"]

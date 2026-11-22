@@ -48,7 +48,7 @@ for f in \
   scripts/kaizen-inbox.py scripts/lib/opencode_agents.py scripts/kaizen-installer scripts/kaizen-start scripts/kaizen-eval scripts/kaizen-learn \
   scripts/kaizen-gov scripts/lib/gov_seed.py .kaizen/gov/governance.json \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
-  .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/catalog.json \
+  .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
   .kaizen/evals/eval.env .kaizen/evals/baseline.json .kaizen/learning/learning.env \
   docs/kaizen/org/FORECAST.md docs/kaizen/org/CATALOGO-AGENTES.md \
   docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
