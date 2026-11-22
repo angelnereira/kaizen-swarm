@@ -4,6 +4,7 @@ set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/config.env" ] && . "$ROOT/.kaizen/config.env"
 [ -f "$ROOT/.kaizen/team/runtime.env" ] && . "$ROOT/.kaizen/team/runtime.env"
+[ -f "$ROOT/.kaizen/learning/learning.env" ] && . "$ROOT/.kaizen/learning/learning.env"
 : "${KR_AGENT_CMD:=opencode}" "${KR_INTERVAL_SEC:=900}" "${KR_MAX_RUNS_PER_DAY:=24}"
 : "${KR_TIMEOUT_SEC:=900}" "${KR_DRY_RUN:=0}" "${KR_PAUSE_FILE:=.kaizen/loop/PAUSE}" "${KR_MAX_DEPTH:=1}"
 : "${KR_STATE_DIR:=.kaizen/team/runtime}" "${KR_TEAMS_FILE:=.kaizen/team/teams.json}"
@@ -61,6 +62,15 @@ $instruction"
     done < <(team_members "$team")
   } > "$log"
   printf '%s team=%s agents=%s rc=%s\n' "$(date -u +%FT%TZ)" "$team" "$n" "$rc" > "$S/last.json"
+  # Cada fallo se convierte en lección: el equipo aprende de lo que sale mal (ADR-0007).
+  if [ "${KL_AUTO_RECORD:-1}" = 1 ] && [ -x "$ROOT/scripts/kaizen-learn" ]; then
+    while IFS=' ' read -r _ ag _ r; do
+      [ "${r#rc=}" = 0 ] && continue
+      "$ROOT/scripts/kaizen-learn" record --agent "${ag#agente=}" --kind failure \
+        --title "Fallo en ciclo $team" --lesson "Revisar ejecución y verificar evidencia antes de delegar." \
+        --source "$log" >/dev/null 2>&1 || true
+    done < <(grep '^agente=' "$log" 2>/dev/null)
+  fi
   [ -x "$ROOT/scripts/kaizen-notify" ] && "$ROOT/scripts/kaizen-notify" event "$team" "$rc" \
     "Agentes ejecutados: $n. Log: $log" >/dev/null 2>&1 || true
   klog "ciclo $team: $n agente(s), rc=$rc, log=$log"

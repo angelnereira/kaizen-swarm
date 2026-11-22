@@ -110,6 +110,8 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          docs/kaizen/adr/0004-especialistas-y-outsourcing.md \
          .kaizen/evals/eval.env .kaizen/evals/baseline.json scripts/kaizen-eval \
          docs/kaizen/adr/0006-evaluacion-y-ratchet-de-agentes.md docs/kaizen/org/EVALUACION.md \
+         .kaizen/learning/learning.env scripts/kaizen-learn \
+         docs/kaizen/adr/0007-aprendizaje-continuo-de-agentes.md docs/kaizen/org/APRENDIZAJE.md \
          .kaizen/org/prompts/gcp-cloud-architect.md .kaizen/org/prompts/ai-rag-engineer.md \
          .kaizen/org/prompts/fiscal-integration-specialist.md .kaizen/org/prompts/flutter-m3-design-specialist.md; do
   [ -f "$REPO/$f" ] && ok "existe $f" || bad "falta $f"
@@ -202,6 +204,25 @@ sed -i '/^## Colaboración/,$d' "$VICTIM"
 ( cd "$REPO" && python3 scripts/kaizen-eval ratchet >/dev/null 2>&1 ) \
   && bad "ratchet debe detectar degradacion" || ok "ratchet detecta degradacion"
 ( cd "$REPO" && git checkout -- .kaizen/org/prompts/ai.md )
+
+# aprendizaje continuo: registrar, deduplicar, digerir y promover
+( cd "$REPO" && scripts/kaizen-learn check >/dev/null 2>&1 ) && ok "learn check" || bad "learn check"
+for i in 1 2; do
+  ( cd "$REPO" && scripts/kaizen-learn record --agent qa --kind blocker --title "Sin evidencia" \
+      --lesson "Toda propuesta exige source_ids verificados" --source "PA-001" >/dev/null 2>&1 )
+done
+LF=$(find "$REPO/.kaizen/learning/lessons/qa" -name '*.md' | wc -l | tr -d ' ')
+[ "$LF" = 1 ] && ok "leccion deduplicada" || bad "leccion deduplicada ($LF)"
+grep -q '^occurrences: 2$' "$REPO"/.kaizen/learning/lessons/qa/*.md && ok "recurrencia registrada" || bad "recurrencia registrada"
+( cd "$REPO" && scripts/kaizen-learn digest qa >/dev/null 2>&1 )
+[ -f "$REPO/.kaizen/learning/experience/qa.md" ] && ok "experiencia generada" || bad "experiencia generada"
+V0=$(sed -n 's/^version: //p' "$REPO/.kaizen/org/prompts/qa.md" | head -1)
+( cd "$REPO" && scripts/kaizen-learn apply qa >/dev/null 2>&1 )
+V1=$(sed -n 's/^version: //p' "$REPO/.kaizen/org/prompts/qa.md" | head -1)
+[ "$V1" -gt "$V0" ] && ok "apply sube version" || bad "apply sube version ($V0->$V1)"
+grep -q 'Aprendizaje acumulado' "$REPO/.kaizen/org/prompts/qa.md" && ok "leccion en definicion" || bad "leccion en definicion"
+( cd "$REPO" && scripts/kaizen-learn report >/dev/null 2>&1 )
+[ -f "$REPO/.kaizen/learning/report.md" ] && ok "reporte de aprendizaje" || bad "reporte de aprendizaje"
 
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]

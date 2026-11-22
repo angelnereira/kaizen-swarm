@@ -116,6 +116,8 @@ Equipo proactivo: `scripts/kaizen-team init <slug> --goal "..." --kpi "..."`, lu
 
 Bases de conocimiento especializado: `.kaizen/org/knowledge/` (mapa normativo panameño, contextos de negocio/tecnología, reglas REG-01..15, rutas de Gaceta Oficial, checklist, estándares internacionales, guía de implementación ISO, capacidades de negocio y `SOURCES.md`). El protocolo de investigación es `.kaizen/org/RESEARCH.md`.
 
+Aprendizaje continuo: `scripts/kaizen-learn record|digest|apply|report` convierte fallos, blockers y decisiones en lecciones con fingerprint, las deduplica, genera experiencia por agente y, cuando se repiten, las promueve a la definición (sube versión). Cuanto más se usa, más aprende y se especializa (`.kaizen/org/learning` → `docs/kaizen/org/APRENDIZAJE.md`, ADR-0007).
+
 Evaluación y ratchet de agentes: `scripts/kaizen-eval check|baseline|ratchet|report|metrics add` — 10 dimensiones, promedio actual **93.1/100**, 42 agentes sobre el umbral de 70. Coste por decisión, tiempo a verificación y tasa de revert se registran con `metrics add`; la línea base no puede bajar sin ADR (`docs/kaizen/org/EVALUACION.md`, ADR-0006).
 
 Verificación completa: `bash tests/run.sh`, `scripts/kaizen check` y `scripts/kaizen-org check`. El alcance realista de los modelos actuales y la previsión de evolución están en `docs/kaizen/org/FORECAST.md`. Los vetos de cumplimiento se regularon en `docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md`.

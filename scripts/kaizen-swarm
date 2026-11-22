@@ -256,6 +256,7 @@ cmd_check() {
   "$KSW_ROOT/scripts/kaizen-runtime" check >/dev/null 2>&1 || fail "kaizen-runtime check en rojo"
   "$KSW_ROOT/scripts/kaizen-installer" check >/dev/null 2>&1 || fail "kaizen-installer check en rojo"
   python3 "$KSW_ROOT/scripts/kaizen-eval" check >/dev/null 2>&1 || fail "kaizen-eval check en rojo"
+  "$KSW_ROOT/scripts/kaizen-learn" check >/dev/null 2>&1 || fail "kaizen-learn check en rojo"
   [ $FAIL = 0 ] || { kfail "kaizen-swarm check: FALLO"; return 1; }
   klog "kaizen-swarm check: todo en verde"
 }

@@ -193,6 +193,9 @@ def cmd_report():
               f"- Coste medio por decisión: USD {cost:.4f}",
               f"- Tiempo medio a verificación: {mins:.1f} min",
               f"- Tasa de revert: {rev:.1%}",
+              "", "## Aprendizaje acumulado",
+              f"- Lecciones registradas: {len(glob.glob(os.path.join(ROOT, '.kaizen/learning/lessons/**/*.md'), recursive=True))}",
+              "- Cuanto más se usa el equipo, más lecciones y más experiencia: `kaizen-learn report`.",
               "", "Registrar: `kaizen-eval metrics add --agent <id> --decision <id> --cost <usd> --minutes <n> --reverted <0|1>`"]
     path = jpath(c["report"])
     os.makedirs(os.path.dirname(path), exist_ok=True)

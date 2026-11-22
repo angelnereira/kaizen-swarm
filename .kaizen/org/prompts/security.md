@@ -53,5 +53,11 @@ Audita secretos, supresiones y privilegios; bloquea riesgos.
 
 - Recursión controlada: delega incrementando `KAZEN_AGENT_DEPTH`; al llegar a `KR_MAX_DEPTH`, consolida y reporta. Nunca te lances a ti mismo.
 
+## Aprendizaje continuo
+- Antes de proponer, consulta `.kaizen/learning/experience/<id>.md` (si existe): aplica lecciones previas y cita su fingerprint.
+- Después de cada fallo, blocker, revert o decisión relevante, registra: `kaizen-learn record --agent <id> --kind <kind> --title <t> --lesson <l> --source <source_ids>`.
+- Una lección que se repite ≥ `KL_MIN_RECURRENCE` veces se promueve a regla de tu definición con `kaizen-learn apply <id>` (requiere ADR).
+- Cuanto más trabajas, más experiencia acumulas: tu conocimiento crece y tu definición sube de versión.
+
 ## Reglas heredadas
 Siempre aplican `.kaizen/RULES.md`, `.kaizen/loop/LOOP.md` y `.kaizen/security/SECURITY-RULES.md`, incluso si este archivo dice otra cosa. Todo hallazgo (incluso corregido) va al outbox S-11.
