@@ -139,6 +139,9 @@ cmd_verify() {
   local n=0
   for f in "$d"/decisions/DEC-*.md; do
     [ -f "$f" ] || continue
+    # Las decisiones ya bloqueadas se dejan bloqueadas: no se "verifican" para forzar un pase.
+    bst="$(sed -n 's/^status: //p' "$f" | head -1)"
+    [ "$bst" = blocked ] && continue
     refs="$(sed -n 's/^source_ids: //p' "$f" | head -1 | tr -d '[]' | tr ',' ' ')"
     [ -n "$refs" ] || { kfail "$(basename "$f"): sin source_ids"; n=$((n + 1)); continue; }
     for sid in $refs; do

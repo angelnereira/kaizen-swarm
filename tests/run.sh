@@ -138,7 +138,7 @@ S=$(sed -n 's/^status: //p' "$REPO/.kaizen/org/prompts/marketing-visual.md" | he
 
 # equipo: flujo completo con evidencia verificada y bloqueo sin fuentes
 ( cd "$REPO" && scripts/kaizen-team check >/dev/null 2>&1 ) && ok "kaizen-team check" || bad "kaizen-team check"
-( cd "$REPO" && scripts/kaizen-team init demo --goal "Probar equipo" --kpi "Decisiones verificadas" >/dev/null 2>&1 )
+( cd "$REPO" && scripts/kaizen-team init demo --goal "Probar equipo" --kpi "Decisiones verificadas" --members facilitador-equipo,verificador-evidencias,cumplimiento-panama >/dev/null 2>&1 )
 ST="$(jq -r .stage "$REPO/.kaizen/team/projects/demo/state.json" 2>/dev/null || echo 0)"
 [ "$ST" = intake ] && ok "team init" || bad "team init ($ST)"
 ( cd "$REPO" && scripts/kaizen-team standup demo >/dev/null 2>&1 )
