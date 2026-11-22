@@ -133,8 +133,10 @@ def cmd_ratchet():
     old = json.load(open(path, encoding="utf-8"))
     scores = all_scores()
     cur = {s["id"]: s["score"] for s in scores}
-    avg = round(sum(cur.values()) / max(1, len(cur)), 2)
-    reg = [f"{k}: {v} -> {cur.get(k)}" for k, v in old.get("agents", {}).items() if cur.get(k, 0) < v]
+    # Solo se compara el conjunto de la línea base: un agente nuevo no degrada el ratchet.
+    base_ids = old.get("agents", {})
+    avg = round(sum(cur.get(k, 0) for k in base_ids) / max(1, len(base_ids)), 2)
+    reg = [f"{k}: {v} -> {cur.get(k)}" for k, v in base_ids.items() if cur.get(k, 0) < v]
     if reg or avg < old.get("average", 0):
         print("RATCHET FALLO: calidad de agentes degradada.\n  " + "\n  ".join(reg))
         return 1
