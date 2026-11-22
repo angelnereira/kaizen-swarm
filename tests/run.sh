@@ -63,8 +63,8 @@ jq -e '.[] | select(.task=="tarea-x" and .status=="reaped")' "$REPO/.kaizen/swar
 [ ! -d "$REPO/.kaizen/swarm/issues/102" ] && ok "dry-run sin efectos" || bad "dry-run sin efectos"
 
 # finalize en seco con gates y export saneado
-( cd "$REPO" && KSW_DRY_RUN=1 scripts/kaizen-swarm finalize 101 2>&1 | grep -q '\[dry-run\]' ) \
-  && ok "finalize dry-run" || bad "finalize dry-run"
+FOUT="$(cd "$REPO" && KSW_DRY_RUN=1 scripts/kaizen-swarm finalize 101 2>&1)"
+case "$FOUT" in *'[dry-run]'*) ok "finalize dry-run";; *) bad "finalize dry-run";; esac
 
 # security: redaccion, supresiones y fallo cerrado
 FAKE="AKIA""IOSFODNN7EXAMPLE"
