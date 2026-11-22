@@ -227,6 +227,7 @@ grep -q 'Aprendizaje acumulado' "$REPO/.kaizen/org/prompts/qa.md" && ok "leccion
 [ -f "$REPO/.kaizen/learning/report.md" ] && ok "reporte de aprendizaje" || bad "reporte de aprendizaje"
 
 # gobernanza semantica: RACI, derechos y deteccion de procesos sin responsable
+( cd "$REPO" && python3 scripts/kaizen-gov regenerate >/dev/null 2>&1 )
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) && ok "gov check" || bad "gov check"
 GO=$(cd "$REPO" && python3 scripts/kaizen-gov raci deployment 2>/dev/null)
 case "$GO" in *humano*) ok "raci con humano";; *) bad "raci con humano";; esac
