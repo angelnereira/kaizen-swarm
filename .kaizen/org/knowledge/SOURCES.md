@@ -31,6 +31,10 @@ Estado: `verified` = fuente oficial consultada; `pending` = requiere verificaci�
 | OWASP-001 | OWASP | ASVS 4.0 / Top 10 2021 | verified |
 | INT-001 | FATF | 40 Recomendaciones | verified |
 | INT-002 | IFRS Foundation | IFRS 15/9/16 (adopción local a verificar) | pending |
+| LOCAL-001 | Documento interno | CV Arquitecto IA Generativa (Ángel Nereira) | verified |
+| LOCAL-002 | Documento interno | CV DevOps / Platform Engineering (Ángel Nereira) | verified |
+| LOCAL-003 | Documento interno | gravital-experience-ui (plan de diseño Flutter M3E) | verified |
+| LOCAL-004 | Documento interno | PlentyPay: perfiles de negocio, módulos, roles y permisos | verified |
 
 ## Panamá — oficiales
 

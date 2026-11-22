@@ -25,6 +25,8 @@ for f in \
   .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md .kaizen/org/knowledge/panama-compliance/CHECKLIST.md \
   .kaizen/org/knowledge/panama-compliance/CONTEXTOS.md .kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md \
   .kaizen/org/knowledge/panama-compliance/GACETA-OFICIAL.md \
+  .kaizen/org/knowledge/business/CAPACIDADES-REFERENCIA.md \
+  .kaizen/org/OUTSOURCING.md \
   .kaizen/org/knowledge/international/ESTANDARES.md .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md \
   .kaizen/org/knowledge/business/CAPACIDADES.md \
   .kaizen/org/prompts/_template.md .kaizen/org/prompts/gerente.md .kaizen/org/prompts/analista-negocios.md \
@@ -32,12 +34,18 @@ for f in \
   .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
   .kaizen/org/prompts/facilitador-equipo.md .kaizen/org/prompts/verificador-evidencias.md \
   .kaizen/org/prompts/monitor-gaceta.md \
+  .kaizen/org/prompts/gcp-cloud-architect.md .kaizen/org/prompts/ai-rag-engineer.md \
+  .kaizen/org/prompts/dotnet-banking-integrator.md .kaizen/org/prompts/platform-engineer.md \
+  .kaizen/org/prompts/rust-systems-specialist.md .kaizen/org/prompts/fiscal-integration-specialist.md \
+  .kaizen/org/prompts/flutter-m3-design-specialist.md .kaizen/org/prompts/business-profiles-architect.md \
+  .kaizen/org/prompts/identity-access-specialist.md .kaizen/org/prompts/vertical-domain-specialist.md \
   .kaizen/team/team.env .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md \
   .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md \
   scripts/kaizen-team \
   docs/kaizen/org/FORECAST.md docs/kaizen/org/CATALOGO-AGENTES.md \
   docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
   docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md \
+  docs/kaizen/adr/0004-especialistas-y-outsourcing.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \

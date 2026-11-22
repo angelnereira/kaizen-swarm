@@ -89,7 +89,7 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 32 ] && ok "inventario de 32 agentes" || bad "inventario de 32 agentes ($N)"
+[ "$N" = 42 ] && ok "inventario de 42 agentes" || bad "inventario de 42 agentes ($N)"
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
@@ -103,7 +103,11 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md \
          docs/kaizen/org/CATALOGO-AGENTES.md .kaizen/org/catalog.json \
          docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
-         docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md; do
+         docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md \
+         .kaizen/org/knowledge/business/CAPACIDADES-REFERENCIA.md .kaizen/org/OUTSOURCING.md \
+         docs/kaizen/adr/0004-especialistas-y-outsourcing.md \
+         .kaizen/org/prompts/gcp-cloud-architect.md .kaizen/org/prompts/ai-rag-engineer.md \
+         .kaizen/org/prompts/fiscal-integration-specialist.md .kaizen/org/prompts/flutter-m3-design-specialist.md; do
   [ -f "$REPO/$f" ] && ok "existe $f" || bad "falta $f"
 done
 ( cd "$REPO" && scripts/kaizen-org research cumplimiento-panama "vigencia normativa" --url https://www.antai.gob.pa/ >/dev/null 2>&1 )
@@ -111,7 +115,7 @@ done
   && ok "expediente de investigacion" || bad "expediente de investigacion"
 ( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
 C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
-[ "$C" = 32 ] && ok "catalogo consistente (32)" || bad "catalogo consistente ($C)"
+[ "$C" = 42 ] && ok "catalogo consistente (42)" || bad "catalogo consistente ($C)"
 grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
   && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
@@ -155,6 +159,16 @@ BL=$(grep -l '^status: blocked$' "$REPO"/.kaizen/team/projects/demo/decisions/*.
 ( cd "$REPO" && scripts/kaizen-team verify demo >/dev/null 2>&1 ) && ok "verify con fuentes" || bad "verify con fuentes"
 ( cd "$REPO" && scripts/kaizen-team sync demo >/dev/null 2>&1 ) && ok "sync" || bad "sync"
 ( cd "$REPO" && scripts/kaizen-team retro demo >/dev/null 2>&1 ) && ok "retro" || bad "retro"
+
+# outsourcing por tecnologia: contrato, rechazo sin evidencia y aceptacion verificable
+( cd "$REPO" && scripts/kaizen-org outsource wasm-spike --tech Wasmtime --to externo --deliverable "PR" --acceptance "tests verdes" >/dev/null 2>&1 )
+[ -f "$REPO/.kaizen/org/outsourcing/wasm-spike/contract.md" ] && ok "contrato outsourcing" || bad "contrato outsourcing"
+( cd "$REPO" && scripts/kaizen-org outsource-accept wasm-spike >/dev/null 2>&1 ) \
+  && bad "aceptar sin evidencia debe fallar" || ok "aceptar sin evidencia falla"
+printf 'source_ids: LOCAL-001\ncommand: bash tests/run.sh\n' > "$REPO/.kaizen/org/outsourcing/wasm-spike/evidence.md"
+( cd "$REPO" && scripts/kaizen-org outsource-accept wasm-spike >/dev/null 2>&1 ) && ok "aceptar con evidencia" || bad "aceptar con evidencia"
+grep -q '^status: accepted$' "$REPO/.kaizen/org/outsourcing/wasm-spike/contract.md" \
+  && ok "contrato accepted" || bad "contrato accepted"
 
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]

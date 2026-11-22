@@ -1,6 +1,6 @@
 # kaizen-swarm
 
-Hogar operativo de una **organización de 32 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, **cumplimiento normativo**, **capacidades tecnológicas/financieras/mercadeo**, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Los agentes de conocimiento **investigan en internet** normativa y estándares (ISO/NIST/AICPA/PCI) con fuentes oficiales y fecha de corte, y producen guías de implementación detalladas. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
+Hogar operativo de una **organización de 42 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, **cumplimiento normativo**, **capacidades tecnológicas/financieras/mercadeo**, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Los agentes de conocimiento **investigan en internet** normativa y estándares (ISO/NIST/AICPA/PCI) con fuentes oficiales y fecha de corte, y producen guías de implementación detalladas. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
 
 ## Capas
 
@@ -41,7 +41,7 @@ scripts/kaizen-swarm finalize 42 --publish      # push + PR (lo hace el orquesta
 Organización de agentes:
 
 ```bash
-scripts/kaizen-org list                          # inventario de 32 puestos
+scripts/kaizen-org list                          # inventario de 42 puestos
 scripts/kaizen-org research cumplimiento-panama "versión vigente de la Ley 81" --url https://www.antai.gob.pa/
 scripts/kaizen-org copy marketing marketing-visual --name "Marketing Visual"
 scripts/kaizen-org save marketing-visual         # sube versión + diario
@@ -56,6 +56,8 @@ Instalación en otro repo:
 ```bash
 scripts/bootstrap /ruta/al/otro/repo
 ```
+
+Especialistas y outsourcing: 10 agentes por tecnología (GCP, RAG, .NET bancario, plataforma, Rust/WASI, fiscal DGI/HKA, Flutter M3E, perfiles de negocio, identidad y verticales) según `CAPACIDADES-REFERENCIA.md`. Si una tecnología queda fuera del equipo, `scripts/kaizen-org outsource <slug> --tech … --deliverable … --acceptance …` abre un contrato; `outsource-accept` solo cierra con `evidence.md` verificable (`.kaizen/org/OUTSOURCING.md`, ADR-0004).
 
 Equipo proactivo: `scripts/kaizen-team init <slug> --goal "..." --kpi "..."`, luego `standup`, `assign`, `handoff`, `ack`, `sync`, `decide --sources PA-001,ISO-001`, `verify`, `advance`, `retro`. Los proyectos avanzan por estados con puertas y ninguna decisión se da por tomada sin fuentes verificadas en `SOURCES.md` (Gaceta Oficial incluida).
 

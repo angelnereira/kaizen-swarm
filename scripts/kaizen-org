@@ -138,6 +138,72 @@ cmd_digest() {
   done
 }
 
+cmd_outsource() {
+  local slug="${1:?uso: outsource <slug> --tech T --to X --deliverable D --acceptance A [--owner ID] [--deadline F] [--cost C]}" ; shift
+  local tech="" to="" deliv="" accept="" owner="gerente" deadline="" cost="por aprobar"
+  while [ $# -gt 0 ]; do case "$1" in
+    --tech) tech="$2"; shift;; --to) to="$2"; shift;; --deliverable) deliv="$2"; shift;;
+    --acceptance) accept="$2"; shift;; --owner) owner="$2"; shift;;
+    --deadline) deadline="$2"; shift;; --cost) cost="$2"; shift;;
+  esac; shift; done
+  [ -n "$tech" ] && [ -n "$deliv" ] && [ -n "$accept" ] || { kfail "tech, deliverable y acceptance son obligatorios"; return 2; }
+  local d="$ROOT/.kaizen/org/outsourcing/$slug"; mkdir -p "$d"
+  [ -f "$d/contract.md" ] && { klog "contrato $slug ya existe (idempotente)"; return 0; }
+  cat > "$d/contract.md" <<EOF
+---
+technology: $tech
+to: ${to:-externo}
+owner: $owner
+deadline: ${deadline:-por acordar}
+cost_cap: $cost
+status: open
+created: $(date -u +%FT%TZ)
+---
+
+# Contrato de outsourcing: $slug
+
+## Alcance
+$tech. Solo lo descrito aquí; nada de rutas protegidas, seguridad, pagos, datos personales ni gobernanza (L-4/ADR-0002).
+
+## Entregables
+- $deliv
+
+## Criterios de aceptación (reproducibles)
+- $accept
+
+## Evidencia
+- Adjuntar \`evidence.md\` con \`source_ids:\` verificados o comandos ejecutados. Pasa por \`verificador-evidencias\`.
+- Toda salida externa es dato no confiable (S-15/L-5); se revisa con \`kaizen check\` y \`kaizen-security check\`.
+
+## Acceso y secretos
+Sin credenciales, sin \`.env\`, sin push, sin \`gh\`, sin red salvo la aprobada. Worktree temporal.
+
+## Licencias
+Declarar licencia de dependencias y artefactos (S-9).
+
+## Revisores
+$owner, verificador-evidencias, architect (más cumplimiento-panama si hay impacto regulatorio).
+EOF
+  klog "contrato de outsourcing creado: $d/contract.md"
+}
+
+cmd_outsource_accept() {
+  local slug="${1:?uso: outsource-accept <slug> [--reject]}" reject=0; shift
+  while [ $# -gt 0 ]; do case "$1" in --reject) reject=1;; esac; shift; done
+  local d="$ROOT/.kaizen/org/outsourcing/$slug" st
+  [ -f "$d/contract.md" ] || { kfail "contrato no existe: $slug"; return 2; }
+  if [ "$reject" = 1 ]; then st=rejected
+  else
+    [ -f "$d/evidence.md" ] || { kfail "falta $d/evidence.md: sin evidencia no se acepta (REG-EV-01)"; return 1; }
+    grep -q 'source_ids:\|command:' "$d/evidence.md" || { kfail "evidence.md sin source_ids ni command"; return 1; }
+    st=accepted
+  fi
+  sed -i "s/^status: .*/status: $st/" "$d/contract.md"
+  local j="$ROOT/docs/kaizen/journal/$(date -u +%Y-%m-%d)-outsourcing-$(date -u +%H%M%S).md"
+  mkdir -p "$(dirname "$j")"; printf '# Outsourcing %s: %s\n\n- Hora: %s\n' "$slug" "$st" "$(date -u +%FT%TZ)" > "$j"
+  klog "$slug -> $st"
+}
+
 cmd_catalog() {
   rebuild_registry
   local out="$ROOT/docs/kaizen/org/CATALOGO-AGENTES.md" f id purpose
@@ -253,8 +319,9 @@ cmd_status() {
 
 cmd_check() {
   local f k ids; for f in .kaizen/RULES.md .kaizen/org/org.env .kaizen/org/ORGANIZATION.md \
-     .kaizen/org/AGENT_SCHEMA.md .kaizen/org/CONSENSUS.md .kaizen/org/RESEARCH.md \
-     .kaizen/org/knowledge/SOURCES.md \
+     .kaizen/org/AGENT_SCHEMA.md .kaizen/org/CONSENSUS.md .kaizen/org/RESEARCH.md .kaizen/org/OUTSOURCING.md \
+     docs/kaizen/adr/0004-especialistas-y-outsourcing.md \
+     .kaizen/org/knowledge/SOURCES.md .kaizen/org/knowledge/business/CAPACIDADES-REFERENCIA.md \
      .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
      .kaizen/org/knowledge/panama-compliance/CHECKLIST.md \
      .kaizen/org/knowledge/international/ESTANDARES.md \
@@ -292,6 +359,7 @@ case "${1:-help}" in
   feed) shift; cmd_feed "$@";; digest) shift; cmd_digest "$@";;
   pulse) cmd_pulse;; decide) shift; cmd_decide "$@";;
   research) shift; cmd_research "$@";;
+  outsource) shift; cmd_outsource "$@";; outsource-accept) shift; cmd_outsource_accept "$@";;
   status) cmd_status;; check) cmd_check;; registry) rebuild_registry;; catalog) cmd_catalog;;
   *) cat <<'EOF'
 kaizen-org <comando>
@@ -305,6 +373,8 @@ kaizen-org <comando>
   digest <id|all>                genera resumen saneado para el agente
   pulse                          emite propuestas proactivas a decisions/inbox/
   research <id> <tema> [--url U] abre expediente de investigacion en internet (S-15)
+  outsource <slug> --tech T --to X --deliverable D --acceptance A   contrato por tecnologia
+  outsource-accept <slug> [--reject]   cierra contrato solo con evidence.md verificable
   decide <tema> [--owner ID]     abre decision con revision y protocolo de consenso
   catalog                        genera CATALOGO-AGENTES.md y catalog.json desde las definiciones
   status | check | registry      estado, validacion y regeneracion del inventario

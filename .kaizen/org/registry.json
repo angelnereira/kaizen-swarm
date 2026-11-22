@@ -11,6 +11,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "ai-rag-engineer",
+    "name": "Ingeniero de IA y RAG",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "none",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
     "id": "analista-negocios",
     "name": "Analista Oficial de Negocios",
     "department": "producto-negocio",
@@ -31,6 +42,17 @@
     "autonomy": "scoped",
     "veto": "architecture",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "business-profiles-architect",
+    "name": "Arquitecto de Perfiles de Negocio",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
   },
   {
     "id": "capacidades-negocio",
@@ -132,6 +154,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "dotnet-banking-integrator",
+    "name": "Integrador Bancario .NET",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "medium",
+    "autonomy": "scoped",
+    "veto": "none",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
     "id": "dx",
     "name": "Experto en DX",
     "department": "tecnologia",
@@ -176,6 +209,39 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "fiscal-integration-specialist",
+    "name": "Especialista en Integración Fiscal DGI/HKA",
+    "department": "cumplimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "compliance",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
+    "id": "flutter-m3-design-specialist",
+    "name": "Especialista en Diseño Flutter M3E",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "none",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
+    "id": "gcp-cloud-architect",
+    "name": "Arquitecto Cloud GCP",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "architecture",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
     "id": "gerente",
     "name": "Gerente de Operaciones (COO)",
     "department": "gerencia",
@@ -185,6 +251,17 @@
     "autonomy": "scoped",
     "veto": "resource",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "identity-access-specialist",
+    "name": "Especialista en Identidad y Acceso",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "architecture",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
   },
   {
     "id": "infra",
@@ -253,6 +330,17 @@
     "triggers": "[schedule:daily, regulatory.change:*, research.required:*]"
   },
   {
+    "id": "platform-engineer",
+    "name": "Ingeniero de Plataforma y DevOps",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "none",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
     "id": "product",
     "name": "Analista de Producto y Alcance",
     "department": "tecnologia",
@@ -308,6 +396,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "rust-systems-specialist",
+    "name": "Especialista en Rust y Sistemas",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "medium",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
     "id": "security",
     "name": "Seguridad y Auditoria",
     "department": "tecnologia",
@@ -350,5 +449,16 @@
     "autonomy": "scoped",
     "veto": "none",
     "triggers": "[decision.proposed, source.stale, schedule:weekly, regulatory.change:*]"
+  },
+  {
+    "id": "vertical-domain-specialist",
+    "name": "Especialista en Verticales Comerciales",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "medium",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
   }
 ]
