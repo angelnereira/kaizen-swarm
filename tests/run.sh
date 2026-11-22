@@ -86,5 +86,31 @@ mv "$REPO/.kaizen/security/patterns.txt" "$REPO/.kaizen/security/patterns.bak"
   && bad "escaner roto debe bloquear" || ok "escaner roto bloquea (fail-closed)"
 mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 
+# organización: inventario, copia/especialización, guardado con versión y conocimiento
+( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
+N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
+[ "$N" = 27 ] && ok "inventario de 27 agentes" || bad "inventario de 27 agentes ($N)"
+ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
+( cd "$REPO" && scripts/kaizen-org copy marketing marketing-visual --name "Marketing Visual" >/dev/null 2>&1 )
+[ -f "$REPO/.kaizen/org/prompts/marketing-visual.md" ] && ok "copy crea especialización" || bad "copy crea especialización"
+[ "$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)" = "$ORIG" ] && ok "original intacto" || bad "original intacto"
+( cd "$REPO" && scripts/kaizen-org save marketing-visual >/dev/null 2>&1 )
+V=$(sed -n 's/^version: //p' "$REPO/.kaizen/org/prompts/marketing-visual.md" | head -1)
+[ "$V" = 2 ] && ok "save sube versión" || bad "save sube versión ($V)"
+printf '# Documento de prueba\nCorreo: alguien@example.com\n' > "$TMP/knowledge.md"
+( cd "$REPO" && scripts/kaizen-org feed marketing-visual "$TMP/knowledge.md" --title "Prueba" >/dev/null 2>&1 \
+   && scripts/kaizen-org digest marketing-visual >/dev/null 2>&1 )
+DG="$REPO/.kaizen/org/knowledge/digests/marketing-visual.md"
+[ -f "$DG" ] && grep -q '<email>' "$DG" && ok "feed + digest saneado" || bad "feed + digest saneado"
+( cd "$REPO" && scripts/kaizen-org pulse >/dev/null 2>&1 )
+[ "$(find "$REPO/.kaizen/org/decisions/inbox" -name '*.md' | wc -l | tr -d ' ')" -gt 0 ] \
+  && ok "pulse proactivo" || bad "pulse proactivo"
+( cd "$REPO" && scripts/kaizen-org decide "Probar consenso" >/dev/null 2>&1 )
+[ "$(find "$REPO/.kaizen/org/decisions" -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')" -gt 0 ] \
+  && ok "decisión registrada" || bad "decisión registrada"
+( cd "$REPO" && scripts/kaizen-org disable marketing-visual >/dev/null 2>&1 )
+S=$(sed -n 's/^status: //p' "$REPO/.kaizen/org/prompts/marketing-visual.md" | head -1)
+[ "$S" = paused ] && ok "disable pausa agente" || bad "disable pausa agente"
+
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]

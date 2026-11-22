@@ -51,3 +51,6 @@ Se aplica `.kaizen/security/SECURITY-RULES.md`. Nada se silencia: todo fallo, ha
 
 ## K-12 Comunidad swarm
 Toda tarea se ejecuta como issue en la comunidad descrita en `.kaizen/swarm/ROLES.md` y `.kaizen/swarm/PROTOCOL.md`. Un agente nunca edita a ciegas archivos de otro: trabaja en su propio worktree, declara propiedad de rutas en `contracts/ownership.json`, publica avances en el buzón y espera ack antes de dar un handoff por cerrado. Seguridad y Arquitecto tienen veto vinculante. `scripts/kaizen-swarm finalize` se niega a integrar si hay BLOCK abierto, lease caducado sin reasignar o propiedad violada. El orquestador —no el agente— hace push y abre PRs.
+
+## K-13 Organización de agentes
+El inventario de puestos vive en `.kaizen/org/prompts/<id>.md` y se consulta con `scripts/kaizen-org list`. Cada puesto es un archivo versionado, copiable y editable: `kaizen-org copy` permite especializar un agente sin destruir el original; `kaizen-org save` sube su versión y deja entrada de diario. La proactividad consiste en proponer con evidencia (`kaizen-org pulse`), nunca en actuar sin control. Las decisiones se toman por consulta, discusión acotada y consenso registrado según `.kaizen/org/CONSENSUS.md`, con revisión posterior del KPI. El alcance realista de estas capacidades y su evolución se documentan en `docs/kaizen/org/FORECAST.md` y se revisan cada trimestre.

@@ -20,7 +20,12 @@ for f in \
   .kaizen/security/patterns.txt .kaizen/security/hardcode.txt .kaizen/security/allowlist.txt \
   .kaizen/loop/LOOP.md .kaizen/loop/loop.env \
   .kaizen/swarm/swarm.env .kaizen/swarm/ROLES.md .kaizen/swarm/PROTOCOL.md .kaizen/swarm/ROSTER.md \
-  scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-insights.py \
+  .kaizen/org/org.env .kaizen/org/ORGANIZATION.md .kaizen/org/AGENT_SCHEMA.md .kaizen/org/CONSENSUS.md \
+  .kaizen/org/registry.json .kaizen/org/knowledge/manifest.jsonl \
+  .kaizen/org/prompts/_template.md .kaizen/org/prompts/gerente.md .kaizen/org/prompts/analista-negocios.md \
+  .kaizen/org/prompts/marketing.md .kaizen/org/prompts/finanzas-panamas.md .kaizen/org/prompts/knowledge-curator.md \
+  docs/kaizen/org/FORECAST.md \
+  scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \
   .githooks/commit-msg .githooks/pre-commit .githooks/pre-push \
@@ -31,7 +36,8 @@ for f in \
   copy_new "$f" "$f"
 done
 mkdir -p "$TARGET/.kaizen/loop/state" "$TARGET/.kaizen/swarm/issues" \
-         "$TARGET/docs/kaizen/loop/prompts" "$TARGET/docs/kaizen/swarm/prompts" \
+         "$TARGET/.kaizen/org/prompts" "$TARGET/.kaizen/org/decisions/inbox" "$TARGET/.kaizen/org/knowledge/digests" \
+         "$TARGET/docs/kaizen/loop/prompts" "$TARGET/docs/kaizen/swarm/prompts" "$TARGET/docs/kaizen/org" \
          "$TARGET/docs/kaizen/journal" "$TARGET/docs/kaizen/data"
 
 # .gitignore: añadir líneas que falten, nunca reemplazar.

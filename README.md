@@ -1,6 +1,6 @@
 # kaizen-swarm
 
-Hogar operativo de una comunidad de **17 agentes especializados** que trabajan por issue con aislamiento en git worktrees, buzón trazable y arbitraje de conflictos. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la comunidad a cualquier proyecto sin sobrescribir lo que ya exista.
+Hogar operativo de una **organización de 27 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
 
 ## Capas
 
@@ -10,6 +10,7 @@ Hogar operativo de una comunidad de **17 agentes especializados** que trabajan p
 | Seguridad | `.kaizen/security/SECURITY-RULES.md` (S-1..S-16) | `scripts/kaizen-security` |
 | Loop autónomo | `.kaizen/loop/LOOP.md` (L-1..L-15) | `scripts/kaizen-loop` |
 | Comunidad | `.kaizen/swarm/ROLES.md`, `PROTOCOL.md` | `scripts/kaizen-swarm` |
+| Organización | `.kaizen/org/ORGANIZATION.md`, `AGENT_SCHEMA.md`, `CONSENSUS.md` | `scripts/kaizen-org` |
 
 Arranca en **nivel 3** (ADR-0001) con PAUSA retirada. Los workflows programados están condicionados a `vars.KAIZEN_LOOP_ENABLED == '1'`: el responsable añade `KAIZEN_TOKEN` y la clave del modelo antes de activarlos. Ningún agente recibe secretos (S-2).
 
@@ -36,13 +37,25 @@ scripts/kaizen-swarm status 42
 scripts/kaizen-swarm finalize 42 --publish      # push + PR (lo hace el orquestador)
 ```
 
+Organización de agentes:
+
+```bash
+scripts/kaizen-org list                          # inventario de 27 puestos
+scripts/kaizen-org copy marketing marketing-visual --name "Marketing Visual"
+scripts/kaizen-org save marketing-visual         # sube versión + diario
+scripts/kaizen-org feed marketing-visual docs/kaizen/org/FORECAST.md
+scripts/kaizen-org digest marketing-visual
+scripts/kaizen-org pulse                         # propuestas proactivas
+scripts/kaizen-org decide "reducir tiempo de feedback" --owner gerente
+```
+
 Instalación en otro repo:
 
 ```bash
 scripts/bootstrap /ruta/al/otro/repo
 ```
 
-Verificación completa: `bash tests/run.sh` y `scripts/kaizen check`.
+Verificación completa: `bash tests/run.sh`, `scripts/kaizen check` y `scripts/kaizen-org check`. El alcance realista de los modelos actuales y la previsión de evolución están en `docs/kaizen/org/FORECAST.md`.
 
 ## Decisiones humanas pendientes
 
