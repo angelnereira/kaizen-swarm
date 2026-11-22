@@ -88,7 +88,7 @@ open_blocks() {
 }
 mark_verdict_ack() { # ISSUE FILE
   [ "${KSW_DRY_RUN:-0}" = "1" ] && return 0
-  sed -i 's/^status: open$/status: ack/' "$1" 2>/dev/null || :
+  sed -i 's/^status: open$/status: ack/' "$2" 2>/dev/null || :
 }
 
 # leases.json: array de {task,owner,expires_at,status}
