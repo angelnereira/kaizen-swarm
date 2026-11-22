@@ -87,6 +87,7 @@ check_org() { "$ROOT/scripts/kaizen-org" check >/dev/null 2>&1 || fail "organiza
 check_team() { "$ROOT/scripts/kaizen-team" check >/dev/null 2>&1 || fail "equipo: ver kaizen-team check"; }
 check_eval() { python3 "$ROOT/scripts/kaizen-eval" check >/dev/null 2>&1 || fail "evaluación: ver kaizen-eval check"; }
 check_learn() { "$ROOT/scripts/kaizen-learn" check >/dev/null 2>&1 || fail "aprendizaje: ver kaizen-learn check"; }
+check_gov() { python3 "$ROOT/scripts/kaizen-gov" check >/dev/null 2>&1 || fail "gobernanza: ver kaizen-gov check"; }
 
 cmd_check() {
   local only=""
@@ -101,8 +102,9 @@ cmd_check() {
     team) check_team;;
     eval) check_eval;;
     learn) check_learn;;
-    "") check_descriptors; check_policy; check_tests; check_security; check_swarm; check_org; check_team; check_eval; check_learn; check_ratchet;;
-    *) echo "uso: check [--only descriptors|policy|ratchet|security|swarm|org|team|eval|learn] [--quiet]"; exit 2;;
+    gov) check_gov;;
+    "") check_descriptors; check_policy; check_tests; check_security; check_swarm; check_org; check_team; check_eval; check_learn; check_gov; check_ratchet;;
+    *) echo "uso: check [--only descriptors|policy|ratchet|security|swarm|org|team|eval|learn|gov] [--quiet]"; exit 2;;
   esac
   [ $FAIL = 0 ] || { echo "kaizen check: FALLO" >&2; exit 1; }
   ok "kaizen check: todo en verde"
@@ -167,8 +169,8 @@ case "${1:-help}" in
 kaizen <comando>
   init        activa los git hooks
   start <br>  crea rama + descriptor desde la plantilla
-  check       descriptors, politicas, formato/lint/tests, seguridad, swarm, organizacion, equipo, eval, aprendizaje y ratchet
-              [--only descriptors|policy|ratchet|security|swarm|org|team|eval|learn] [--quiet]
+  check       descriptors, politicas, formato/lint/tests, seguridad, swarm, organizacion, equipo, eval, aprendizaje, gobernanza y ratchet
+              [--only descriptors|policy|ratchet|security|swarm|org|team|eval|learn|gov] [--quiet]
   baseline    escribe/sube la linea base de calidad
   metrics     agrega una linea a docs/kaizen/data/metrics.jsonl
   retro [desde]  resumen de datos para la retrospectiva

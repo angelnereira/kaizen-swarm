@@ -14,6 +14,9 @@ kpis: [cambios normativos detectados con URL oficial y fecha, 0 normas citadas s
 rules: [K-1..K-14, L-1..L-17, S-1..S-16]
 channels: [broadcast, direct, alert]
 squad_role: monitor
+governance: .kaizen/gov/governance.json
+obligations_ref: ".kaizen/gov/governance.json#agents/monitor-gaceta/obligations"
+participation_ref: ".kaizen/gov/governance.json#agents/monitor-gaceta/participates_in"
 decision_authority: propose
 ---
 
@@ -53,6 +56,18 @@ Vigilar la Gaceta Oficial de Panamá y los órganos competentes para detectar le
 - Recursión controlada: delega incrementando `KAZEN_AGENT_DEPTH`; al llegar a `KR_MAX_DEPTH`, consolida y reporta. Nunca te lances a ti mismo.
 
 - Mensajes con `correlation_id`, `intent`, `expects_ack` y ack obligatorio en handoffs.
+
+## Participación estructural
+
+- `decision`: C@consult, I@record
+- `deployment`: I@execute
+- `incident`: R@detect, I@learn
+- `compliance`: R@research, R@monitor, I@monitor
+- `research`: R@gather
+- `agent_lifecycle`: R@copy, I@install
+- `retro`: C@learn, R@apply, I@apply
+
+Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y las demás en `governance.json`. Autoridad: {"approve": false, "recommend": true, "execute": false, "veto": null, "escalate_to": "gerente"}.
 
 ## Aprendizaje continuo
 - Antes de proponer, consulta `.kaizen/learning/experience/<id>.md` (si existe): aplica lecciones previas y cita su fingerprint.

@@ -44,6 +44,7 @@ for f in \
   .kaizen/team/runtime.env .kaizen/team/teams.json .kaizen/team/notify.env \
   scripts/kaizen-team scripts/kaizen-runtime scripts/kaizen-notify scripts/kaizen-inbox \
   scripts/kaizen-inbox.py scripts/lib/opencode_agents.py scripts/kaizen-installer scripts/kaizen-start scripts/kaizen-eval scripts/kaizen-learn \
+  scripts/kaizen-gov scripts/lib/gov_seed.py .kaizen/gov/governance.json \
   .kaizen/evals/eval.env .kaizen/evals/baseline.json .kaizen/learning/learning.env \
   docs/kaizen/org/FORECAST.md docs/kaizen/org/CATALOGO-AGENTES.md \
   docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
@@ -52,6 +53,7 @@ for f in \
   docs/kaizen/adr/0005-runtime-y-presidencia.md docs/kaizen/org/RUNTIME.md \
   docs/kaizen/adr/0006-evaluacion-y-ratchet-de-agentes.md docs/kaizen/org/EVALUACION.md \
   docs/kaizen/adr/0007-aprendizaje-continuo-de-agentes.md docs/kaizen/org/APRENDIZAJE.md \
+  docs/kaizen/adr/0008-gobernanza-semantica-de-roles.md docs/kaizen/org/GOBIERNO.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \
@@ -66,7 +68,7 @@ mkdir -p "$TARGET/.kaizen/loop/state" "$TARGET/.kaizen/swarm/issues" \
          "$TARGET/.kaizen/org/prompts" "$TARGET/.kaizen/org/decisions/inbox" "$TARGET/.kaizen/org/knowledge/digests" \
          "$TARGET/.kaizen/org/research" \
          "$TARGET/.kaizen/team/projects" "$TARGET/.kaizen/team/evidence" "$TARGET/.kaizen/evals" \
-         "$TARGET/.kaizen/learning/lessons" "$TARGET/.kaizen/learning/experience" \
+         "$TARGET/.kaizen/learning/lessons" "$TARGET/.kaizen/learning/experience" "$TARGET/.kaizen/gov" \
          "$TARGET/.kaizen/org/knowledge/panama-compliance" "$TARGET/.kaizen/org/knowledge/international" \
          "$TARGET/.kaizen/org/knowledge/business" \
          "$TARGET/docs/kaizen/loop/prompts" "$TARGET/docs/kaizen/swarm/prompts" "$TARGET/docs/kaizen/org" \

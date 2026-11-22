@@ -14,6 +14,9 @@ kpis: [recorridos por vertical verificados con el negocio]
 rules: [K-1..K-14, L-1..L-17, S-1..S-16]
 channels: [broadcast, direct, review, decision]
 squad_role: specialist
+governance: .kaizen/gov/governance.json
+obligations_ref: ".kaizen/gov/governance.json#agents/vertical-domain-specialist/obligations"
+participation_ref: ".kaizen/gov/governance.json#agents/vertical-domain-specialist/participates_in"
 decision_authority: propose
 ---
 
@@ -50,6 +53,17 @@ Traduce necesidades de restaurante, salón, barbería, mensajería y carga a cap
 - Si la tecnología queda fuera de su contrato, se abre `kaizen-org outsource` (`.kaizen/org/OUTSOURCING.md`).
 
 - Recursión controlada: delega incrementando `KAZEN_AGENT_DEPTH`; al llegar a `KR_MAX_DEPTH`, consolida y reporta. Nunca te lances a ti mismo.
+
+## Participación estructural
+
+- `decision`: C@consult, I@record
+- `deployment`: I@execute
+- `incident`: I@learn
+- `compliance`: I@monitor
+- `agent_lifecycle`: R@copy, I@install
+- `retro`: C@learn, R@apply, I@apply
+
+Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y las demás en `governance.json`. Autoridad: {"approve": false, "recommend": true, "execute": false, "veto": null, "escalate_to": "gerente"}.
 
 ## Aprendizaje continuo
 - Antes de proponer, consulta `.kaizen/learning/experience/<id>.md` (si existe): aplica lecciones previas y cita su fingerprint.

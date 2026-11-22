@@ -112,6 +112,8 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          docs/kaizen/adr/0006-evaluacion-y-ratchet-de-agentes.md docs/kaizen/org/EVALUACION.md \
          .kaizen/learning/learning.env scripts/kaizen-learn \
          docs/kaizen/adr/0007-aprendizaje-continuo-de-agentes.md docs/kaizen/org/APRENDIZAJE.md \
+         .kaizen/gov/governance.json scripts/kaizen-gov scripts/lib/gov_seed.py \
+         docs/kaizen/adr/0008-gobernanza-semantica-de-roles.md docs/kaizen/org/GOBIERNO.md \
          .kaizen/org/prompts/gcp-cloud-architect.md .kaizen/org/prompts/ai-rag-engineer.md \
          .kaizen/org/prompts/fiscal-integration-specialist.md .kaizen/org/prompts/flutter-m3-design-specialist.md; do
   [ -f "$REPO/$f" ] && ok "existe $f" || bad "falta $f"
@@ -223,6 +225,19 @@ V1=$(sed -n 's/^version: //p' "$REPO/.kaizen/org/prompts/qa.md" | head -1)
 grep -q 'Aprendizaje acumulado' "$REPO/.kaizen/org/prompts/qa.md" && ok "leccion en definicion" || bad "leccion en definicion"
 ( cd "$REPO" && scripts/kaizen-learn report >/dev/null 2>&1 )
 [ -f "$REPO/.kaizen/learning/report.md" ] && ok "reporte de aprendizaje" || bad "reporte de aprendizaje"
+
+# gobernanza semantica: RACI, derechos y deteccion de procesos sin responsable
+( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) && ok "gov check" || bad "gov check"
+GO=$(cd "$REPO" && python3 scripts/kaizen-gov raci deployment 2>/dev/null)
+case "$GO" in *humano*) ok "raci con humano";; *) bad "raci con humano";; esac
+( cd "$REPO" && python3 scripts/kaizen-gov can security veto >/dev/null 2>&1 ) && ok "can veto" || bad "can veto"
+( cd "$REPO" && python3 scripts/kaizen-gov can dev1-core approve >/dev/null 2>&1 ) \
+  && bad "dev no puede aprobar" || ok "dev no puede aprobar"
+jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
+  && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
+( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \
+  && bad "gov detecta proceso sin A" || ok "gov detecta proceso sin A"
+( cd "$REPO" && git checkout -- .kaizen/gov/governance.json )
 
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]
