@@ -229,7 +229,7 @@ cmd_watch() {
   while IFS= read -r n; do
     [ -z "$n" ] && continue
     cmd_init "$n" || know "no se pudo iniciar sala para #$n"
-  done < <(gh issue list --label "$label" --state open --json number --jq '.[].number' 2>/dev/null || true)
+  done < <(gh issue list --label "$label" --state open --json number --jq '.[].number' 2>/dev/null || :)
 }
 
 cmd_check() {

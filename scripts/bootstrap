@@ -56,8 +56,8 @@ for f in \
   scripts/kaizen-gov scripts/lib/gov_seed.py .kaizen/gov/governance.json \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
   .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
-  .kaizen/observability/observability.env .kaizen/finops/tokens.env .kaizen/knowledge/sources.json \
-  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge scripts/kaizen-workspace scripts/kaizen-peer scripts/kaizen-remote scripts/kaizen-whatsapp scripts/kaizen-welcome scripts/kaizen-conflict \
+  .kaizen/observability/observability.env .kaizen/finops/tokens.env .kaizen/knowledge/sources.json .kaizen/meta/meta.env \
+  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge scripts/kaizen-workspace scripts/kaizen-peer scripts/kaizen-remote scripts/kaizen-whatsapp scripts/kaizen-welcome scripts/kaizen-conflict scripts/kaizen-meta \
   observability/prometheus.yml observability/docker-compose.yml \
   observability/grafana/dashboards/kaizen-swarm.json \
   observability/grafana/provisioning/datasources/prometheus.yml \
@@ -84,6 +84,7 @@ for f in \
   docs/kaizen/adr/0025-whatsapp-oficial-via-bsp.md docs/kaizen/org/WHATSAPP-OFICIAL.md \
   docs/kaizen/adr/0026-empaquetado-docker-local.md \
   docs/kaizen/adr/0027-resolucion-autonoma-de-conflictos.md \
+  docs/kaizen/adr/0028-meta-auditoria-ejecutora.md docs/kaizen/org/META-AUDITORIA.md \
   .kaizen/knowledge/cards/README.md .kaizen/knowledge/golden/README.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \

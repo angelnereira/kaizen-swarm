@@ -125,6 +125,10 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
+## Meta-auditoría ejecutora
+
+`scripts/kaizen-meta check|drift|close|guard|recurrence|execute` audita **y corrige**: cierre real (HEAD vs remoto + release), deriva de versión, permisos denegados, supresiones S-10 y recurrencia por clase (3 repeticiones → `stop-the-line`). El equipo `meta-auditoria` ejecuta remediaciones deterministas sin tocar seguridad/dinero/datos (ADR-0028).
+
 ## Resolución de conflictos y push
 
 Los agentes pueden hacer push y resolver conflictos en ramas `kaizen/*`, `feature/*` o `fix/*` (nunca `main`) con `scripts/kaizen-conflict status|resolve|commit-push|abort`. La estrategia (`ours`/`theirs`) y cada push quedan auditados en `.kaizen/team/runtime/conflicts.jsonl`. Los 47 agentes generados tienen `git push*` en `allow` (ADR-0027); la negación anterior era la causa de los errores de permisos.

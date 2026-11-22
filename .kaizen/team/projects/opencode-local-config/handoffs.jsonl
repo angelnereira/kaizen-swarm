@@ -24,3 +24,28 @@
   "created": "2026-11-22T19:46:13Z",
   "acked_at": "2026-11-22T19:46:42Z"
 }
+{
+  "id": "H-1795377637441",
+  "correlation_id": "OLC-SEC-002",
+  "from": "facilitador-equipo",
+  "to": "security",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "Validar opencode.json V2 (permissions) y denegaciones de secretos — evidencia reproducible con source_ids; se requiere dictamen de security sobre el allow global de *.env",
+  "expects_ack": true,
+  "deadline": "2026-11-25T18:00:00Z",
+  "source_ids": [
+    "ISO-001",
+    "NIST-001",
+    "OWASP-001",
+    "AICPA-001",
+    "TOOL-001"
+  ],
+  "refs": [
+    "docs/kaizen/team/opencode-local-config/facilitador-equipo-validacion-v2-secretos.md",
+    ".kaizen/loop/outbox/opencode-global-env-allow.md"
+  ],
+  "status": "ack",
+  "created": "2026-11-22T20:00:37Z",
+  "acked_at": "2026-11-22T20:01:31Z"
+}

@@ -15,7 +15,7 @@ case "$CMD" in
     echo "buzón iniciado en 127.0.0.1:$KI_PORT (PID $(cat "$S/inbox.pid"))"
     ;;
   stop)
-    [ -f "$S/inbox.pid" ] && { kill "$(cat "$S/inbox.pid")" 2>/dev/null || true; rm -f "$S/inbox.pid"; echo "buzón detenido"; } || echo "buzón no corriendo"
+    [ -f "$S/inbox.pid" ] && { kill "$(cat "$S/inbox.pid")" 2>/dev/null || :  rm -f "$S/inbox.pid"; echo "buzón detenido"; } || echo "buzón no corriendo"
     ;;
   status)
     if [ -f "$S/inbox.pid" ] && kill -0 "$(cat "$S/inbox.pid")" 2>/dev/null; then echo "buzón: ACTIVO (PID $(cat "$S/inbox.pid")) puerto $KI_PORT"; else echo "buzón: inactivo"; fi

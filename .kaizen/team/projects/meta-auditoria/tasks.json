@@ -1,0 +1,27 @@
+[
+  {
+    "task": "Cerrar loop: verificar HEAD vs origin y release antes de decir hecho",
+    "owner": "verificador-evidencias",
+    "status": "pending"
+  },
+  {
+    "task": "Detectar deriva de version y permisos denegados en logs",
+    "owner": "qa",
+    "status": "pending"
+  },
+  {
+    "task": "Ejecutar remediacion determinista y sincronizar gobernanza",
+    "owner": "architect",
+    "status": "pending"
+  },
+  {
+    "task": "Verificar que la ejecucion no toca seguridad/dinero/datos",
+    "owner": "security",
+    "status": "pending"
+  },
+  {
+    "task": "Reportar meta-auditoria con evidencia",
+    "owner": "knowledge-curator",
+    "status": "pending"
+  }
+]

@@ -163,5 +163,19 @@
     ],
     "kpi": "47 agentes globales, 0 reglas deny de git push, esquema V2 válido, MCP rea activo",
     "model": "opencode/hy4-flash-free"
+  },
+  "meta-auditoria": {
+    "goal": "Auditar y EJECUTAR correcciones del propio sistema: cierre verificado, deriva, permisos, recurrencia y sincronizacion de gobernanza",
+    "members": [
+      "verificador-evidencias",
+      "qa",
+      "architect",
+      "security",
+      "facilitador-equipo",
+      "dx",
+      "knowledge-curator"
+    ],
+    "kpi": "0 afirmaciones de 'hecho' sin evidencia de cierre; 0 denies de push; 0 clases de fallo por encima del limite sin stop-the-line",
+    "model": "opencode/hy4-flash-free"
   }
 }

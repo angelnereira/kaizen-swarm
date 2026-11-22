@@ -40,14 +40,14 @@ check_descriptors() {
 }
 
 check_policy() {
-  local files; files="$(git ls-files -- "$KZ_DRAFTS_DIR" docs .kaizen 2>/dev/null || true)"
+  local files; files="$(git ls-files -- "$KZ_DRAFTS_DIR" docs .kaizen 2>/dev/null || :)"
   if [ "${KZ_POLICY_NO_EMOJI:-0}" = "1" ] && [ -n "$files" ]; then
     echo "$files" | xargs grep -lP '[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}]' 2>/dev/null | while read -r x; do
-      echo "FALLA: emoji en $x" >&2; done | grep -q . && FAIL=1 || true
+      echo "FALLA: emoji en $x" >&2; done | grep -q . && FAIL=1 || : #28
   fi
   if [ "${KZ_POLICY_NO_AI_ATTRIBUTION:-0}" = "1" ] && [ -n "$files" ]; then
     echo "$files" | xargs grep -liE 'generated (with|by) (claude|codex|openai|copilot|opencode)|co-authored-by:.*(claude|codex|copilot)' 2>/dev/null | grep -q . \
-      && fail "atribucion a herramientas de IA en documentos" || true
+      && fail "atribucion a herramientas de IA en documentos" || : #28
   fi
   ok "politicas de contenido"
 }
@@ -129,7 +129,7 @@ cmd_baseline() {
 
 cmd_metrics() {
   mkdir -p docs/kaizen/data
-  local issues=""; command -v gh >/dev/null 2>&1 && issues="$(gh issue list --state open --json number --jq 'length' 2>/dev/null || true)"
+  local issues=""; command -v gh >/dev/null 2>&1 && issues="$(gh issue list --state open --json number --jq 'length' 2>/dev/null || :)"
   local cov warn
   cov="$(run_num "${KZ_COVERAGE_CMD:-}")"; warn="$(run_num "${KZ_WARNINGS_CMD:-}")"
   printf '{"date":"%s","commit":"%s","loc":%s,"debt":%s,"coverage":%s,"warnings":%s,"open_issues":%s}\n' \
@@ -142,9 +142,9 @@ cmd_retro() {
   local since="${1:-14 days ago}"
   echo "# Datos del periodo (desde: $since)"
   echo "- Commits: $(git log --since="$since" --oneline 2>/dev/null | wc -l | tr -d ' ')"
-  echo "- Cierres de issues en commits: $(git log --since="$since" --format=%B 2>/dev/null | grep -ciE '(closes|fixes|resolves) #[0-9]+' || true)"
+  echo "- Cierres de issues en commits: $(git log --since="$since" --format=%B 2>/dev/null | grep -ciE '(closes|fixes|resolves) #[0-9]+' || :)"
   echo "- Reverts: $(git log --since="$since" --oneline -i --grep='^revert' 2>/dev/null | wc -l | tr -d ' ')"
-  echo "- Ultimas metricas:"; tail -n2 docs/kaizen/data/metrics.jsonl 2>/dev/null | sed 's/^/    /' || true
+  echo "- Ultimas metricas:"; tail -n2 docs/kaizen/data/metrics.jsonl 2>/dev/null | sed 's/^/    /' || : #28
   echo; echo "Usa docs/kaizen/retros/_TEMPLATE.md y acuerda como maximo 3 mejoras."
 }
 
@@ -156,7 +156,7 @@ cmd_start() {
   echo "rama $br creada; completa $KZ_DRAFTS_DIR/$flat.md"
 }
 
-cmd_init() { git config core.hooksPath .githooks; chmod +x .githooks/* scripts/kaizen* scripts/bootstrap 2>/dev/null || true; echo "hooks activados"; }
+cmd_init() { git config core.hooksPath .githooks; chmod +x .githooks/* scripts/kaizen* scripts/bootstrap 2>/dev/null || :  echo "hooks activados"; }
 
 case "${1:-help}" in
   check) shift; cmd_check "$@";;

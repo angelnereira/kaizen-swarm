@@ -80,11 +80,11 @@ $instruction"
       [ "${r#rc=}" = 0 ] && continue
       "$ROOT/scripts/kaizen-learn" record --agent "${ag#agente=}" --kind failure \
         --title "Fallo en ciclo $team" --lesson "Revisar ejecución y verificar evidencia antes de delegar." \
-        --source "$log" >/dev/null 2>&1 || true
+        --source "$log" >/dev/null 2>&1 || : #28
     done < <(grep '^agente=' "$log" 2>/dev/null)
   fi
   [ -x "$ROOT/scripts/kaizen-notify" ] && "$ROOT/scripts/kaizen-notify" event "$team" "$rc" \
-    "Agentes ejecutados: $n. Log: $log" >/dev/null 2>&1 || true
+    "Agentes ejecutados: $n. Log: $log" >/dev/null 2>&1 || : #28
   klog "ciclo $team: $n agente(s), rc=$rc, log=$log"
   return $rc
 }
@@ -177,7 +177,7 @@ cmd_deploy() {
   wait
   printf '%s deploy teams=%s parallel=%s\n' "$(date -u +%FT%TZ)" "$n" "$KR_MAX_TEAMS_PARALLEL" > "$S/deploy.json"
   [ -x "$ROOT/scripts/kaizen-notify" ] && "$ROOT/scripts/kaizen-notify" send \
-    --title "Equipos desplegados" --body "Equipos: ${teams[*]}. Paralelismo: $KR_MAX_TEAMS_PARALLEL. Profundidad: $KR_MAX_DEPTH." --level info >/dev/null 2>&1 || true
+    --title "Equipos desplegados" --body "Equipos: ${teams[*]}. Paralelismo: $KR_MAX_TEAMS_PARALLEL. Profundidad: $KR_MAX_DEPTH." --level info >/dev/null 2>&1 || : #28
   klog "despliegue completado: $n equipos"
 }
 

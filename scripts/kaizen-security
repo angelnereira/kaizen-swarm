@@ -12,7 +12,7 @@ FAIL=0
 fail() { echo "SEGURIDAD: $*" >&2; FAIL=1; }
 warn() { echo "AVISO: $*" >&2; }
 
-clean_list() { [ -f "$1" ] && { grep -Ev '^[[:space:]]*(#|$)' "$1" || true; }; }
+clean_list() { [ -f "$1" ] && { grep -Ev '^[[:space:]]*(#|$)' "$1" || :; }; }
 
 added_lines() {
   git diff -U0 --no-color "$@" | awk '
@@ -146,7 +146,7 @@ cmd_report() {
     fi
   fi
   marker="kaizen-fp:$fp"
-  num="$(gh issue list --state open --search "\"$marker\" in:body" --json number --jq '.[0].number // empty' 2>/dev/null || true)"
+  num="$(gh issue list --state open --search "\"$marker\" in:body" --json number --jq '.[0].number // empty' 2>/dev/null || :)"
   if [ -n "$num" ]; then gh issue comment "$num" --body "Reincidencia $(date -u +%FT%TZ)" && return 0; fi
   gh issue create --title "$title" --body "$body"$'\n\n'"<!-- $marker -->" "${largs[@]}" \
     || gh issue create --title "$title" --body "$body"$'\n\n'"<!-- $marker -->" \
