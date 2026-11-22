@@ -125,6 +125,10 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
+## Instalación no invasiva y comunidad de pares
+
+La comunidad se instala en la **máquina y sus herramientas** (agentes globales + `~/.local/share/kaizen-swarm/workspaces/`), no dentro del código del proyecto: `kaizen-installer repo <destino>` solo registra un workspace externo; `--embedded` es explícito y opcional. Los agentes se organizan con `kaizen-peer request-review|comment|validate`, investigan en internet y participan en issues/PR remotos con `kaizen-remote` auditado (`--dry-run` por defecto). Ninguna credencial se guarda en el repo (ADR-0024, K-15).
+
 ## Corpus normativo y citas verificadas
 
 `scripts/kaizen-knowledge add|ingest|verify|diff|index|stale|cite-check` mantiene `.kaizen/knowledge/sources.json` con niveles **V/S/I/N**, frescura por dominio y anclas por artículo. Solo una fuente **V** (verificada por humano) sustenta decisiones; `cite-check` falla si una cita no existe o no está verificada. Equipo `normativa-corpus` con `opencode/hy4-flash-free` (ADR-0022, `docs/kaizen/org/CORPUS-NORMATIVO.md`).

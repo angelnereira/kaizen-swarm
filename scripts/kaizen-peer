@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# kaizen-peer: circuito de revisión entre agentes (pedir, comentar, validar, reportar).
+set -uo pipefail
+BASE="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/workspaces"
+REPO="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+HASH="$(printf '%s' "$REPO" | sha256sum | cut -c1-16)"
+D="$BASE/$HASH/peers"; mkdir -p "$D"
+TS=$(date -u +%FT%TZ)
+klog() { printf '[kaizen-peer] %s\n' "$*"; }
+
+cmd_request() { # --from A --to B --about T --evidence S
+  local from="" to="" about="" evidence=""
+  while [ $# -gt 0 ]; do case "$1" in --from) from="$2"; shift;; --to) to="$2"; shift;; --about) about="$2"; shift;; --evidence) evidence="$2"; shift;; esac; shift; done
+  [ -n "$from" ] && [ -n "$to" ] && [ -n "$about" ] || { echo "faltan --from/--to/--about"; return 2; }
+  local id="REV-$(date -u +%Y%m%d%H%M%S)-$to"
+  cat > "$D/$id.md" <<EOF
+---
+id: $id
+from: $from
+to: $to
+about: $about
+evidence: $evidence
+status: open
+created: $TS
+ack: pending
+---
+
+# Solicitud de revisión: $about
+
+- Solicitante: $from
+- Revisor: $to
+- Evidencia: $evidence
+
+## Dictamen del revisor
+- [ ] APPROVE | CHANGES_REQUESTED | BLOCK
+- [ ] Evidencia concreta (comando o source_id)
+- [ ] Contraejemplo considerado
+EOF
+  klog "revisión solicitada: $id ($from -> $to)"
+}
+
+cmd_comment() { # --id REV --from B --text T [--evidence S]
+  local id="" from="" text="" evidence=""
+  while [ $# -gt 0 ]; do case "$1" in --id) id="$2"; shift;; --from) from="$2"; shift;; --text) text="$2"; shift;; --evidence) evidence="$2"; shift;; esac; shift; done
+  local f="$D/$id.md"; [ -f "$f" ] || { echo "revisión no existe: $id"; return 2; }
+  printf '\n- [%s] **%s**: %s%s\n' "$TS" "$from" "$text" "${evidence:+ (evidencia: $evidence)}" >> "$f"
+  sed -i 's/^ack: pending$/ack: acknowledged/' "$f"
+  klog "comentario registrado en $id por $from"
+}
+
+cmd_validate() { # --id REV --by C --verdict APPROVE|... --evidence S
+  local id="" by="" verdict="" evidence=""
+  while [ $# -gt 0 ]; do case "$1" in --id) id="$2"; shift;; --by) by="$2"; shift;; --verdict) verdict="$2"; shift;; --evidence) evidence="$2"; shift;; esac; shift; done
+  case "$verdict" in APPROVE|CHANGES_REQUESTED|BLOCK) ;; *) echo "verdict inválido"; return 2;; esac
+  [ -n "$evidence" ] || { echo "sin evidencia: no se valida (K-10)"; return 1; }
+  local f="$D/$id.md"; [ -f "$f" ] || return 2
+  sed -i "s/^status: .*/status: $verdict/" "$f"
+  printf '\n## Validación final\n- %s: **%s** — %s\n' "$by" "$verdict" "$evidence" >> "$f"
+  klog "validado: $id -> $verdict por $by"
+}
+
+cmd_report() {
+  local s='{}'
+  for f in "$D"/*.md; do
+    [ -f "$f" ] || continue
+    s="$(printf '%s' "$s" | jq -c --arg id "$(basename "$f")" --arg st "$(sed -n 's/^status: //p' "$f" | head -1)" '.[$id]=$st')"
+  done
+  printf '%s\n' "$s"
+}
+
+case "${1:-help}" in
+  request) shift; cmd_request "$@";; comment) shift; cmd_comment "$@";;
+  validate) shift; cmd_validate "$@";; report) cmd_report;;
+  *) echo "uso: kaizen-peer request|comment|validate|report";;
+esac

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# kaizen-workspace: estado de la comunidad FUERA del repo, por máquina y por proyecto.
+set -uo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+BASE="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/workspaces"
+mkdir -p "$BASE"
+hash_repo() { printf '%s' "$1" | sha256sum | cut -c1-16; }
+wdir() { local p; p="$(cd "$1" 2>/dev/null && pwd || printf '%s' "$1")"; printf '%s/%s' "$BASE" "$(hash_repo "$p")"; }
+klog() { printf '[kaizen-workspace] %s\n' "$*"; }
+
+cmd_init() {
+  local target="${1:?uso: init <repo>}" d p; [ -d "$target" ] || { echo "no existe: $target"; return 2; }
+  p="$(cd "$target" && pwd)"; d="$(wdir "$p")"
+  mkdir -p "$d"/{team/projects,learning/lessons,evals,outbox,peers,remote}
+  if [ ! -f "$d/manifest.json" ]; then
+    jq -n --arg repo "$p" --arg created "$(date -u +%FT%TZ)" --arg version "$(cat "$ROOT/VERSION" 2>/dev/null || echo 0)" \
+      '{repo:$repo,created:$created,version:$version,mode:"external-non-invasive"}' > "$d/manifest.json"
+  fi
+  klog "workspace externo: $d"
+  klog "el repo NO se modifica: $p"
+}
+
+cmd_status() {
+  local target="${1:-$PWD}" d; d="$(wdir "$target")"
+  [ -f "$d/manifest.json" ] || { echo "sin workspace para $target"; return 1; }
+  jq -c . "$d/manifest.json"
+  echo "tareas: $(find "$d/team/projects" -name 'tasks.json' 2>/dev/null | wc -l | tr -d ' ')"
+  echo "revisiones de pares: $(find "$d/peers" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
+  echo "acciones remotas: $(wc -l < "$d/remote/actions.jsonl" 2>/dev/null || echo 0)"
+}
+
+cmd_list() {
+  for f in "$BASE"/*/manifest.json; do
+    [ -f "$f" ] || continue
+    printf '%s  %s  %s\n' "$(basename "$(dirname "$f")")" "$(jq -r .repo "$f")" "$(jq -r .version "$f")"
+  done
+}
+
+cmd_check() {
+  local d; d="$(wdir "${1:-$PWD}")"
+  [ -f "$d/manifest.json" ] || { echo "sin workspace"; return 1; }
+  jq -e '.repo and .version and .mode=="external-non-invasive"' "$d/manifest.json" >/dev/null 2>&1 || return 1
+  klog "workspace válido: $d"
+}
+
+case "${1:-help}" in
+  init) shift; cmd_init "$@";; status) shift; cmd_status "$@";;
+  list) cmd_list;; check) shift; cmd_check "$@";;
+  *) echo "uso: kaizen-workspace init|status|list|check <repo>";;
+esac

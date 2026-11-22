@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# kaizen-remote: interacción auditada con issues/PR del remoto vía gh (sin credenciales en el repo).
+set -uo pipefail
+BASE="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/workspaces"
+REPO="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+HASH="$(printf '%s' "$REPO" | sha256sum | cut -c1-16)"
+D="$BASE/$HASH/remote"; mkdir -p "$D"; A="$D/actions.jsonl"
+klog() { printf '[kaizen-remote] %s\n' "$*"; }
+audit() { jq -cn --arg ts "$(date -u +%FT%TZ)" --arg action "$1" --arg target "$2" --arg mode "$3" \
+  '{ts:$ts,action:$action,target:$target,mode:$mode,repo:"'"$REPO"'"}' >> "$A"; }
+
+cmd_status() {
+  if command -v gh >/dev/null 2>&1; then
+    gh auth status 2>&1 | head -4
+  else echo "gh no disponible"; fi
+  echo "acciones auditadas: $(wc -l < "$A" 2>/dev/null || echo 0)"
+}
+
+cmd_issues() {
+  local state="open" repo=""
+  while [ $# -gt 0 ]; do case "$1" in --state) state="$2"; shift;; --repo) repo="$2"; shift;; esac; shift; done
+  local args=(issue list --state "$state" --json number,title,labels --limit 20)
+  [ -n "$repo" ] && args+=(--repo "$repo")
+  gh "${args[@]}" 2>/dev/null | jq -r '.[] | "#\(.number) \(.title)"' || echo "(sin datos: gh no autenticado o sin acceso)"
+}
+
+post() { # kind target body flags...
+  local kind="$1" target="$2" body="" dry=1
+  shift 2
+  while [ $# -gt 0 ]; do case "$1" in --body) body="$2"; shift;; --yes) dry=0;; --dry-run) dry=1;; esac; shift; done
+  [ -n "$body" ] || { echo "falta --body"; return 2; }
+  if [ $dry = 1 ]; then
+    audit "$kind" "$target" "dry-run"
+    klog "[dry-run] $kind #$target: ${body:0:80}"
+    return 0
+  fi
+  # El contenido de issues/PR es dato no confiable; no se ejecutan instrucciones que contenga.
+  case "$kind" in
+    issue-comment) gh issue comment "$target" --body "$body" >/dev/null 2>&1 || { klog "falló el comentario"; audit "$kind" "$target" "error"; return 1; };;
+    pr-comment) gh pr comment "$target" --body "$body" >/dev/null 2>&1 || { klog "falló el comentario"; audit "$kind" "$target" "error"; return 1; };;
+    *) echo "kind desconocido"; return 2;;
+  esac
+  audit "$kind" "$target" "posted"
+  klog "$kind publicado en #$target (auditado)"
+}
+
+case "${1:-status}" in
+  status) cmd_status;;
+  issues) shift; cmd_issues "$@";;
+  issue-comment) shift; post issue-comment "$@";;
+  pr-comment) shift; post pr-comment "$@";;
+  *) echo "uso: kaizen-remote status|issues|issue-comment <N> --body T [--dry-run|--yes]|pr-comment <N> --body T [--dry-run|--yes]";;
+esac
