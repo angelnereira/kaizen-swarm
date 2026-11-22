@@ -54,7 +54,7 @@ for f in \
   scripts/kaizen-gov scripts/lib/gov_seed.py .kaizen/gov/governance.json \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
   .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
-  .kaizen/observability/observability.env scripts/kaizen-exporter.py scripts/kaizen-observability \
+  .kaizen/observability/observability.env scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback \
   observability/prometheus.yml observability/docker-compose.yml \
   observability/grafana/dashboards/kaizen-swarm.json \
   observability/grafana/provisioning/datasources/prometheus.yml \
@@ -73,6 +73,7 @@ for f in \
   docs/kaizen/adr/0016-observabilidad-grafana.md docs/kaizen/adr/0017-integracion-reverse-api-engineer.md \
   docs/kaizen/adr/0018-computer-use-gobernado.md \
   docs/kaizen/adr/0019-colaboracion-alta-performance-y-memoria-de-fallos.md \
+  docs/kaizen/adr/0020-monitoreo-central-y-usuario-grafana.md docs/kaizen/org/MONITOREO-PROYECTOS.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \

@@ -134,6 +134,42 @@ def collect():
         r.gauge("kaizen_learning_lessons", int(m.group(1)) if m else 1,
                 {"agent": aid, "fingerprint": os.path.basename(f)[:-3]}, "Lecciones aprendidas por agente")
 
+    # Proyectos hermanos: monitoreo central de otros repos con Kaizen instalado.
+    if C.get("KO_MONITOR_SIBLINGS", "1") == "1":
+        parent = os.path.dirname(ROOT)
+        for repo in sorted(glob.glob(os.path.join(parent, "*"))):
+            if not os.path.isdir(repo) or os.path.abspath(repo) == os.path.abspath(ROOT):
+                continue
+            if not os.path.isdir(os.path.join(repo, ".kaizen")):
+                continue
+            label = os.path.basename(repo)
+            for state in glob.glob(os.path.join(repo, ".kaizen/team/projects", "*", "state.json")):
+                s = jload(state, {})
+                if not s:
+                    continue
+                slug = s.get("slug", os.path.basename(os.path.dirname(state)))
+                r.gauge("kaizen_sibling_project_stage", 1,
+                        {"repo": label, "project": slug, "stage": s.get("stage", "?")},
+                        "Etapa de proyectos en repos hermanos")
+                d = os.path.dirname(state)
+                tasks = jload(os.path.join(d, "tasks.json"), [])
+                for t in tasks if isinstance(tasks, list) else []:
+                    r.gauge("kaizen_sibling_tasks", 1,
+                            {"repo": label, "project": slug, "owner": t.get("owner", "?"),
+                             "status": t.get("status", "?")}, "Tareas en repos hermanos")
+            kinds = {}
+            for f in glob.glob(os.path.join(repo, ".kaizen/loop/outbox", "*.md")):
+                txt = open(f, encoding="utf-8", errors="replace").read()
+                m = re.search(r"^kind:\s*(\S+)", txt, re.M)
+                k = m.group(1) if m else "unknown"
+                kinds[k] = kinds.get(k, 0) + 1
+            for kind, n in kinds.items():
+                r.gauge("kaizen_sibling_outbox_findings", n, {"repo": label, "kind": kind},
+                        "Hallazgos en repos hermanos")
+            base2 = jload(os.path.join(repo, ".kaizen/evals/baseline.json"), {})
+            r.gauge("kaizen_sibling_eval_average", base2.get("average", 0), {"repo": label},
+                    "Calidad de agentes en repos hermanos")
+
     # Actividad en tiempo real: último ciclo de cada equipo desde last.json y logs.
     for lf in glob.glob(p(C.get("KO_RUNTIME_DIR", ".kaizen/team/runtime"), "*.log")):
         team = os.path.basename(lf)[16:-4] if len(os.path.basename(lf)) > 20 else "?"

@@ -110,6 +110,8 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          scripts/kaizen-desktop docs/kaizen/adr/0018-computer-use-gobernado.md \
          .kaizen/team/DECISIONES.md .kaizen/org/knowledge/business/VOZ-Y-DOCUMENTACION.md \
          scripts/kaizen-voice docs/kaizen/adr/0019-colaboracion-alta-performance-y-memoria-de-fallos.md \
+         scripts/grafana-bootstrap scripts/kaizen-feedback \
+         docs/kaizen/adr/0020-monitoreo-central-y-usuario-grafana.md docs/kaizen/org/MONITOREO-PROYECTOS.md \
          .kaizen/observability/observability.env scripts/kaizen-exporter.py scripts/kaizen-observability \
          observability/prometheus.yml observability/docker-compose.yml \
          observability/grafana/dashboards/kaizen-swarm.json \
@@ -278,6 +280,11 @@ jq -e '.processes.decision.stages.challenge' "$REPO/.kaizen/gov/governance.json"
   && ok "retador en decision" || bad "retador en decision"
 jq -e '.["decisiones"].model == "opencode/hy4-flash-free"' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 \
   && ok "equipo decisiones con Hy4" || bad "equipo decisiones con Hy4"
+grep -q 'KO_GRAFANA_AGENT_USER=kaizen-agent' "$REPO/.kaizen/observability/observability.env" \
+  && ok "usuario agente Grafana" || bad "usuario agente Grafana"
+grep -q 'kaizen_sibling_project_stage' "$REPO/scripts/kaizen-exporter.py" \
+  && ok "monitoreo de hermanos" || bad "monitoreo de hermanos"
+bash -n "$REPO/scripts/grafana-bootstrap" "$REPO/scripts/kaizen-feedback" && ok "scripts monitoreo sintaxis" || bad "scripts monitoreo sintaxis"
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \

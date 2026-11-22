@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# kaizen-feedback: convierte la telemetría de proyectos hermanos en feedback y lecciones verificables.
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
+[ -f "$ROOT/.kaizen/observability/observability.env" ] && . "$ROOT/.kaizen/observability/observability.env"
+: "${KO_EXPORTER_PORT:=9101}" "${KO_EXPORTER_BIND:=127.0.0.1}"
+URL="http://$KO_EXPORTER_BIND:$KO_EXPORTER_PORT/metrics"
+OUT="$ROOT/docs/kaizen/org/FEEDBACK.md"
+klog() { printf '[kaizen-feedback] %s\n' "$*"; }
+fetch() {
+  if python3 -c "import urllib.request,sys; urllib.request.urlopen('$URL',timeout=3).read()" >/dev/null 2>&1; then
+    python3 -c "import urllib.request; print(urllib.request.urlopen('$URL',timeout=5).read().decode())"
+  else echo ""; fi
+}
+
+cmd_snapshot() {
+  local m; m="$(fetch)"
+  [ -n "$m" ] || { klog "exporter no accesible en $URL: no se inventan datos"; return 1; }
+  {
+    printf '# Feedback de proyectos monitoreados\n\n'
+    printf 'Generado: %s | Fuente: `%s`\n\n' "$(date -u +%FT%TZ)" "$URL"
+    printf '## Proyectos hermanos\n\n| Repo | Proyecto | Etapa | Calidad | Hallazgos |\n| --- | --- | --- | ---: | --- |\n'
+    python3 - "$m" <<'PY'
+import re,sys
+m=sys.argv[1]
+def vals(name):
+    out=[]
+    for line in m.splitlines():
+        if line.startswith(name+'{'):
+            labs=dict(re.findall(r'(\w+)="([^"]*)"',line.split('{')[1].split('}')[0]))
+            out.append((labs,line.rsplit(' ',1)[1]))
+    return out
+stages={ (v['repo'],v['project']): v['stage'] for v,_ in vals('kaizen_sibling_project_stage') }
+qual={ v['repo']: float(x) for v,x in vals('kaizen_sibling_eval_average') }
+find={}
+for v,x in vals('kaizen_sibling_outbox_findings'):
+    k=(v['repo']); find[k]=find.get(k,0)+float(x)
+for (repo,project),stage in sorted(stages.items()):
+    print(f"| {repo} | {project} | {stage} | {qual.get(repo,0):.1f} | {int(find.get(repo,0))} |")
+if not stages: print("| (sin proyectos hermanos) | - | - | 0 | 0 |")
+PY
+    printf '\n## Regla de uso\n- Rojo si etapa `intake` sin handoffs, calidad < 70 o hallazgos > 0.\n- Todo hallazgo debe convertirse en lección `kaizen-learn` y decidirse con `source_ids`.\n'
+  } > "$OUT"
+  klog "reporte: $OUT"
+}
+
+cmd_learn() {
+  local m; m="$(fetch)"
+  [ -n "$m" ] || { klog "sin telemetría: nada que aprender"; return 1; }
+  local n=0 repo nfind
+  while IFS= read -r repo; do
+    [ -n "$repo" ] || continue
+    nfind="$(printf '%s\n' "$m" | grep "kaizen_sibling_outbox_findings{repo=\"$repo\"" | awk -F' ' '{s+=$NF} END{print s+0}')"
+    [ "${nfind%.*}" -gt 0 ] || continue
+    "$ROOT/scripts/kaizen-learn" known add --agent verificador-evidencias \
+      --title "Hallazgos activos en $repo" --symptom "$nfind hallazgos abiertos en el repo hermano $repo" \
+      --fix "Revisar su outbox y convertir en decisión con source_ids" \
+      --avoid "Monitorear kaizen_sibling_outbox_findings antes de integrar cambios en $repo" >/dev/null
+    n=$((n + 1))
+  done < <(printf '%s\n' "$m" | sed -n 's/.*kaizen_sibling_outbox_findings{repo="\([^"]*\)".*/\1/p' | sort -u)
+  klog "lecciones de monitoreo: $n"
+}
+
+case "${1:-snapshot}" in snapshot) cmd_snapshot;; learn) cmd_learn;; all) cmd_snapshot; cmd_learn;; *) echo "uso: kaizen-feedback snapshot|learn|all";; esac
