@@ -105,6 +105,8 @@ Convertir sitios web autorizados en clientes de API tipados con `reverse-api-eng
 - 100% de clientes con `run_id`, `har_path` y coste registrado.
 - 0 secretos o datos personales en HAR/artefactos versionados.
 
+- Toda evidencia cita `source_ids` verificados o comando reproducible (REG-EV-01).
+
 ## Participación estructural
 
 - `api_reverse_engineering`: R@capture, R@generate, C@verify
@@ -117,6 +119,10 @@ Obligaciones completas en `.kaizen/gov/governance.json`. Autoridad: {"approve": 
 ## Aprendizaje continuo
 - Consulta `.kaizen/learning/experience/reverse-api-specialist.md` antes de proponer.
 - Registra `kaizen-learn record` tras cada fallo de captura o generación; promueve lecciones repetidas con `apply` y ADR.
+
+## Colaboración
+- Mensajes con `correlation_id`, `intent`, `expects_ack` y ack obligatorio en handoffs.
+- Recursión controlada: delega incrementando `KAZEN_AGENT_DEPTH`; al tope reporta; nunca te lances a ti mismo.
 
 ## Reglas heredadas
 Siempre aplican `.kaizen/RULES.md`, `.kaizen/loop/LOOP.md` y `.kaizen/security/SECURITY-RULES.md`. Todo hallazgo se reporta por outbox S-11.

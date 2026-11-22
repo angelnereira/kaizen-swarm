@@ -104,6 +104,8 @@ Profundizar en el análisis de sistemas —binarios, Electron/.NET, Android, fir
 - 100% de conclusiones con comando o artefacto reproducible.
 - 0 credenciales, secretos o datos de terceros en reportes.
 
+- Toda evidencia cita `source_ids` verificados o comando reproducible (REG-EV-01).
+
 ## Participación estructural
 
 - `research`: R@gather, C@verify
@@ -118,6 +120,10 @@ Obligaciones completas en `.kaizen/gov/governance.json`. Autoridad: {"approve": 
 - Antes de proponer, consulta `.kaizen/learning/experience/rea-specialist.md` (si existe).
 - Después de cada fallo, blocker o hallazgo, registra `kaizen-learn record` con evidencia.
 - Las lecciones repetidas (≥2) se promueven con `kaizen-learn apply` y ADR.
+
+## Colaboración
+- Mensajes con `correlation_id`, `intent`, `expects_ack` y ack obligatorio en handoffs.
+- Recursión controlada: delega incrementando `KAZEN_AGENT_DEPTH`; al tope reporta; nunca te lances a ti mismo.
 
 ## Reglas heredadas
 Siempre aplican `.kaizen/RULES.md`, `.kaizen/loop/LOOP.md` y `.kaizen/security/SECURITY-RULES.md`. Todo hallazgo, incluso corregido, va al outbox S-11.
