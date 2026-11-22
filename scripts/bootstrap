@@ -54,7 +54,8 @@ for f in \
   scripts/kaizen-gov scripts/lib/gov_seed.py .kaizen/gov/governance.json \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
   .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
-  .kaizen/observability/observability.env scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback \
+  .kaizen/observability/observability.env .kaizen/finops/tokens.env .kaizen/knowledge/sources.json \
+  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge \
   observability/prometheus.yml observability/docker-compose.yml \
   observability/grafana/dashboards/kaizen-swarm.json \
   observability/grafana/provisioning/datasources/prometheus.yml \
@@ -74,6 +75,9 @@ for f in \
   docs/kaizen/adr/0018-computer-use-gobernado.md \
   docs/kaizen/adr/0019-colaboracion-alta-performance-y-memoria-de-fallos.md \
   docs/kaizen/adr/0020-monitoreo-central-y-usuario-grafana.md docs/kaizen/org/MONITOREO-PROYECTOS.md \
+  docs/kaizen/adr/0021-economia-de-tokens-y-trabajo-continuo.md docs/kaizen/org/TOKENS.md \
+  docs/kaizen/adr/0022-corpus-normativo-y-citas-verificadas.md docs/kaizen/org/CORPUS-NORMATIVO.md \
+  .kaizen/knowledge/cards/README.md .kaizen/knowledge/golden/README.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \
@@ -89,7 +93,7 @@ mkdir -p "$TARGET/.kaizen/loop/state" "$TARGET/.kaizen/swarm/issues" \
          "$TARGET/.kaizen/org/research" \
          "$TARGET/.kaizen/team/projects" "$TARGET/.kaizen/team/evidence" "$TARGET/.kaizen/evals" \
          "$TARGET/.kaizen/learning/lessons" "$TARGET/.kaizen/learning/experience" "$TARGET/.kaizen/gov" \
-         "$TARGET/.kaizen/release" "$TARGET/.kaizen/catalog" "$TARGET/.kaizen/observability" \
+         "$TARGET/.kaizen/release" "$TARGET/.kaizen/catalog" "$TARGET/.kaizen/observability" "$TARGET/.kaizen/finops" "$TARGET/.kaizen/knowledge/corpus" "$TARGET/.kaizen/knowledge/cards" "$TARGET/.kaizen/knowledge/golden" \
          "$TARGET/.kaizen/org/knowledge/panama-compliance" "$TARGET/.kaizen/org/knowledge/international" \
          "$TARGET/.kaizen/org/knowledge/business" \
          "$TARGET/docs/kaizen/loop/prompts" "$TARGET/docs/kaizen/swarm/prompts" "$TARGET/docs/kaizen/org" \

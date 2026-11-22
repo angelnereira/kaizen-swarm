@@ -134,6 +134,30 @@ def collect():
         r.gauge("kaizen_learning_lessons", int(m.group(1)) if m else 1,
                 {"agent": aid, "fingerprint": os.path.basename(f)[:-3]}, "Lecciones aprendidas por agente")
 
+    # Economía de tokens (ledger local; sin inventar datos si no hay registros).
+    ledger = os.environ.get("KT_LEDGER", ".kaizen/finops/token-ledger.jsonl")
+    lpath = ledger if os.path.isabs(ledger) else p(ledger)
+    if os.path.exists(lpath):
+        agg = {}
+        for line in open(lpath, encoding="utf-8"):
+            try:
+                rec = json.loads(line)
+            except Exception:
+                continue
+            a = rec.get("agent", "?")
+            s = agg.setdefault(a, {"in": 0, "out": 0, "cost": 0.0, "saved": 0, "n": 0})
+            s["in"] += rec.get("input", 0)
+            s["out"] += rec.get("output", 0)
+            s["cost"] += rec.get("cost_usd", 0) or 0
+            s["saved"] += rec.get("saved_estimate", 0) or 0
+            s["n"] += 1
+        for a, s in agg.items():
+            r.gauge("kaizen_tokens_input_total", s["in"], {"agent": a}, "Tokens de entrada registrados")
+            r.gauge("kaizen_tokens_output_total", s["out"], {"agent": a}, "Tokens de salida registrados")
+            r.gauge("kaizen_tokens_cost_usd", s["cost"], {"agent": a}, "Coste estimado registrado")
+            r.gauge("kaizen_tokens_saved_estimate", s["saved"], {"agent": a}, "Ahorro estimado contra línea base")
+            r.gauge("kaizen_token_tasks_total", s["n"], {"agent": a}, "Tareas con consumo medido")
+
     # Proyectos hermanos: monitoreo central de otros repos con Kaizen instalado.
     if C.get("KO_MONITOR_SIBLINGS", "1") == "1":
         parent = os.path.dirname(ROOT)

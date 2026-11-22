@@ -125,6 +125,14 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
+## Corpus normativo y citas verificadas
+
+`scripts/kaizen-knowledge add|ingest|verify|diff|index|stale|cite-check` mantiene `.kaizen/knowledge/sources.json` con niveles **V/S/I/N**, frescura por dominio y anclas por artículo. Solo una fuente **V** (verificada por humano) sustenta decisiones; `cite-check` falla si una cita no existe o no está verificada. Equipo `normativa-corpus` con `opencode/hy4-flash-free` (ADR-0022, `docs/kaizen/org/CORPUS-NORMATIVO.md`).
+
+## Economía de tokens y trabajo continuo
+
+`scripts/kaizen-tokens record|snapshot|report` lleva un ledger local de entrada/salida, coste reportado y ahorro **estimado**; el exporter lo publica como `kaizen_tokens_*` en Grafana. `kaizen-runtime work <equipo>` asigna la siguiente tarea pendiente al terminar una (proactividad sin detenerse), con `KT_MAX_TASKS_PER_AGENT=3`, `KT_MAX_AGENTS=12` y `KT_MAX_PARALLEL=6` para no reventar la máquina. Equipo `finops-tokens` con `opencode/hy4-flash-free` (ADR-0021, `docs/kaizen/org/TOKENS.md`).
+
 ## Supervisión local (Grafana)
 
 Grafana es la **capa de monitoreo**, 100 % en tu máquina: Prometheus `:9090`, Grafana `:3000`, exporter `:9101`. Muestra en tiempo real qué agente trabaja, en qué equipo, cuánto dura su evento y si terminó en verde. La **fuente** es persistente (archivos del repo) y el histórico se conserva en volúmenes locales de Prometheus y Grafana. No hay telemetría externa.

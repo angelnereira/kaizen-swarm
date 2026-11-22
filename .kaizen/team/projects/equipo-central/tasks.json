@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "task": "Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético",
+    "owner": "?",
+    "status": "pending",
+    "source": "outbox"
+  },
+  {
+    "task": "Recurrencia — trazabilidad de SOURCES.md rota tras nueva modificación (hash 11e96012)",
+    "owner": "?",
+    "status": "pending",
+    "source": "outbox"
+  },
+  {
+    "task": "Digests desactualizados frente al hash actual de SOURCES.md",
+    "owner": "?",
+    "status": "pending",
+    "source": "outbox"
+  }
+]

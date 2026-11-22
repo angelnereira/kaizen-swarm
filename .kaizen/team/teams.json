@@ -89,5 +89,34 @@
     ],
     "kpi": "100% de decisiones con source_ids, retador asignado y memorial; 0 decisiones sensibles sin humano",
     "model": "opencode/hy4-flash-free"
+  },
+  "finops-tokens": {
+    "goal": "Medir y optimizar el consumo de tokens, estimar el ahorro y mantener a los agentes trabajando en tareas pendientes sin reventar la máquina",
+    "members": [
+      "finops",
+      "capacidades-negocio",
+      "verificador-evidencias",
+      "facilitador-equipo",
+      "qa"
+    ],
+    "kpi": "100% de tareas con consumo registrado, tendencia de coste estable y 0 agentes detenidos con tareas pendientes",
+    "model": "opencode/hy4-flash-free"
+  },
+  "normativa-corpus": {
+    "goal": "Construir y mantener el corpus normativo panameño con fuentes oficiales, anclas por artículo, frescura y citas verificadas",
+    "members": [
+      "monitor-gaceta",
+      "cumplimiento-panama",
+      "knowledge-curator",
+      "verificador-evidencias",
+      "architect",
+      "security",
+      "fiscal-integration-specialist",
+      "data-expert",
+      "qa",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de normas citadas con source_id nivel V, 0 fuentes críticas vencidas, 0 citas inválidas en entregables",
+    "model": "opencode/hy4-flash-free"
   }
 }

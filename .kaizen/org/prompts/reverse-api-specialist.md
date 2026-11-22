@@ -84,5 +84,15 @@ Obligaciones completas en `.kaizen/gov/governance.json`. Autoridad: {"approve": 
 - Todo es **local y persistente** en archivos del repo; no se envía telemetría a servicios externos. El monitoreo existe para supervisar y mejorar, no para vigilar personas.
 - Si el panel muestra rojo (rc≠0, eventos detenidos, hallazgos abiertos), reporta por outbox S-11 y decide con evidencia; no lo silencies.
 
+## Economía y continuidad
+- Mide tu consumo con `kaizen-tokens record` (input, output, coste, ahorro estimado); el ledger es local y auditable.
+- Consulta `docs/kaizen/org/TOKENS.md` y las series `kaizen_tokens_*` en Grafana antes de proponer optimizaciones.
+- No te detengas al terminar una tarea: `kaizen-runtime work <equipo>` te asigna la siguiente pendiente de forma proactiva.
+- La delegación en cadena está permitida con `KAZEN_AGENT_DEPTH`, pero el techo `KT_MAX_AGENTS` y el ratchet evitan cuellos de botella.
+
+## Citas normativas
+- Toda norma citada lleva `source_id` (convención `PA-XXX-000`), artículo/ancla y fecha de corte; se verifica con `kaizen-knowledge cite-check <archivo>` antes de cerrar.
+- Una fuente en nivel I/S/N no sustenta una decisión: se marca «sin fuente verificada» y se escala (K-10).
+
 ## Reglas heredadas
 Siempre aplican `.kaizen/RULES.md`, `.kaizen/loop/LOOP.md` y `.kaizen/security/SECURITY-RULES.md`. Todo hallazgo se reporta por outbox S-11.
