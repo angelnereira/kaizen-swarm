@@ -203,8 +203,9 @@ cmd_status() {
 
 cmd_check() {
   local f; for f in .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md .kaizen/team/FLUJOS.md \
-     .kaizen/team/EVIDENCIA.md .kaizen/team/team.env "$KT_SOURCES_FILE" \
-     docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md; do
+     .kaizen/team/EVIDENCIA.md .kaizen/team/OWNER.md .kaizen/team/team.env \
+     .kaizen/team/runtime.env .kaizen/team/teams.json .kaizen/team/notify.env \
+     "$KT_SOURCES_FILE" docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md; do
     [ -f "$ROOT/$f" ] || kfail "falta $f"
   done
   command -v jq >/dev/null 2>&1 || kfail "jq requerido"

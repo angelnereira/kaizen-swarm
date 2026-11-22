@@ -101,6 +101,8 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          .kaizen/org/prompts/facilitador-equipo.md .kaizen/org/prompts/verificador-evidencias.md \
          .kaizen/org/prompts/monitor-gaceta.md \
          .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md \
+         .kaizen/team/OWNER.md .kaizen/team/teams.json .kaizen/team/notify.env .kaizen/team/runtime.env \
+         scripts/kaizen-installer scripts/kaizen-runtime scripts/kaizen-notify scripts/kaizen-inbox scripts/kaizen-start \
          docs/kaizen/org/CATALOGO-AGENTES.md .kaizen/org/catalog.json \
          docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
          docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md \
@@ -169,6 +171,17 @@ printf 'source_ids: LOCAL-001\ncommand: bash tests/run.sh\n' > "$REPO/.kaizen/or
 ( cd "$REPO" && scripts/kaizen-org outsource-accept wasm-spike >/dev/null 2>&1 ) && ok "aceptar con evidencia" || bad "aceptar con evidencia"
 grep -q '^status: accepted$' "$REPO/.kaizen/org/outsourcing/wasm-spike/contract.md" \
   && ok "contrato accepted" || bad "contrato accepted"
+
+# runtime, instalador y notificaciones (sin llamar a ningun modelo)
+( cd "$REPO" && scripts/kaizen-installer check >/dev/null 2>&1 ) && ok "instalador check" || bad "instalador check"
+( cd "$REPO" && scripts/kaizen-runtime check >/dev/null 2>&1 ) && ok "runtime check" || bad "runtime check"
+( cd "$REPO" && KR_DRY_RUN=1 scripts/kaizen-runtime once equipo-central >/dev/null 2>&1 )
+[ -f "$REPO/.kaizen/team/runtime/last.json" ] && ok "runtime ciclo dry-run" || bad "runtime ciclo dry-run"
+NA="$TMP/agents"; ( cd "$REPO" && scripts/kaizen-installer opencode --project "$NA" >/dev/null 2>&1 )
+AG=$(find "$NA" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
+[ "$AG" -ge 40 ] && ok "agentes OpenCode generados ($AG)" || bad "agentes OpenCode generados ($AG)"
+( cd "$REPO" && KN_CHANNELS=file scripts/kaizen-notify send --title "Prueba" --body "Reporte" >/dev/null 2>&1 )
+[ -f "$REPO/.kaizen/team/runtime/notifications.jsonl" ] && ok "notificacion registrada" || bad "notificacion registrada"
 
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]

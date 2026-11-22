@@ -65,6 +65,25 @@ Bases de conocimiento especializado: `.kaizen/org/knowledge/` (mapa normativo pa
 
 Verificación completa: `bash tests/run.sh`, `scripts/kaizen check` y `scripts/kaizen-org check`. El alcance realista de los modelos actuales y la previsión de evolución están en `docs/kaizen/org/FORECAST.md`. Los vetos de cumplimiento se regularon en `docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md`.
 
+## Arranque en un comando y WhatsApp
+
+```bash
+./scripts/kaizen-start start      # instala 44 agentes, runtime persistente y buzón
+kaizen-start status               # estado
+kaizen-start stop                 # pausa total
+```
+
+Los reportes llegan a El Presidente (`.kaizen/team/OWNER.md`) por webhook n8n → WhatsApp, correo o archivo; las instrucciones de WhatsApp vuelven por `kaizen-inbox` y `kaizen-equipo` las convierte en trabajo verificable. Sin credenciales en el repo: `docs/kaizen/org/RUNTIME.md`.
+
+## Primer objetivo (piloto recomendado, 7 días)
+
+**Auditoría exprés de cumplimiento fiscal y de datos en PlentyPay.**
+
+- Equipo: `cumplimiento` + `plataforma`, coordinado por `kaizen-equipo`.
+- Entregable: mapa de obligaciones DGI/Ley 81 con `source_ids` verificados, checklist accionable, 3 hallazgos con evidencia y un ADR de decisión.
+- KPI: **0 normas sin fuente verificada** y primer reporte en menos de 24 h.
+- Arranque: `kaizen-start start` y, desde WhatsApp, «Audita DGI y datos personales de PlentyPay y envíame el resumen con fuentes».
+
 ## Decisiones humanas pendientes
 
 Secret scanning y push protection, Dependabot/CodeQL, reporte privado de vulnerabilidades, protección de rama con los checks Kaizen, CODEOWNERS sobre los rieles, permisos de workflows, token de granularidad fina, 2FA y límite de gasto del proveedor. Ver `.github/SECURITY.md`.

@@ -253,6 +253,8 @@ cmd_check() {
   [ -f "$KSW_ROOT/docs/kaizen/adr/0001-autonomia-nivel-3.md" ] || fail "falta ADR-0001 (autonomia nivel 3)"
   "$KSW_ROOT/scripts/kaizen-org" check >/dev/null 2>&1 || fail "kaizen-org check en rojo"
   "$KSW_ROOT/scripts/kaizen-team" check >/dev/null 2>&1 || fail "kaizen-team check en rojo"
+  "$KSW_ROOT/scripts/kaizen-runtime" check >/dev/null 2>&1 || fail "kaizen-runtime check en rojo"
+  "$KSW_ROOT/scripts/kaizen-installer" check >/dev/null 2>&1 || fail "kaizen-installer check en rojo"
   [ $FAIL = 0 ] || { kfail "kaizen-swarm check: FALLO"; return 1; }
   klog "kaizen-swarm check: todo en verde"
 }

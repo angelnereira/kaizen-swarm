@@ -40,12 +40,15 @@ for f in \
   .kaizen/org/prompts/flutter-m3-design-specialist.md .kaizen/org/prompts/business-profiles-architect.md \
   .kaizen/org/prompts/identity-access-specialist.md .kaizen/org/prompts/vertical-domain-specialist.md \
   .kaizen/team/team.env .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md \
-  .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md \
-  scripts/kaizen-team \
+  .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md .kaizen/team/OWNER.md \
+  .kaizen/team/runtime.env .kaizen/team/teams.json .kaizen/team/notify.env \
+  scripts/kaizen-team scripts/kaizen-runtime scripts/kaizen-notify scripts/kaizen-inbox \
+  scripts/kaizen-inbox.py scripts/lib/opencode_agents.py scripts/kaizen-installer scripts/kaizen-start \
   docs/kaizen/org/FORECAST.md docs/kaizen/org/CATALOGO-AGENTES.md \
   docs/kaizen/adr/0002-veto-de-cumplimiento-e-investigacion-normativa.md \
   docs/kaizen/adr/0003-modelo-de-equipo-proactivo.md \
   docs/kaizen/adr/0004-especialistas-y-outsourcing.md \
+  docs/kaizen/adr/0005-runtime-y-presidencia.md docs/kaizen/org/RUNTIME.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \
