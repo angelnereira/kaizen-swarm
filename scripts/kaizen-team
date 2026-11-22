@@ -67,7 +67,7 @@ cmd_assign() {
     || { kfail "$agent no pertenece a la escuadra"; return 2; }
   local due; due="$(date -u -d "+$KT_TASK_DUE_DAYS days" +%Y-%m-%d 2>/dev/null || date -u +%Y-%m-%d)"
   jq --arg t "$task" --arg a "$agent" --arg due "$due" --arg now "$(date -u +%FT%TZ)" \
-     '. + [{task:$t,owner:$agent,due:$due,status:"assigned",created:$now}]' "$d/tasks.json" > "$d/tasks.tmp" && mv "$d/tasks.tmp" "$d/tasks.json"
+     '. + [{task:$t,owner:$a,due:$due,status:"assigned",created:$now}]' "$d/tasks.json" > "$d/tasks.tmp" && mv "$d/tasks.tmp" "$d/tasks.json"
   jq -cn --arg from "$KT_FACILITATOR" --arg to "$agent" --arg task "$task" --arg now "$(date -u +%FT%TZ)" \
      '{id:("H-"+(now|gsub("[^0-9]";""))),from:$from,to:$to,channel:"direct",intent:"handoff",task:$task,expects_ack:true,status:"open",created:$now}' >> "$d/handoffs.jsonl"
   jq --arg now "$(date -u +%FT%TZ)" '.stage="execute" | .updated=$now' "$d/state.json" > "$d/state.tmp" && mv "$d/state.tmp" "$d/state.json"
@@ -142,7 +142,7 @@ cmd_verify() {
     # Las decisiones ya bloqueadas se dejan bloqueadas: no se "verifican" para forzar un pase.
     bst="$(sed -n 's/^status: //p' "$f" | head -1)"
     [ "$bst" = blocked ] && continue
-    refs="$(sed -n 's/^source_ids: //p' "$f" | head -1 | tr -d '[]' | tr ',' ' ')"
+    refs="$(sed -n 's/^source_ids: //p' "$f" | head -1 | tr -d '[]"' | tr ',' ' ')"
     [ -n "$refs" ] || { kfail "$(basename "$f"): sin source_ids"; n=$((n + 1)); continue; }
     for sid in $refs; do
       source_ok "$sid" || { kfail "$(basename "$f"): fuente no verificada: $sid"; n=$((n + 1)); }
