@@ -105,7 +105,7 @@ lease_reap() { # ISSUE -> tareas reasignadas
   local issue="$1" f now n=0 t o
   f="$(room "$issue")/contracts/leases.json"; [ -f "$f" ] || { printf '0\n'; return 0; }
   now="$(date -u +%FT%TZ)"
-  if is_dry; then klog "[dry-run] reap leases expirados antes de $now"; printf '0\n'; return 0; fi
+  if is_dry; then klog "[dry-run] reap leases expirados antes de $now" >&2; printf '0\n'; return 0; fi
   while IFS=$'\t' read -r t o; do
     [ -z "$t" ] && continue
     mail_send "$issue" orchestrator all blocker "Lease caducado: $t (antes $o). Se libera y reasigna." >/dev/null || :
