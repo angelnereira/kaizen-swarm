@@ -8,7 +8,7 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 BASE="http://127.0.0.1:$KO_GRAFANA_PORT"
 klog() { printf '[grafana-bootstrap] %s\n' "$*"; }
 
-api() { # method path [data]
+api() { # method path [data] — fallback controlado de lectura (ADR-0020 / #20)
   local m="$1" path="$2" data="${3:-}"
   local args=(-sS --max-time 15 -u "$KO_GRAFANA_ADMIN_USER:$KO_GRAFANA_ADMIN_PASSWORD" -H 'Content-Type: application/json' -X "$m")
   [ -n "$data" ] && args+=(-d "$data")
@@ -16,7 +16,7 @@ api() { # method path [data]
 }
 
 cmd_check() {
-  local r; r="$(api GET /api/health 2>/dev/null || : #20 fallback controlado)"
+  local r; r="$(api GET /api/health 2>/dev/null || :)"
   case "$r" in *'"status":"ok"'*|*'"database":"ok"'*) klog "Grafana accesible en $BASE (usuario $KO_GRAFANA_ADMIN_USER)";; *) klog "Grafana no accesible: levanta el stack con kaizen-observability stack"; return 1;; esac
 }
 
@@ -24,18 +24,18 @@ cmd_apply() {
   cmd_check || return 1
   local payload; payload="$(jq -cn --arg login "$KO_GRAFANA_AGENT_USER" --arg pw "$KO_GRAFANA_AGENT_PASSWORD" \
     '{name:"Kaizen Agent",email:"kaizen-agent@local",login:$login,password:$pw}')"
-  local out; out="$(api POST /api/admin/users "$payload" 2>/dev/null || : #20 fallback controlado)"
+  local out; out="$(api POST /api/admin/users "$payload" 2>/dev/null || :)"
   case "$out" in
     *'"message"'*"User already exists"*|*"user already exists"*) klog "usuario $KO_GRAFANA_AGENT_USER ya existe";;
     *'"id"'*) klog "usuario creado: $KO_GRAFANA_AGENT_USER";;
     *) klog "no se pudo crear el usuario (revisa permisos de admin): ${out:0:120}";;
   esac
   local sa; sa="$(jq -cn --arg n "kaizen-agents" '{name:$n,role:"Viewer"}')"
-  local so; so="$(api POST /api/serviceaccounts "$sa" 2>/dev/null || : #20 fallback controlado)"
+  local so; so="$(api POST /api/serviceaccounts "$sa" 2>/dev/null || :)"
   case "$so" in
     *'"id"'*) local id; id="$(printf '%s' "$so" | jq -r '.id')"
       local tok; tok="$(jq -cn --arg n "kaizen-agent-token" '{name:$n,secondsToLive:0}')"
-      local to; to="$(api POST "/api/serviceaccounts/$id/tokens" "$tok" 2>/dev/null || : #20 fallback controlado)"
+      local to; to="$(api POST "/api/serviceaccounts/$id/tokens" "$tok" 2>/dev/null || :)"
       if printf '%s' "$to" | jq -e '.key' >/dev/null 2>&1; then
         klog "service account lista; token crear en entorno, NUNCA versionar"
       else klog "service account creada; no se pudo crear token"; fi;;
