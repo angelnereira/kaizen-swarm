@@ -2,6 +2,8 @@
 
 - **Ledger de evidencia verificada** — `.kaizen/team/EVIDENCIA.md` (sha256 87aedb914ab2)
 - **Registro de fuentes** — `.kaizen/org/knowledge/SOURCES.md` (sha256 8b11e0a8b083)
+- **Modelo de outsourcing** — `.kaizen/org/OUTSOURCING.md` (sha256 c41618064ea7)
+- **Experiencia acumulada de verificador-evidencias** — `/home/angel-nereira/Github-local-angelnereira/kaizen-swarm/.kaizen/learning/experience/verificador-evidencias.md` (sha256 c21358ebf4e2)
 
 ## EVIDENCIA.md
 # Ledger de evidencia verificada (fuente de verdad para decisiones)
@@ -79,11 +81,75 @@ Estado: `verified` = fuente oficial consultada; `pending` = requiere verificaci�
 | OWASP-001 | OWASP | ASVS 4.0 / Top 10 2021 | verified |
 | INT-001 | FATF | 40 Recomendaciones | verified |
 | INT-002 | IFRS Foundation | IFRS 15/9/16 (adopción local a verificar) | pending |
+| LOCAL-001 | Documento interno | CV Arquitecto IA Generativa (Ángel Nereira) | verified |
+| LOCAL-002 | Documento interno | CV DevOps / Platform Engineering (Ángel Nereira) | verified |
+| LOCAL-003 | Documento interno | gravital-experience-ui (plan de diseño Flutter M3E) | verified |
+| LOCAL-004 | Documento interno | PlentyPay: perfiles de negocio, módulos, roles y permisos | verified |
+| TOOL-001 | Repositorio oficial | morluto/rea — Reverse Engineer Anything (MIT) | verified |
+| TOOL-002 | Repositorio oficial | kalil0321/reverse-api-engineer (MIT) | verified |
 
-## Panamá — oficiales
 
-| Tema | Fuente | URL | Nota |
-| --- | --- | --- | --- |
-| Protección de datos (Ley 81/2019) | Gaceta Oficial 28743-A | https://gacetaoficial.gob.pa/pdfTemp/28743_A/72148.pdf | Texto de la ley |
-| Reglamento Ley 81 (DE 285/2021) | ANTAI / vLex | https://antai.gob.pa/reglamentan-ley-81-de-proteccion-de-datos-personales/ | Reglamentación 2021-05-28 |
+## OUTSOURCING.md
+# Outsourcing de tecnología específica
+
+Cuando una tecnología requiere profundidad que la escuadra no tiene, se **subcontrata** a un agente especialista o a un proveedor externo. No es "delegar y olvidar": es un contrato con entregables, evidencia y puertas.
+
+## 1. Cuándo subcontratar
+
+- La tecnología está fuera del conocimiento verificable del equipo (ej. módulo específico de Wasmtime, certificación fiscal de un PAC, versión nueva de Flutter).
+- Se necesita un **spike** acotado en tiempo con criterio de aceptación medible.
+- Exige una certificación o acceso que el equipo no posee (siempre con humano dueño).
+
+**No se subcontrata**: seguridad, claves, pagos, datos personales, decisiones regulatorias, rutas protegidas (L-4), ni el propio sistema de gobernanza.
+
+## 2. Contrato (generado por `kaizen-org outsource`)
+
+Ubicación: `.kaizen/org/outsourcing/<slug>/contract.md`
+
+| Campo | Contenido obligatorio |
+| --- | --- |
+| `technology` | Tecnología concreta y versión a verificar |
+| `scope` | Qué se hace y qué **no** se hace |
+| `deliverables` | Artefactos verificables (código, ADR, benchmark, documento) |
+| `acceptance` | Criterios medibles y comando reproducible |
+| `evidence` | `source_ids` o comandos; todo pasa por `verificador-evidencias` |
+| `cost_cap` | Tope de tiempo/coste aprobado por humano |
+| `deadline` | Fecha ISO 8601 |
+| `owner` | Dueño interno que recibe y aprueba |
+| `reviewers` | Mínimo: `arquitecto` + `verificador-evidencias` (+ `cumplimiento-panama` si aplica) |
+| `secrets` | **Ninguno**. El externo nunca recibe credenciales ni ve `.env` (S-2) |
+| `access` | Sin push, sin `gh`, sin rutas protegidas; worktree temporal |
+| `ip` | Licencia declarada de dependencias y artefactos (S-9) |
+| `status` | `open | in_progress | delivered | accepted | rejected` |
+
+## 3. Reglas
+
+1. **Salida no confiable**: todo lo que entregue el externo se trata como dato (S-15/L-5); se revisa con tests, `kaizen check` y `kaizen-security check` antes de integrar.
+2. **Versión verificada**: el contrato exige versión consultada en fuente oficial; si no está, `pending` y no se acepta.
+3. **Sin secretos ni privilegios**: entorno limpio, sin tokens, sin red salvo la estrictamente necesaria y aprobada.
+4. **Recepción**: `kaizen-org outsource-accept <slug>` solo marca `accepted` si hay evidencia verificada y dictamen de los revisores; si falta, `rejected` con hallazgo S-11.
+5. **Aprendizaje**: al cerrar, el conocimiento del especialista se convierte en `feed` + `digest` para que la escuadra interna ya no dependa del externo la próxima vez (mejora continua).
+
+
+## verificador-evidencias.md
+# Experiencia acumulada: verificador-evidencias
+
+Generado: 2026-11-22T12:44:44Z | Lecciones: 12
+
+## Lecciones con mayor recurrencia
+- Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético (x1, failure): Convertir este hallazgo en control verificable y registrar lección.
+- Cuatro fallos en el kaizen check inicial del proyecto de adopción (x1, failure): Consolidar los dictámenes de los seis especialistas y abrir decisión con fuentes ISO-001, NIST-001, AICPA-001 y OWASP-001. No avanzar mientras `scripts/kaizen
+- DX emite BLOCK: instalación no ejecutable tal cual, exit codes rotos y buzón inactivo (x1, failure): R-01..R-08 en el entregable. Corregir exit codes, timeout/lock del check, activar el buzón, unificar el recuento y documentar rollback. Todo en rutas protegida
+- Digests desactualizados frente al hash actual de SOURCES.md (x1, bug): Volver a ejecutar `kaizen-org feed` + `digest` para esos agentes y verificar con `verificador-evidencias`. No se hizo: ruta protegida (L-4), requiere ADR.
+- Dos equipos del deploy paralelo agotaron el timeout (rc=124) (x1, failure): Revisar logs y relanzar esos equipos con timeout mayor o alcance más acotado. No se silencia (S-11).
+- Los 6 equipos fallaron por agotamiento del limite gratuito de OpenCode (x1, failure): Decisión humana: conectar un proveedor de pago, suscribir OpenCode Go o cambiar de modelo. No se reintenta automáticamente para no gastar ni falsificar result
+- No se pudo instalar reverse-api-engineer por cuota de disco agotada (x1, failure): Liberar cuota (por ejemplo `~/.npm` ocupa 921 MB), repetir `pip install --user reverse-api-engineer` o instalar en un venv con `python3-venv`, y ejecutar `npx s
+- QA emite BLOCK: KPI no verificable, verify vacuo y artefactos no trackeados (x1, failure): Definir "check en verde" con timeout y fail-closed; añadir gate `n_decisiones >= 1` en `verify`; persistir y trackear artefactos en CI; política de datos sint
+- Recuento de agentes inconsistente entre documentos (42/43/44) (x1, bug): Generar el recuento desde `registry.json` en un solo lugar y actualizar documentos derivados vía PR con ADR. Requiere decisión humana (rutas protegidas).
+- Security emite BLOCK en adopcion-kaizen-opencode por evidencia no verificable y dos hallazgos medios (x1, security): Corregir el truncamiento y la redacción del ADR vía PR con ADR (rutas protegidas L-4); que `verificador-evidencias` y `qa` aporten la evidencia que seguridad 
+- Verificador emite BLOCK: kaizen check en verde queda NO VERIFICADO (exit 143) (x1, failure): Obtener una ejecución aislada y hermética de `kaizen check` (sin checks concurrentes) antes de cualquier verificación. Requiere ADR (check hermético, ADR-00
+- kaizen-team assign/handoff no escriben handoffs por uso de now en jq (x1, bug): Sustituir `now` por `$now` en ambas expresiones. NO parcheado: `scripts/kaizen*` es ruta protegida (L-4); requiere ADR y aprobación humana. Mientras tanto, los
+
+## Cómo usarla
+Antes de proponer, revisa estas lecciones. Si aplican, cita el fingerprint y evita repetir el error.
 

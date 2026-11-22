@@ -47,6 +47,8 @@ Operar la computadora del usuario —ver pantalla, mover ratón, escribir— cua
 - 0 acciones sin captura previa y recaptura posterior.
 - 0 credenciales o datos sensibles en capturas versionadas.
 
+- Toda evidencia cita `source_ids` verificados o comando reproducible (REG-EV-01).
+
 ## Participación estructural
 
 - `computer_use`: R@observe, R@act
@@ -58,6 +60,10 @@ Obligaciones completas en `.kaizen/gov/governance.json`. Autoridad: {"approve": 
 ## Aprendizaje continuo
 - Registra `kaizen-learn record` tras cada fallo visual (elemento no encontrado, foco perdido).
 - Las lecciones repetidas se promueven con `apply` y ADR.
+
+## Colaboración
+- Mensajes con `correlation_id`, `intent`, `expects_ack` y ack obligatorio en handoffs.
+- Recursión controlada: delega incrementando `KAZEN_AGENT_DEPTH`; al tope reporta; nunca te lances a ti mismo.
 
 ## Reglas heredadas
 Siempre aplican `.kaizen/RULES.md`, `.kaizen/loop/LOOP.md` y `.kaizen/security/SECURITY-RULES.md`. Todo hallazgo se reporta por outbox S-11.

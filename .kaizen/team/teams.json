@@ -60,5 +60,17 @@
       "facilitador-equipo"
     ],
     "kpi": "0 acciones sin captura y recaptura; 0 secretos expuestos"
+  },
+  "auto-mejora": {
+    "goal": "Auto-mejorar la comunidad: convertir hallazgos del outbox en lecciones, refinar definiciones con copy/save, actualizar conocimiento y subir el promedio de kaizen-eval sin regresiones",
+    "members": [
+      "verificador-evidencias",
+      "knowledge-curator",
+      "architect",
+      "qa",
+      "dx",
+      "facilitador-equipo"
+    ],
+    "kpi": "Promedio eval >= baseline 93.1, 0 regresiones, 100% de hallazgos con leccion o escalado"
   }
 }
