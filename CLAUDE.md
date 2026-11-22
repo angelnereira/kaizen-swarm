@@ -1,0 +1,2 @@
+## Kaizen
+Sigue estrictamente @.kaizen/RULES.md, @.kaizen/security/SECURITY-RULES.md, @.kaizen/loop/LOOP.md y @.kaizen/swarm/PROTOCOL.md. Antes de dar una tarea por terminada ejecuta `scripts/kaizen check` y reporta el resultado real. Para empezar usa `/kaizen start <rama>` o `/kaizen-swarm <issue>`; para cerrar, `/kaizen done`. No leas credenciales ni imprimas variables de entorno. Todo hallazgo va al outbox (S-11). No hagas push ni abras PR: lo hace el orquestador.

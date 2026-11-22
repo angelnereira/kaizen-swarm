@@ -1,0 +1,21 @@
+# Rieles de gobernanza: solo personas pueden debilitarlos (K-10/S-14).
+# Sustituye @angelnereira por el equipo humano responsable si aplica.
+*                              @angelnereira
+/.github/                      @angelnereira
+/.githooks/                    @angelnereira
+/.kaizen/                      @angelnereira
+/scripts/kaizen*               @angelnereira
+/scripts/lib/                  @angelnereira
+/scripts/bootstrap             @angelnereira
+/docs/kaizen/loop/             @angelnereira
+/docs/kaizen/swarm/            @angelnereira
+/AGENTS.md                     @angelnereira
+/CLAUDE.md                     @angelnereira
+/GEMINI.md                     @angelnereira
+/opencode.json                 @angelnereira
+/.claude/                      @angelnereira
+/.opencode/                    @angelnereira
+/.agents/                      @angelnereira
+/CODEOWNERS                    @angelnereira
+/SECURITY.md                   @angelnereira
+/example.env                   @angelnereira

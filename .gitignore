@@ -1,0 +1,25 @@
+# Secretos (S-1)
+.env
+.env.*
+!example.env
+*.pem
+*.key
+id_rsa*
+
+# Estado efímero del loop y del swarm (buzón híbrido)
+.kaizen/loop/state/
+.kaizen/loop/outbox/
+.kaizen/swarm/issues/
+
+# Python
+__pycache__/
+*.pyc
+
+#Worktrees de agentes
+worktrees/
+
+# Excepciones para que las carpetas efimeras existan en el arbol
+.kaizen/swarm/issues/*
+!.kaizen/swarm/issues/.gitkeep
+.kaizen/loop/state/*
+!.kaizen/loop/state/.gitkeep

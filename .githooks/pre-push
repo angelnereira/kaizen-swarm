@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel)"; cd "$ROOT"
+[ -f .kaizen/config.env ] && . .kaizen/config.env
+B="origin/${KZ_DEFAULT_BRANCH:-main}"
+git rev-parse --verify -q "$B" >/dev/null || B="${KZ_DEFAULT_BRANCH:-main}"
+scripts/kaizen check || exit 1
+scripts/kaizen-security check "$B" HEAD || exit 1
+scripts/kaizen-security audit || exit 1
