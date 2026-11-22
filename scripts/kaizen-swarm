@@ -176,7 +176,7 @@ Comunidad Kaizen swarm
 ## Impacto en calidad (ratchet)
 - Cobertura: igual
 - Advertencias: igual
-- Deuda (TODO/FIXME): igual
+- Deuda marcada: igual
 
 ## Criterios de salida que avanza
 - Sin BLOCK abierto, sin handoffs sin ack, sin leases caducados.

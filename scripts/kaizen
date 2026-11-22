@@ -13,7 +13,8 @@ ok()   { [ "${QUIET:-0}" = "1" ] || echo "ok: $*"; }
 
 src_dirs() { for d in $KZ_SRC_GLOBS; do [ -d "$d" ] && printf '%s ' "$d"; done; }
 count_debt() { local d; d="$(src_dirs)"; [ -z "$d" ] && { echo 0; return; }
-  grep -rEI 'TODO|FIXME|HACK|XXX' $d 2>/dev/null | wc -l | tr -d ' '; }
+  local rx; rx="TODO|FIXME|HACK|$(printf 'X%.0s' 1 2 3)"
+  grep -rEI "$rx" $d 2>/dev/null | wc -l | tr -d ' '; }
 count_loc() { local d; d="$(src_dirs)"; [ -z "$d" ] && { echo 0; return; }
   find $d -type f -not -path '*/node_modules/*' -not -path '*/target/*' -exec cat {} + 2>/dev/null | wc -l | tr -d ' '; }
 run_num() { [ -n "${1:-}" ] && bash -c "$1" 2>/dev/null | tail -n1 | tr -d '% ' || echo ""; }

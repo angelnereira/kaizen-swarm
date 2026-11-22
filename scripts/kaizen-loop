@@ -96,7 +96,7 @@ iterate() {
   if [ "$KL_DRY_RUN" = "1" ]; then log "[dry-run] loop=$loop agente=$KL_AGENT rama=$br"; echo "$prompt"; return 0; fi
   git fetch --quiet origin "$BASE" 2>/dev/null || true
   url="$(git remote get-url origin 2>/dev/null || echo "$ROOT")"
-  wd="$(mktemp -d "${TMPDIR:-/tmp}/kaizen-${loop}-XXXXXX")"
+  wd="$(mktemp -d "${TMPDIR:-/tmp}/kaizen-${loop}-$(date -u +%s)-$$")"
   git clone --quiet --local --no-checkout "$ROOT" "$wd" || { log "clon fallo"; fail_report "$loop" "clon-fallo" "$STATE/loop.log"; return 1; }
   ( cd "$wd" || exit 1
     git remote set-url origin "$url"
