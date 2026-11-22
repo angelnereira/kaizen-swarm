@@ -26,7 +26,7 @@ Autoridad final: **El Presidente (dueño del negocio y del proyecto)**
 
 | Proceso | Etapas | Puerta |
 | --- | ---: | --- |
-| `decision` — Toma de decisiones | 6 | kaizen-team verify en verde y mayoría cualificada sin veto |
+| `decision` — Toma de decisiones | 8 | kaizen-team verify en verde y mayoría cualificada sin veto |
 | `deployment` — Despliegue a producción | 7 | tests + gates + Kaizen check verdes; humano para producción; rollback documentado |
 | `change` — Cambio de código o configuración | 4 | descriptor K-4, ownership.json, kaizen check y sin BLOCK abierto |
 | `incident` — Incidente y respuesta | 5 | contención + notificación al regulador cuando aplique + postmortem sin culpables |
@@ -45,9 +45,11 @@ Autoridad final: **El Presidente (dueño del negocio y del proyecto)**
 - **propose** — R: analista-negocios, facilitador-equipo, kaizen-equipo, A: facilitador-equipo
 - **consult** — C: ai, ai-rag-engineer, analista-negocios, architect, business-profiles-architect, capacidades-negocio, computer-operator, cumplimiento-panama, data-expert, dev1-core, dev2-api, dev3-ui, dev4-data, dev5-glue, director-producto, dotnet-banking-integrator, dx, facilitador-equipo, finanzas-panamas, finops, fiscal-integration-specialist, flutter-m3-design-specialist, gcp-cloud-architect, gerente, identity-access-specialist, infra, innovation, knowledge-curator, lowlevel, marketing, monitor-gaceta, platform-engineer, product, product-owner, qa, rea-specialist, researcher, reverse-api-specialist, runbooks, rust-systems-specialist, security, soporte, systems, verificador-evidencias, vertical-domain-specialist
 - **discuss** — A: analista-negocios, architect, C: architect, cumplimiento-panama, finanzas-panamas
+- **challenge** — R: architect, cumplimiento-panama, qa, security, A: architect, I: gerente
 - **veto** — V: analista-negocios, architect, cumplimiento-panama, gerente, qa, security
 - **decide** — A: gerente, humano, C: verificador-evidencias
-- **record** — R: facilitador-equipo, verificador-evidencias, I: ai, ai-rag-engineer, analista-negocios, architect, business-profiles-architect, capacidades-negocio, computer-operator, cumplimiento-panama, data-expert, dev1-core, dev2-api, dev3-ui, dev4-data, dev5-glue, director-producto, dotnet-banking-integrator, dx, facilitador-equipo, finanzas-panamas, finops, fiscal-integration-specialist, flutter-m3-design-specialist, gcp-cloud-architect, gerente, identity-access-specialist, infra, innovation, knowledge-curator, lowlevel, marketing, monitor-gaceta, platform-engineer, product, product-owner, qa, rea-specialist, researcher, reverse-api-specialist, runbooks, rust-systems-specialist, security, soporte, systems, verificador-evidencias, vertical-domain-specialist
+- **memorial** — R: knowledge-curator, verificador-evidencias, I: ai, ai-rag-engineer, analista-negocios, architect, business-profiles-architect, capacidades-negocio, computer-operator, cumplimiento-panama, data-expert, dev1-core, dev2-api, dev3-ui, dev4-data, dev5-glue, director-producto, dotnet-banking-integrator, dx, facilitador-equipo, finanzas-panamas, finops, fiscal-integration-specialist, flutter-m3-design-specialist, gcp-cloud-architect, gerente, identity-access-specialist, infra, innovation, knowledge-curator, lowlevel, marketing, monitor-gaceta, platform-engineer, product, product-owner, qa, rea-specialist, researcher, reverse-api-specialist, runbooks, rust-systems-specialist, security, soporte, systems, verificador-evidencias, vertical-domain-specialist
+- **verify** — R: qa, verificador-evidencias, A: humano
 
 ### Despliegue a producción (`deployment`)
 - **plan** — R: gcp-cloud-architect, platform-engineer, A: architect

@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.2.0 — 2026-11-22
+
+Fecha: 2026-11-22 | ADRs: 9 | Agentes: 45 | Pruebas: 144/144 en verde
+
+## Cambios desde v1.1.1
+
+- Add high-performance deliberation, public voice and known-failure memory
+- Pin auto-mejora team to opencode/hy4-flash-free
+- Sync generated agents after deterministic self-improvement
+
+## Capacidades
+- Catálogo de 263 herramientas REA en 11 familias.
+- Gobernanza semántica, evaluación, aprendizaje y runtime proactivo.
+
+## Instalación
+```bash
+npx -y opencode-ai@latest >/dev/null 2>&1 || true
+git clone --depth 1 https://github.com/angelnereira/kaizen-swarm /tmp/kaizen-swarm
+/tmp/kaizen-swarm/scripts/kaizen-installer all <proyecto>
+/tmp/kaizen-swarm/scripts/kaizen-release install --global
+```
+
 ## v1.1.1 — 2026-11-22
 
 Fecha: 2026-11-22 | ADRs: 9 | Agentes: 45 | Pruebas: 144/144 en verde
