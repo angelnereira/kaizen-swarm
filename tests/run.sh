@@ -320,6 +320,8 @@ grep -q 'ADR-0025' "$REPO/.opencode/agents/qa.md" 2>/dev/null && ok 'agente con 
 jq -e '.["whatsapp-onboarding"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo bienvenida' || bad 'equipo bienvenida'
 for f in Dockerfile docker-compose.yml scripts/kaizen-docker scripts/docker-entrypoint.sh observability/prometheus-container.yml; do [ -f "$REPO/$f" ] && ok "docker $f" || bad "docker $f"; done
 bash -n "$REPO/scripts/kaizen-docker" "$REPO/scripts/docker-entrypoint.sh" && ok 'docker sintaxis' || bad 'docker sintaxis'
+[ -x "$REPO/scripts/kaizen-conflict" ] && ok 'script conflict' || bad 'script conflict'
+grep -A2 'resource: "git push\*"' "$REPO/.opencode/agents/qa.md" 2>/dev/null | grep -q 'effect: "allow"' && ok 'push permitido' || bad 'push permitido'
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \

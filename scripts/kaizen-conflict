@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# kaizen-conflict: resolución autónoma y auditada de conflictos en ramas kaizen/*.
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"; cd "$ROOT"
+BR="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo '?')"
+LOG="$ROOT/.kaizen/team/runtime/conflicts.jsonl"; mkdir -p "$(dirname "$LOG")"
+klog() { printf '[kaizen-conflict] %s\n' "$*"; }
+audit() { jq -cn --arg ts "$(date -u +%FT%TZ)" --arg action "$1" --arg branch "$BR" --arg detail "$2" \
+  '{ts:$ts,action:$action,branch:$branch,detail:$detail}' >> "$LOG"; }
+guard() {
+  case "$BR" in
+    kaizen/*|feature/*|fix/*) return 0;;
+    *) klog "rama $BR no permitida: solo ramas kaizen/*, feature/* o fix/* (nunca main)"; return 1;;
+  esac
+}
+unmerged() { git diff --name-only --diff-filter=U 2>/dev/null; }
+
+cmd_status() {
+  local files; files="$(unmerged)"
+  if [ -z "$files" ]; then echo "sin conflictos"; return 0; fi
+  echo "conflictos en $BR:"
+  printf '%s\n' "$files" | sed 's/^/  /'
+}
+
+cmd_resolve() { # --strategy ours|theirs --file PATH | --all
+  local strategy="" file="" all=0
+  while [ $# -gt 0 ]; do case "$1" in
+    --strategy) strategy="$2"; shift;; --file) file="$2"; shift;; --all) all=1;;
+  esac; shift; done
+  guard || return 1
+  case "$strategy" in ours|theirs) ;; *) echo "estrategia inválida: usa ours|theirs"; return 2;; esac
+  local list; if [ $all = 1 ]; then list="$(unmerged)"; else list="$file"; fi
+  [ -n "$list" ] || { echo "sin archivos en conflicto"; return 0; }
+  local f
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    git checkout "--$strategy" -- "$f" || { klog "no se pudo resolver $f"; return 1; }
+    git add -- "$f"
+    audit "resolve-$strategy" "$f"
+    klog "resuelto ($strategy): $f"
+  done <<< "$list"
+}
+
+cmd_commit_push() {
+  guard || return 1
+  [ -z "$(unmerged)" ] || { klog "quedan conflictos sin resolver"; return 1; }
+  if git diff --cached --quiet; then klog "nada que commitear"; return 0; fi
+  git commit -q -m "Resolve merge conflicts in $BR" || return 1
+  git push -q origin "$BR" || { klog "push falló: revisa remoto/permisos"; audit "push-error" "$BR"; return 1; }
+  audit "pushed" "$BR"
+  klog "conflicto resuelto y pusheado en $BR"
+}
+
+cmd_abort() { guard || return 1; git merge --abort 2>/dev/null || git rebase --abort 2>/dev/null || :; audit "abort" "$BR"; klog "fusión/rebase abortada"; }
+
+case "${1:-status}" in
+  status) cmd_status;; resolve) shift; cmd_resolve "$@";; commit-push) cmd_commit_push;; abort) cmd_abort;;
+  *) echo "uso: kaizen-conflict status|resolve --strategy ours|theirs --file F|--all|commit-push|abort";;
+esac

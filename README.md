@@ -125,6 +125,10 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
+## Resolución de conflictos y push
+
+Los agentes pueden hacer push y resolver conflictos en ramas `kaizen/*`, `feature/*` o `fix/*` (nunca `main`) con `scripts/kaizen-conflict status|resolve|commit-push|abort`. La estrategia (`ours`/`theirs`) y cada push quedan auditados en `.kaizen/team/runtime/conflicts.jsonl`. Los 47 agentes generados tienen `git push*` en `allow` (ADR-0027); la negación anterior era la causa de los errores de permisos.
+
 ## Despliegue Docker local
 
 ```bash
