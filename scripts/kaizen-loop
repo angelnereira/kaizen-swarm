@@ -92,7 +92,7 @@ run_agent() { # $1 workdir $2 prompt (subshell)
 iterate() {
   local loop="$1" ts br wd url base_sha prompt rc=0 class draft=() title d
   ts="$(date -u +%Y%m%d-%H%M%S)"; br="kaizen/${loop}-${ts}"; d="$DRAFTS/${br//\//-}.md"
-  prompt="Ejecuta UNA iteracion del loop '$loop' siguiendo docs/kaizen/loop/prompts/$loop.md. Rama: $br. Descriptor: $d. Nivel: $KL_AUTONOMY. Reporta hallazgos en .kaizen/loop/outbox/ (S-11). Sigue .kaizen/security/SECURITY-RULES.md. No hagas push ni abras PR."
+  prompt="Ejecuta UNA iteracion del loop '$loop' siguiendo docs/kaizen/loop/prompts/$loop.md. Rama: $br. Descriptor: $d. Nivel: $KL_AUTONOMY. Reporta hallazgos en .kaizen/loop/outbox/ (S-11). Sigue .kaizen/security/SECURITY-RULES.md. Puedes commit y push en ramas kaizen/* y abrir PR con evidencia; no hagas push directo a main (ADR-0023)."
   if [ "$KL_DRY_RUN" = "1" ]; then log "[dry-run] loop=$loop agente=$KL_AGENT rama=$br"; echo "$prompt"; return 0; fi
   git fetch --quiet origin "$BASE" 2>/dev/null || true
   url="$(git remote get-url origin 2>/dev/null || echo "$ROOT")"

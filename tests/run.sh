@@ -302,6 +302,9 @@ jq -e '.["normativa-corpus"].model == "opencode/hy4-flash-free"' "$REPO/.kaizen/
   && ok "equipo normativa con Hy4" || bad "equipo normativa con Hy4"
 grep -q 'kaizen-knowledge cite-check' "$REPO/.kaizen/org/prompts/monitor-gaceta.md" \
   && ok 'agentes con deber de cita' || bad 'agentes con deber de cita'
+grep -q 'ADR-0023' "$REPO/.kaizen/RULES.md" && ok 'push autonomo gobernado' || bad 'push autonomo gobernado'
+grep -q 'Puedes hacer commit y push' "$REPO/.opencode/agents/qa.md" 2>/dev/null \
+  && ok 'agente generado sin bloqueo push' || bad 'agente generado sin bloqueo push'
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \
