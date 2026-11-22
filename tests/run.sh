@@ -89,7 +89,7 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 42 ] && ok "inventario de 42 agentes" || bad "inventario de 42 agentes ($N)"
+[ "$N" = 43 ] && ok "inventario de 43 agentes" || bad "inventario de 43 agentes ($N)"
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
@@ -98,6 +98,8 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md \
          .kaizen/org/knowledge/business/CAPACIDADES.md \
          .kaizen/org/knowledge/panama-compliance/GACETA-OFICIAL.md \
+         .kaizen/org/knowledge/business/REA-INTEGRACION.md .kaizen/org/prompts/rea-specialist.md \
+         docs/kaizen/adr/0009-integracion-rea-gobernada.md \
          .kaizen/org/prompts/facilitador-equipo.md .kaizen/org/prompts/verificador-evidencias.md \
          .kaizen/org/prompts/monitor-gaceta.md \
          .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md \
@@ -123,7 +125,7 @@ done
   && ok "expediente de investigacion" || bad "expediente de investigacion"
 ( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
 C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
-[ "$C" = 42 ] && ok "catalogo consistente (42)" || bad "catalogo consistente ($C)"
+[ "$C" = 43 ] && ok "catalogo consistente (43)" || bad "catalogo consistente ($C)"
 grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
   && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
@@ -234,6 +236,10 @@ case "$GO" in *humano*) ok "raci con humano";; *) bad "raci con humano";; esac
 ( cd "$REPO" && python3 scripts/kaizen-gov can security veto >/dev/null 2>&1 ) && ok "can veto" || bad "can veto"
 ( cd "$REPO" && python3 scripts/kaizen-gov can dev1-core approve >/dev/null 2>&1 ) \
   && bad "dev no puede aprobar" || ok "dev no puede aprobar"
+jq -e '.processes.reverse_engineering.stages.authorize.A | index("humano")' "$REPO/.kaizen/gov/governance.json" >/dev/null 2>&1 \
+  && ok "REA requiere humano" || bad "REA requiere humano"
+grep -q '263 herramientas MCP' "$REPO/.kaizen/org/knowledge/business/REA-INTEGRACION.md" \
+  && ok "REA documentado instalado" || bad "REA documentado instalado"
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \

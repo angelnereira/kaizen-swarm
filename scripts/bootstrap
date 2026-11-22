@@ -26,6 +26,7 @@ for f in \
   .kaizen/org/knowledge/panama-compliance/CONTEXTOS.md .kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md \
   .kaizen/org/knowledge/panama-compliance/GACETA-OFICIAL.md \
   .kaizen/org/knowledge/business/CAPACIDADES-REFERENCIA.md \
+  .kaizen/org/knowledge/business/REA-INTEGRACION.md \
   .kaizen/org/OUTSOURCING.md \
   .kaizen/org/knowledge/international/ESTANDARES.md .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md \
   .kaizen/org/knowledge/business/CAPACIDADES.md \
@@ -39,6 +40,7 @@ for f in \
   .kaizen/org/prompts/rust-systems-specialist.md .kaizen/org/prompts/fiscal-integration-specialist.md \
   .kaizen/org/prompts/flutter-m3-design-specialist.md .kaizen/org/prompts/business-profiles-architect.md \
   .kaizen/org/prompts/identity-access-specialist.md .kaizen/org/prompts/vertical-domain-specialist.md \
+  .kaizen/org/prompts/rea-specialist.md \
   .kaizen/team/team.env .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md \
   .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md .kaizen/team/OWNER.md \
   .kaizen/team/runtime.env .kaizen/team/teams.json .kaizen/team/notify.env \
@@ -54,6 +56,7 @@ for f in \
   docs/kaizen/adr/0006-evaluacion-y-ratchet-de-agentes.md docs/kaizen/org/EVALUACION.md \
   docs/kaizen/adr/0007-aprendizaje-continuo-de-agentes.md docs/kaizen/org/APRENDIZAJE.md \
   docs/kaizen/adr/0008-gobernanza-semantica-de-roles.md docs/kaizen/org/GOBIERNO.md \
+  docs/kaizen/adr/0009-integracion-rea-gobernada.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \

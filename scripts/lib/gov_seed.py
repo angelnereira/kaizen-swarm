@@ -124,6 +124,18 @@ PROCESS_DEFS = {
             "apply": {"R": ["*"], "I": ["*"]},
         },
     },
+    "reverse_engineering": {
+        "name": "Ingeniería inversa y depuración profunda (REA)",
+        "gate": "autorización humana + herramienta legalmente licenciada + evidencia reproducible",
+        "stages": {
+            "authorize": {"R": ["rea-specialist"], "A": ["humano"],
+                          "V": ["security", "cumplimiento-panama"]},
+            "inspect": {"R": ["rea-specialist"], "C": ["lowlevel", "systems"]},
+            "verify": {"R": ["verificador-evidencias", "qa"]},
+            "apply": {"R": ["dev1-core", "dev5-glue"], "A": ["architect"], "I": ["*"]},
+            "learn": {"R": ["rea-specialist", "knowledge-curator"], "I": ["*"]},
+        },
+    },
 }
 
 
@@ -158,6 +170,8 @@ def participation(fields):
         parts += ["compliance", "decision", "research", "agent_lifecycle"]
     if aid == "kaizen-installer":
         parts += ["agent_lifecycle"]
+    if aid == "rea-specialist":
+        parts += ["reverse_engineering", "research"]
     return sorted(set(parts))
 
 

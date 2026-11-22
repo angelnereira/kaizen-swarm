@@ -52,7 +52,7 @@ def cmd_check(args):
         accountable = any("A" in s for s in stages.values())
         if not accountable:
             errors.append(f"{pid}: sin responsable (A)")
-        if pid in ("decision", "deployment", "compliance", "budget"):
+        if pid in ("decision", "deployment", "compliance", "budget", "reverse_engineering"):
             all_a = [x for s in stages.values() for x in s.get("A", [])]
             if "humano" not in all_a and pid != "decision":
                 errors.append(f"{pid}: decisión sensible sin humano como A")

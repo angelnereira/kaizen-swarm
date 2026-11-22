@@ -1,6 +1,6 @@
 # kaizen-swarm
 
-Hogar operativo de una **organización de 42 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, **cumplimiento normativo**, **capacidades tecnológicas/financieras/mercadeo**, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Los agentes de conocimiento **investigan en internet** normativa y estándares (ISO/NIST/AICPA/PCI) con fuentes oficiales y fecha de corte, y producen guías de implementación detalladas. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
+Hogar operativo de una **organización de 43 agentes** (17 roles técnicos + gerencia, analista oficial de negocios, marketing, finanzas panameñas, **cumplimiento normativo**, **capacidades tecnológicas/financieras/mercadeo**, operaciones y conocimiento) que trabajan por issue con aislamiento en git worktrees, buzón trazable, proactividad con evidencia y consenso registrado. Los agentes de conocimiento **investigan en internet** normativa y estándares (ISO/NIST/AICPA/PCI) con fuentes oficiales y fecha de corte, y producen guías de implementación detalladas. Cada agente es un archivo **copiable, editable y guardable**, así que puedes especializar uno nuevo sin destruir el original. Además es una **plantilla instalable**: `scripts/bootstrap <repo>` lleva la organización a cualquier proyecto sin sobrescribir lo que ya exista.
 
 ## Instalación en un paso (para un agente CLI)
 
@@ -15,7 +15,7 @@ Instala la comunidad de este repositorio: https://github.com/angelnereira/kaizen
 
 1) Clónalo en /tmp/kaizen-swarm (git clone --depth 1).
 2) Ejecuta: /tmp/kaizen-swarm/scripts/kaizen-installer all <directorio-destino>
-   (instala el framework en el repo destino, los 44 agentes en .opencode/agents y en ~/.config/opencode/agents).
+   (instala el framework en el repo destino, los 45 agentes en .opencode/agents y en ~/.config/opencode/agents).
 3) Verifica con: /tmp/kaizen-swarm/scripts/kaizen-start status y bash tests/run.sh.
 4) Reporta qué archivos creó, qué omitió por existir y qué decisiones humanas quedan pendientes.
 No escribas secretos, no modifiques opencode.json sin permiso y no hagas git push.
@@ -53,7 +53,7 @@ kaizen-start status          # o: ./scripts/kaizen-start status
 kaizen-start start           # activa runtime + buzón con un solo comando
 ```
 
-`all` es idempotente: fusiona sin sobrescribir (`scripts/bootstrap`) y genera los 44 agentes desde las definiciones. No toca tu `opencode.json` ni tus credenciales.
+`all` es idempotente: fusiona sin sobrescribir (`scripts/bootstrap`) y genera los 45 agentes desde las definiciones. No toca tu `opencode.json` ni tus credenciales.
 
 ## Capas
 
@@ -94,7 +94,7 @@ scripts/kaizen-swarm finalize 42 --publish      # push + PR (lo hace el orquesta
 Organización de agentes:
 
 ```bash
-scripts/kaizen-org list                          # inventario de 42 puestos
+scripts/kaizen-org list                          # inventario de 43 puestos
 scripts/kaizen-org research cumplimiento-panama "versión vigente de la Ley 81" --url https://www.antai.gob.pa/
 scripts/kaizen-org copy marketing marketing-visual --name "Marketing Visual"
 scripts/kaizen-org save marketing-visual         # sube versión + diario
@@ -118,6 +118,8 @@ Bases de conocimiento especializado: `.kaizen/org/knowledge/` (mapa normativo pa
 
 Gobernanza semántica: `.kaizen/gov/governance.json` define 9 procesos con RACI + veto + humano, responsabilidades, obligaciones y derechos por agente. Consulta con `scripts/kaizen-gov raci <proceso>|who|can|obligations|report` (ADR-0008, `docs/kaizen/org/GOBIERNO.md`).
 
+Depuración profunda con REA: instalado con aprobación humana (MCP + skill `reverse-engineer-anything`, 263 herramientas, Node v22.23.4 en espacio de usuario). El agente `rea-specialist` analiza binarios, Electron/.NET, Android, firmware y runtime **solo con autorización** del proceso `reverse_engineering` (A: humano, V: seguridad/cumplimiento); todo resultado se trata como dato no confiable (`.kaizen/org/knowledge/business/REA-INTEGRACION.md`, ADR-0009).
+
 Aprendizaje continuo: `scripts/kaizen-learn record|digest|apply|report` convierte fallos, blockers y decisiones en lecciones con fingerprint, las deduplica, genera experiencia por agente y, cuando se repiten, las promueve a la definición (sube versión). Cuanto más se usa, más aprende y se especializa (`.kaizen/org/learning` → `docs/kaizen/org/APRENDIZAJE.md`, ADR-0007).
 
 Evaluación y ratchet de agentes: `scripts/kaizen-eval check|baseline|ratchet|report|metrics add` — 10 dimensiones, promedio actual **93.1/100**, 42 agentes sobre el umbral de 70. Coste por decisión, tiempo a verificación y tasa de revert se registran con `metrics add`; la línea base no puede bajar sin ADR (`docs/kaizen/org/EVALUACION.md`, ADR-0006).
@@ -127,7 +129,7 @@ Verificación completa: `bash tests/run.sh`, `scripts/kaizen check` y `scripts/k
 ## Arranque en un comando y WhatsApp
 
 ```bash
-./scripts/kaizen-start start      # instala 44 agentes, runtime persistente y buzón
+./scripts/kaizen-start start      # instala 45 agentes, runtime persistente y buzón
 kaizen-start status               # estado
 kaizen-start stop                 # pausa total
 ```

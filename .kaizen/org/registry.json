@@ -374,6 +374,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "rea-specialist",
+    "name": "Especialista en Ingeniería Inversa y Depuración Profunda (REA)",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "none",
+    "triggers": "[research.required:*, issue.label:depuracion, reverse_engineering.authorized:*, knowledge.updated:*]"
+  },
+  {
     "id": "researcher",
     "name": "Investigador de Tecnologia",
     "department": "conocimiento",
