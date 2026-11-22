@@ -1,0 +1,50 @@
+[
+  {
+    "task": "Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético",
+    "owner": "architect",
+    "due": "2026-11-24T18:00:00Z",
+    "status": "assigned",
+    "created": "2026-11-22T18:39:42Z",
+    "lease": {
+      "owner": "architect",
+      "expires_at": "2026-11-24T18:00:00Z"
+    },
+    "correlation_id": "OT-BLOCK-ARCH-001",
+    "source_refs": [
+      ".kaizen/loop/outbox/arquitectura-block-adopcion.md"
+    ],
+    "assigned_at": "2026-11-22T18:39:57Z"
+  },
+  {
+    "task": "Recurrencia — trazabilidad de SOURCES.md rota tras nueva modificación (hash 11e96012)",
+    "owner": "verificador-evidencias",
+    "due": "2026-11-25T18:00:00Z",
+    "status": "assigned",
+    "created": "2026-11-22T18:39:42Z",
+    "lease": {
+      "owner": "verificador-evidencias",
+      "expires_at": "2026-11-25T18:00:00Z"
+    },
+    "correlation_id": "OT-EVID-TRAZA-002",
+    "source_refs": [
+      ".kaizen/team/projects/finding-trazabilidad-sources-20261122.md"
+    ],
+    "assigned_at": "2026-11-22T18:39:57Z"
+  },
+  {
+    "task": "Digests desactualizados frente al hash actual de SOURCES.md",
+    "owner": "knowledge-curator",
+    "due": "2026-11-25T18:00:00Z",
+    "status": "assigned",
+    "created": "2026-11-22T18:39:42Z",
+    "lease": {
+      "owner": "knowledge-curator",
+      "expires_at": "2026-11-25T18:00:00Z"
+    },
+    "correlation_id": "OT-EVID-DIGEST-003",
+    "source_refs": [
+      ".kaizen/team/projects/finding-trazabilidad-sources-20261122.md"
+    ],
+    "assigned_at": "2026-11-22T18:39:57Z"
+  }
+]

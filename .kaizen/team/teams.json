@@ -130,5 +130,24 @@
     ],
     "kpi": "1 mensaje entregado y confirmado por El Presidente; 0 SILENCIOS: cada fallo documentado en outbox",
     "model": "opencode/hy4-flash-free"
+  },
+  "outsourcing-tech": {
+    "goal": "Contratar y supervisar especialistas externos por tecnologia: REA, reverse-api-engineer, Computer Use, observabilidad Grafana/Prometheus y puente WhatsApp BSP; con contratos, acceptance y evidencia antes de integrar",
+    "members": [
+      "facilitador-equipo",
+      "architect",
+      "security",
+      "finops",
+      "verificador-evidencias",
+      "knowledge-curator",
+      "rea-specialist",
+      "reverse-api-specialist",
+      "platform-engineer",
+      "gcp-cloud-architect",
+      "flutter-m3-design-specialist",
+      "dotnet-banking-integrator"
+    ],
+    "kpi": "100% de contratos con deliverable, acceptance y evidence.md; 0 integraciones sin verificacion",
+    "model": "opencode/hy4-flash-free"
   }
 }
