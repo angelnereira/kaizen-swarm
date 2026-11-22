@@ -71,6 +71,7 @@
       "dx",
       "facilitador-equipo"
     ],
-    "kpi": "Promedio eval >= baseline 93.1, 0 regresiones, 100% de hallazgos con leccion o escalado"
+    "kpi": "Promedio eval >= baseline 93.1, 0 regresiones, 100% de hallazgos con leccion o escalado",
+    "model": "opencode/hy4-flash-free"
   }
 }
