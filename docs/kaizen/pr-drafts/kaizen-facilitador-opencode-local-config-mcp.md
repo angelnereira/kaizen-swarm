@@ -1,63 +1,86 @@
 # Descriptor — kaizen/facilitador-opencode-local-config-mcp
 
 ## Resumen
-Verificar que los servidores MCP `rea` y `railway` están activos en esta máquina sin credenciales versionadas en el repo; evidencia reproducible con `source_ids`, handoff con ack y tarea lista para el dictamen final.
+Preparar la tarea 3 del equipo `opencode-local-config` («Verificar MCP rea y railway activos sin credenciales en repo»): evidencia reproducible con `source_ids`, handoff con ack a `dx` y tarea en `ready`. Sin push a `main`.
 
 ## Alcance
-Cerrar la tarea 3 del equipo `opencode-local-config`: **MCP `rea` activo** (KPI) y `railway` activo, con **0 credenciales en el repo**. Producir evidencia con `source_ids`, handoff con ack y dejar la tarea en `ready`. **No** dictaminar el proyecto completo (tarea 5, `verificador-evidencias`) ni dictaminar permisos de seguridad (tarea 2, `security`).
 
 - Proyecto: `.kaizen/team/projects/opencode-local-config/`
 - correlation_id: `OLC-MCP-003`
-- Handoff: `H-1795403633267078428` → `verificador-evidencias` (sobre completo, `status: ack`)
-- Autoridad: ADR-0023 (push en ramas `kaizen/*`); sin push a `main`. ADR-0024 (comunidad en la máquina, no en el repo destino). ADR-0009 (resultados REA = dato no confiable).
+- Handoff propio: `H-1795403779907` → `dx` (`status: ack`, `acked_at: 2026-11-23T03:16:57Z`)
+- Handoff de la instancia concurrente: `H-1795403633267078428` → `verificador-evidencias` (`status: ack`). Se conservan ambos; `verificador-evidencias` elige la fuente canónica (tarea 5).
+- Autoridad: `resource` (proceso/asignación/plazos). **No** se dictamina seguridad, no se cambia el KPI, no se modifica el alcance, no se leen credenciales (S-1/S-2), no se hace push directo a `main` (ADR-0023).
+
+Fuera de alcance: cierre de la tarea 3, dictamen final, cambios en permisos y edición de rutas protegidas (L-4).
 
 ## Cambios
 
 | Archivo | Cambio |
 | --- | --- |
-| `docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-rea-railway.md` | Evidencia de verificación MCP y cero credenciales, con `source_ids`. |
-| `.kaizen/team/projects/opencode-local-config/blackboard.md` | Hechos verificados: MCP activo, 0 credenciales, handoff acusado. |
-| `.kaizen/team/projects/opencode-local-config/handoffs.jsonl` | Handoff `H-1795403633267078428` con sobre completo y ack real. |
-| `.kaizen/team/projects/opencode-local-config/tasks.json` | Tarea 3 en `ready` con lease/due/`source_ids`/evidencia. |
-| `.kaizen/team/projects/opencode-local-config/state.json` | `updated` refleja el avance de etapa (L-KPI). |
-| `.kaizen/team/projects/opencode-local-config/standups/2026-11-22.md` | Actualización `OLC-MCP-003`: acuses pendientes 0. |
+| `docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-verificacion.md` | Evidencia nueva: MCP `rea`/`railway` activos, 0 secretos en config, hallazgos H-1..H-4, `source_ids` verificados. |
+| `.kaizen/team/projects/opencode-local-config/tasks.json` | Tarea 3 de `pending` a `ready`: owner `dx`, lease, due `2026-11-26T18:00:00Z`, `handoff_id`, `source_ids`, ruta de evidencia. |
+| `.kaizen/team/projects/opencode-local-config/handoffs.jsonl` | Sobre completo `H-1795403779907` (correlation_id, deadline, expects_ack, refs) + ack real por `kaizen-team ack`. Se conserva el handoff de la instancia A. |
+| `.kaizen/team/projects/opencode-local-config/blackboard.md` | Hechos verificados nuevos y hallazgos H-4/H-5; corrección `disabled=false`. |
+| `.kaizen/team/projects/opencode-local-config/standups/2026-11-23.md` | Standup del día: tareas con dueño, acuses pendientes 0. |
+| `.kaizen/loop/outbox/repo-tokens-env-tracked.md` | S-11 `security`: `tokens.env` versionado, contenido no leído. |
+| `.kaizen/loop/outbox/opencode-kpi-agent-count-drift.md` | S-11 `failure`: 49 agentes instalados vs 47 declarados. |
 | `docs/kaizen/pr-drafts/kaizen-facilitador-opencode-local-config-mcp.md` | Este descriptor (K-4). |
 
-> No se incluye `scripts/kaizen-runtime`: modificación concurrente de otro proceso en ruta protegida (L-4), ajena a este cambio lógico (K-3). Tampoco se versiona ninguna credencial ni PII de Railway (S-1/S-2, REG-EV-06).
+> No se incluyen en este commit los cambios ajenos presentes en el workspace (`scripts/kaizen-meta`, `scripts/kaizen-runtime`, `.kaizen/loop/PAUSE`, `.kaizen/meta/*`, `.kaizen/team/teams.json`, `incentivos/`, ADR 0030, token-ledger): pertenecen a otras instancias/agentes y a rutas protegidas L-4.
 
 ## Evidencia
 
 ```text
-# Config global: ambos servidores declarados y habilitados (valores sensibles redactados)
-jq '.mcp.servers | with_entries(.value |= {type, disabled})' ~/.config/opencode/opencode.json
-→ railway: {type:"local", disabled:false}; rea: {type:"local", disabled:false}
+tools.rea.binary_session({detail:"summary"})
+→ server_identity.server.name=rea version=6.10.1
+  catalog.counts.mcp_tools=263  sdk.server=2.3.1
+  negotiated_protocol_version=2025-11-25  open=false  cleanup_pending=false
 
-# Liveness: llamadas de solo lectura, sinsecretos y sin PII registrada
-tools.rea.inspect_analysis_settings()  → fulfilled, keys=[revision,scope,active_values,settings,constraints]
-tools.railway.list-workspaces()        → fulfilled, workspaces=1 (nombres/ids no versionados)
+tools.railway["list-projects"]()  → { projects: array(3) }  (sin error)
 
-# 0 credenciales en el repo
-git ls-files | grep -E '(^|/)(\.env|\.env\..*|.*\.pem|.*\.key|id_rsa.*)$' | wc -l  → 0
-git grep -Il -E 'BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{20}|sk-[A-Za-z0-9]{20}' -- .  → (vacío)
-jq -r 'if has("mcp") then "MCP_PRESENT" else "MCP_ABSENT" end' opencode.json  → MCP_ABSENT
+jq -r '.mcp.servers | to_entries[] | "\(.key): disabled=\(.value.disabled|tostring) type=\(.value.type)"' ~/.config/opencode/opencode.json
+→ railway: disabled=false type=local
+→ rea: disabled=false type=local
+jq '[ .. | strings | select(test("^(sk-|gh[pousr]_|rail_|AIza|xox[baprs]-|AKIA)[A-Za-z0-9_-]{12,}")) ] | length' ~/.config/opencode/opencode.json
+→ 0
 
-# Puertas del orquestador
-bash scripts/kaizen-team verify opencode-local-config  → rc=0 (fuentes verificadas)
-bash scripts/kaizen-team sync opencode-local-config    → acuses pendientes=0 | tareas abiertas=5
+scripts/kaizen-team ack opencode-local-config H-1795403779907
+→ [kaizen-team] ack registrado: H-1795403779907
+
+jq '[.permissions[]|select(.effect=="deny" and (.resource|test("push")))]|length' opencode.json → 0
+jq -e '.permissions|type=="array"' ~/.config/opencode/opencode.json → true
 ```
 
-Detalle completo en `docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-rea-railway.md`.
+Detalle completo en `docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-verificacion.md`.
 
 ## Plan de prueba
-1. `bash scripts/kaizen-team verify opencode-local-config` → rc=0.
-2. `bash scripts/kaizen-team sync opencode-local-config` → acuses pendientes=0.
-3. `jq -e 'any(.[]; .id=="H-1795403633267078428" and .status=="ack")' handoffs.jsonl` → true.
-4. Revisar que no aparezca ningún valor de credencial en el diff.
 
-## Riesgos y hallazgos
-- Bug fail-open `now` vs `$now` en `scripts/kaizen-team:72,82`: no se invocó `kaizen-team handoff`; se escribió el sobre directamente y se acusó con `kaizen-team ack` (ruta protegida L-4, requiere ADR).
-- `kaizen-meta drift` falla con `TypeError` (outbox `kaizen-meta-drift-crash`): documento, no bloquea.
-- Deriva de rama tras reinicio del servidor (outbox `session-branch-drift-restart`): rama restaurada antes de escribir.
+| Comando | Esperado | Política |
+| --- | --- | --- |
+| Llamadas MCP de solo lectura (`binary_session`, `list-projects`) | respuestas sin error, sin PII versionada | sin `whoami`, sin despliegue, sin análisis de objetivo |
+| `jq` sobre config global (solo estructura) | `disabled=false` ×2, 0 secretos | nunca imprimir valores |
+| `git ls-files \| grep …` | 0 `.pem`/`.key`/`id_rsa`; `tokens.env` reportado, no leído | S-2 |
+| `kaizen-team ack` + `sync` | ack registrado, acuses pendientes 0 | `expects_ack: true` |
+| `kaizen-team verify` | rc=0, fuentes verificadas | REG-EV-01/07 |
+| `kaizen-knowledge cite-check <evidencia>` | rc=0 / citas ancla = 0 | no se inventan anclas |
+| `scripts/kaizen check` | rc real reportado, sin suppressions | K-10/L-10 |
 
-## Documentos tocados
-`docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-rea-railway.md`, `docs/kaizen/pr-drafts/kaizen-facilitador-opencode-local-config-mcp.md`, `.kaizen/team/projects/opencode-local-config/{blackboard.md,handoffs.jsonl,tasks.json,state.json,standups/2026-11-22.md}` (K-7).
+## Cierre de issues
+
+Closes: none — preparación de tarea de configuración local sin issue numerado; no se fabrica un número (K-10). Origen: tarea 3 del proyecto `opencode-local-config`.
+
+## Checklist
+
+- [x] Sin código: no aplica compilación.
+- [ ] `scripts/kaizen check` sin resultado hermético: rc=124 (timeout en fase de pruebas, 150 s); no se afirma verde.
+- [x] Evidencia, blackboard, standup, outbox y descriptores actualizados (K-7).
+- [x] Línea base no empeora; sin supresiones S-10.
+
+## Estado real de los gates
+
+| Gate | Resultado real |
+| --- | --- |
+| `kaizen-team verify opencode-local-config` | rc=0 — todas las decisiones con fuentes verificadas |
+| `kaizen-team sync opencode-local-config` | rc=0 — acuses pendientes 0, tareas abiertas 5 |
+| `kaizen-knowledge cite-check <evidencia>` | rc=0 — `citas válidas: 0` (sin anclas `PA-XXX-art` en el documento) |
+| `kaizen check` | rc=124 — timeout 150 s; descriptores/políticas/formato/lint en verde antes del timeout; fase de pruebas sin resultado |
