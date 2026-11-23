@@ -37,6 +37,11 @@ No se leyó ni imprimió ninguna credencial, `.env`, clave ni variable de entorn
 - 0 tareas sin dueño al cierre; acuses pendientes = 0.
 - Riesgos reportados por S-11 sin silenciar: `kaizen-meta-drift-crash`,
   `session-branch-drift-restart`, `facilitador-duplicate-work-OLC-MCP-003`.
+- **`kaizen check` INCOMPLETO (no verde):** pasó descriptores/políticas/formato/lint y se
+  colgó en `tests/run.sh` por recursión de `opencode run`; se detuvo mi árbol con SIGTERM
+  (rc=143) tras ~8 min. Reportado como `kaizen-check-recursive-agent-spawn`. El hook
+  `pre-push` ejecuta el mismo check, así que el push quedó bloqueado; **no** se usó
+  `--no-verify`. Escalado a humano (L-4).
 - Se conserva el estado canónico (handoff A) y se deja al verificador elegir fuente.
 
 ## Aprendizaje
