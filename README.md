@@ -125,6 +125,10 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
+## Dirección ejecutiva e incentivos
+
+Equipos `direccion-ejecutiva` (criterio normativo, legal, financiero y de negocio con humano como A en decisiones sensibles) e `incentivos` (`kaizen-incentive`: score ponderado Evidencia 25 / Cierre 25 / Proactividad 20 / Mejora 15 / Eficiencia 10 / Seguridad 5; refuerzo ≥70, ajuste 40-69, freno <40). El incentivo no recompensa resultados sin evidencia (ADR-0029).
+
 ## Meta-auditoría ejecutora
 
 `scripts/kaizen-meta check|drift|close|guard|recurrence|execute` audita **y corrige**: cierre real (HEAD vs remoto + release), deriva de versión, permisos denegados, supresiones S-10 y recurrencia por clase (3 repeticiones → `stop-the-line`). El equipo `meta-auditoria` ejecuta remediaciones deterministas sin tocar seguridad/dinero/datos (ADR-0028).

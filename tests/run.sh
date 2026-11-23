@@ -323,7 +323,9 @@ bash -n "$REPO/scripts/kaizen-docker" "$REPO/scripts/docker-entrypoint.sh" && ok
 [ -x "$REPO/scripts/kaizen-conflict" ] && ok 'script conflict' || bad 'script conflict'
 grep -A2 'resource: "git push\*"' "$REPO/.opencode/agents/qa.md" 2>/dev/null | grep -q 'effect: "allow"' && ok 'push permitido' || bad 'push permitido'
 [ -x "$REPO/scripts/kaizen-meta" ] && ok 'meta script' || bad 'meta script'
-jq -e '.["meta-auditoria"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo meta' || bad 'equipo meta'
+jq -e '.["meta-auditoria"] and .["direccion-ejecutiva"] and .["incentivos"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipos nuevos' || bad 'equipos nuevos'
+[ -x "$REPO/scripts/kaizen-incentive" ] && ok 'script incentivos' || bad 'script incentivos'
+( cd "$REPO" && scripts/kaizen-incentive check >/dev/null 2>&1 ) && ok 'incentivos check' || bad 'incentivos check'
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \

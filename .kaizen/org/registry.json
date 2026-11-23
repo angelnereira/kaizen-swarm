@@ -44,6 +44,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "auditor-riesgos",
+    "name": "Auditor de Riesgos Empresariales",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[decision.proposed, issue.label:auditor-riesgos, research.required:*]"
+  },
+  {
     "id": "business-profiles-architect",
     "name": "Arquitecto de Perfiles de Negocio",
     "department": "producto-negocio",
@@ -306,6 +317,17 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "legal-corporativo",
+    "name": "Asesor Legal Corporativo",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[decision.proposed, issue.label:legal-corporativo, research.required:*]"
   },
   {
     "id": "lowlevel",

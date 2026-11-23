@@ -47,6 +47,7 @@ for f in \
   .kaizen/org/prompts/flutter-m3-design-specialist.md .kaizen/org/prompts/business-profiles-architect.md \
   .kaizen/org/prompts/identity-access-specialist.md .kaizen/org/prompts/vertical-domain-specialist.md \
   .kaizen/org/prompts/rea-specialist.md .kaizen/org/prompts/reverse-api-specialist.md \
+  .kaizen/org/prompts/legal-corporativo.md .kaizen/org/prompts/auditor-riesgos.md \
   .kaizen/org/prompts/computer-operator.md \
   .kaizen/team/team.env .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md \
   .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md .kaizen/team/OWNER.md \
@@ -56,8 +57,9 @@ for f in \
   scripts/kaizen-gov scripts/lib/gov_seed.py .kaizen/gov/governance.json \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
   .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
-  .kaizen/observability/observability.env .kaizen/finops/tokens.env .kaizen/knowledge/sources.json .kaizen/meta/meta.env \
-  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge scripts/kaizen-workspace scripts/kaizen-peer scripts/kaizen-remote scripts/kaizen-whatsapp scripts/kaizen-welcome scripts/kaizen-conflict scripts/kaizen-meta \
+  .kaizen/observability/observability.env .kaizen/finops/tokens.env .kaizen/knowledge/sources.json .kaizen/meta/meta.env .kaizen/incentives/incentives.env \
+  .kaizen/incentives/ledger.jsonl \
+  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge scripts/kaizen-workspace scripts/kaizen-peer scripts/kaizen-remote scripts/kaizen-whatsapp scripts/kaizen-welcome scripts/kaizen-conflict scripts/kaizen-meta scripts/kaizen-incentive \
   observability/prometheus.yml observability/docker-compose.yml \
   observability/grafana/dashboards/kaizen-swarm.json \
   observability/grafana/provisioning/datasources/prometheus.yml \
@@ -85,6 +87,7 @@ for f in \
   docs/kaizen/adr/0026-empaquetado-docker-local.md \
   docs/kaizen/adr/0027-resolucion-autonoma-de-conflictos.md \
   docs/kaizen/adr/0028-meta-auditoria-ejecutora.md docs/kaizen/org/META-AUDITORIA.md \
+  docs/kaizen/adr/0029-direccion-ejecutiva-e-incentivos.md docs/kaizen/org/INCENTIVOS.md \
   .kaizen/knowledge/cards/README.md .kaizen/knowledge/golden/README.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \

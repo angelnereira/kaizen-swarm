@@ -177,5 +177,35 @@
     ],
     "kpi": "0 afirmaciones de 'hecho' sin evidencia de cierre; 0 denies de push; 0 clases de fallo por encima del limite sin stop-the-line",
     "model": "opencode/hy4-flash-free"
+  },
+  "direccion-ejecutiva": {
+    "goal": "Tomar decisiones de diseño, arquitectura y requerimientos funcionales con criterio ejecutivo, normativo, legal y financiero; mantener las finanzas activas",
+    "members": [
+      "gerente",
+      "director-producto",
+      "analista-negocios",
+      "cumplimiento-panama",
+      "legal-corporativo",
+      "auditor-riesgos",
+      "finanzas-panamas",
+      "fiscal-integration-specialist",
+      "verificador-evidencias",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de decisiones con board, source_ids y humano como A en sensibles; 0 decisiones financieras sin criterio de finanzas/cumplimiento",
+    "model": "opencode/hy4-flash-free"
+  },
+  "incentivos": {
+    "goal": "Medir y reforzar el buen comportamiento de los agentes con un score ponderado: evidencia, cierre, proactividad, mejora, eficiencia de tokens y seguridad",
+    "members": [
+      "qa",
+      "dx",
+      "finops",
+      "knowledge-curator",
+      "verificador-evidencias",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de agentes con score monitorizado; 0 incentivos que recompensen resultados sin evidencia",
+    "model": "opencode/hy4-flash-free"
   }
 }

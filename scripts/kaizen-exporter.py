@@ -134,6 +134,24 @@ def collect():
         r.gauge("kaizen_learning_lessons", int(m.group(1)) if m else 1,
                 {"agent": aid, "fingerprint": os.path.basename(f)[:-3]}, "Lecciones aprendidas por agente")
 
+    # Incentivo ponderado (score medio por agente).
+    inc = os.environ.get("KI_LEDGER", ".kaizen/incentives/ledger.jsonl")
+    ipath = inc if os.path.isabs(inc) else p(inc)
+    if os.path.exists(ipath):
+        agg = {}
+        for line in open(ipath, encoding="utf-8"):
+            try:
+                rec = json.loads(line)
+            except Exception:
+                continue
+            a = rec.get("agent", "?")
+            s = agg.setdefault(a, {"sum": 0.0, "n": 0})
+            s["sum"] += rec.get("score", 0) or 0
+            s["n"] += 1
+        for a, s in agg.items():
+            r.gauge("kaizen_incentive_score", s["sum"] / max(1, s["n"]), {"agent": a},
+                    "Score ponderado de comportamiento proactivo")
+
     # Economía de tokens (ledger local; sin inventar datos si no hay registros).
     ledger = os.environ.get("KT_LEDGER", ".kaizen/finops/token-ledger.jsonl")
     lpath = ledger if os.path.isabs(ledger) else p(ledger)
