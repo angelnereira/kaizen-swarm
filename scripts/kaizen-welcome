@@ -3,6 +3,9 @@
 set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
+# Configuracion local del canal (nunca versionada): URL de n8n/BSP. Sin secretos en el repo.
+LOCAL_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/whatsapp.env"
+[ -f "$LOCAL_ENV" ] && . "$LOCAL_ENV"
 S="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/whatsapp"
 mkdir -p "$S"
 STATE="$S/welcome-state.json"
