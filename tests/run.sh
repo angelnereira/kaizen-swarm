@@ -89,7 +89,7 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 67 ] && ok "inventario de 67 agentes" || bad "inventario de 67 agentes ($N)"
+[ "$N" = 70 ] && ok "inventario de 70 agentes" || bad "inventario de 70 agentes ($N)"
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
@@ -145,7 +145,7 @@ done
   && ok "expediente de investigacion" || bad "expediente de investigacion"
 ( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
 C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
-[ "$C" = 67 ] && ok "catalogo consistente (67)" || bad "catalogo consistente ($C)"
+[ "$C" = 70 ] && ok "catalogo consistente (70)" || bad "catalogo consistente ($C)"
 grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
   && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
@@ -342,3 +342,8 @@ jq -e '.["orquestacion-dinamica"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>
 [ -x "$REPO/scripts/kaizen-devcommunity" ] && ok 'CLI comunidad desarrollo' || bad 'CLI comunidad desarrollo'
 ( cd "$REPO" && scripts/kaizen-devcommunity check >/dev/null 2>&1 ) && ok 'comunidad 6 agentes' || bad 'comunidad 6 agentes'
 jq -e '.["comunidad-desarrollo"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo comunidad desarrollo' || bad 'equipo comunidad desarrollo'
+
+[ -x "$REPO/scripts/kaizen-invoke" ] && ok 'CLI invocacion multi-cliente' || bad 'CLI invocacion multi-cliente'
+( cd "$REPO" && scripts/kaizen-invoke check >/dev/null 2>&1 ) && ok 'clientes detectados' || bad 'clientes detectados'
+( cd "$REPO" && scripts/kaizen-scout check >/dev/null 2>&1 ) && ok 'CLI investigacion' || bad 'CLI investigacion'
+jq -e '.["investigacion-capacidades"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo investigacion' || bad 'equipo investigacion'

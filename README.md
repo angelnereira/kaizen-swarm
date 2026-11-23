@@ -196,6 +196,11 @@ Credenciales locales por defecto (sobrescribibles; **no usar fuera de localhost*
 
 
 
+
+## Invocación multi-cliente, investigación y desbloqueo
+
+`kaizen-invoke detect|invoke|all` usa la sintaxis real de OpenCode (`run --agent`), Claude Code (`-p --agent`) y Codex (`exec`), con dry-run por defecto. `deep-researcher`, `capability-scout` y `task-unblocker` investigan externamente con fuentes verificadas, descubren capacidades con valor y diagnostican tareas colgadas con rollback; `kaizen-scout research|skills|tools|unblock` los delega (ADR-0036).
+
 ## Comunidad de desarrollo y automejora
 
 Seis agentes trabajan en el repositorio como comunidad: `maintainer-proactivo` detecta mejoras con evidencia, `issue-reporter` redacta borradores, `pr-builder` prepara PRs en ramas `kaizen/*`, `consensus-facilitator` modera 2 turnos con memorial, `retador-decisiones` exige contraejemplos y `self-improvement` convierte lecciones en mejoras con ratchet. `kaizen-devcommunity propose|issue|comment|pr|consensus|retro|check` es dry-run por defecto; ningún agente aprueba ni hace push a `main` (ADR-0035).

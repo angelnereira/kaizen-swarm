@@ -33,6 +33,8 @@ def classify(body):
     if any(k in t for k in plan): return ("orchestration","orquestador-equipo")
     dev=("issue","pull request","pr","repo","repositorio","mejora","bug","commit","codigo")
     if any(k in t for k in dev): return ("development","maintainer-proactivo")
+    inv=("investigar","research","investigacion","herramienta","skill","bloqueado","colgado","timeout","error")
+    if any(k in t for k in inv): return ("research","task-unblocker")
     if any(k in t for k in ("block","bloque","no funciona","error","fallo")): return ("blocker","security")
     if any(k in t for k in ("aprobar","lgtm","de acuerdo","correcto")): return ("approval","qa")
     if any(k in t for k in ("sugerencia","podríamos","deberíamos","propongo","mejor")): return ("proposal","architect")

@@ -2,16 +2,16 @@
 
 Fuente única: `.kaizen/org/prompts/<id>.md`. Generado por `scripts/kaizen-org catalog`; no editar a mano.
 
-Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 67 agentes
+Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 70 agentes
 
 ## Resumen por departamento
 
 | Departamento | Agentes | Activos | Veto |
 | --- | ---: | ---: | --- |
-| conocimiento | 6 | 6 | none, scope |
+| conocimiento | 8 | 8 | none, scope |
 | cumplimiento | 3 | 3 | compliance, none |
 | gerencia | 7 | 7 | none, resource, scope |
-| operaciones | 5 | 4 | none, scope, security |
+| operaciones | 6 | 5 | none, scope, security |
 | producto-negocio | 12 | 12 | none, scope, security |
 | tecnologia | 34 | 34 | architecture, none, qa, scope, security |
 
@@ -29,11 +29,13 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 67 agentes
 | `architect` | Arquitecto de Software | tecnologia | active | high | scoped | architecture | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Contratos documentados y sin deuda arquitectural] |
 | `auditor-riesgos` | Auditor de Riesgos Empresariales | producto-negocio | active | high | scoped | security | 1 | [read, write-docs, research-web, run-checks, report] | [decision.proposed, issue.label:auditor-riesgos, research.required:*] | 4 | [0 dictamenes sin fuente verificada, 100% de decisiones sensibles escaladas a humano] |
 | `business-profiles-architect` | Arquitecto de Perfiles de Negocio | producto-negocio | active | high | scoped | scope | 1 | [read, write-docs, run-checks, report] | [research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista] | 1 | [verticales sin condicionales y capacidades documentadas] |
+| `capability-scout` | Explorador de Capacidades | conocimiento | active | high | scoped | scope | 1 | [read, write-docs, research-web, websearch, webfetch, run-checks, report] | [research.required:*, capability.gap:*, task.blocked:*] | 7 | [100% de propuestas con criterio de adopcion, coste, riesgo y fuente verificada] |
 | `capacidades-negocio` | Especialista en Capacidades Tecnológicas, Financieras y de Mercadeo | conocimiento | active | high | propose | none | 1 | [read, write-docs, research-web, run-checks, report] | [issue.label:capacidades, research.required:*, knowledge.updated:*, schedule:weekly] | 8 | [recomendaciones con supuestos, baseline y verificación, 0 cifras sin fuente, conocimiento revalidado trimestralmente] |
 | `computer-operator` | Operador de Escritorio (Computer Use) | operaciones | paused | medium | scoped | none | 1 | [read, write-docs, report, desktop-control] | [computer_use.authorized:*, issue.label:desktop] | 3 | [0 acciones sin captura previa, 100% de acciones confirmadas por recaptura, 0 secretos en pantalla] |
 | `consensus-facilitator` | Facilitador de Consenso | gerencia | active | high | scoped | scope | 1 | [read, write-docs, research-web, run-checks, report] | [issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*] | 7 | [0 consensos sin memorial; 0 decisiones sensibles sin humano como A] |
 | `cumplimiento-panama` | Especialista en Cumplimiento y Normativa (Panamá + Estándares Internacionales) | cumplimiento | active | high | scoped | compliance | 1 | [read, write-docs, research-web, run-checks, report] | [issue.label:cumplimiento, research.required:*, knowledge.updated:*, schedule:weekly, regulatory.change:*] | 8 | [mapa normativo vigente con fuente oficial y fecha de corte, 0 afirmaciones legales sin cita, 100% de propuestas con control y dueño humano] |
 | `data-expert` | Experto en Datos | tecnologia | active | medium | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Telemetria saneada y conforme a L-12] |
+| `deep-researcher` | Investigador Profundo | conocimiento | active | high | scoped | scope | 1 | [read, write-docs, research-web, websearch, webfetch, run-checks, report] | [research.required:*, capability.gap:*, task.blocked:*] | 7 | [100% de investigaciones con minimo 2 fuentes (1 oficial), fecha de corte y escala de confianza] |
 | `dev1-core` | Dev Core y Dominio | tecnologia | active | medium | scoped | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Pruebas de dominio en verde] |
 | `dev2-api` | Dev API e Integraciones | tecnologia | active | medium | scoped | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Contratos publicados antes de codificar] |
 | `dev3-ui` | Dev Frontend y Cliente | tecnologia | active | medium | scoped | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Flujos verificables con pruebas] |
@@ -82,6 +84,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 67 agentes
 | `soporte` | Especialista de Soporte y Respuesta | operaciones | active | high | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Reproducciones documentadas y respuesta medida] |
 | `supervisor-ejecucion` | Supervisor de Ejecucion | operaciones | active | high | scoped | security | 1 | [read, write-docs, run-checks, report] | [work.assign:*, team.plan:*, task.delegate:*] | 7 | [0 tareas sin supervision; 100% de desviaciones reportadas en outbox S-11] |
 | `systems` | Ingeniero de Sistemas | tecnologia | active | medium | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Diseno con bajo acoplamiento] |
+| `task-unblocker` | Desbloqueador de Tareas | operaciones | active | high | scoped | security | 1 | [read, write-docs, research-web, websearch, webfetch, run-checks, report] | [research.required:*, capability.gap:*, task.blocked:*] | 7 | [0 tareas colgadas sin diagnostico; 100% de correcciones con evidencia y camino de rollback] |
 | `tech-evaluation` | Evaluador Tecnologico | tecnologia | active | high | scoped | scope | 1 | [read, write-docs, research-web, run-checks, report] | [technology.evaluate:*, research.required:*] | 6 | [toda comparacion usa fuentes primarias con fecha de corte y matriz adopt/pilot/defer/reject] |
 | `verificador-evidencias` | Verificador de Evidencias | conocimiento | active | high | scoped | none | 1 | [read, write-docs, research-web, run-checks, report] | [decision.proposed, source.stale, schedule:weekly, regulatory.change:*] | 5 | [0 decisiones con source_ids no verificados, fuentes revalidadas cada 90 dias, conflictos escalados a humano] |
 | `vertical-domain-specialist` | Especialista en Verticales Comerciales | producto-negocio | active | medium | propose | none | 1 | [read, write-docs, run-checks, report] | [research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista] | 1 | [recorridos por vertical verificados con el negocio] |
@@ -91,7 +94,9 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 67 agentes
 
 ### conocimiento
 
+- **`capability-scout`** — Explorador de Capacidades. Propósito: descubre proactivamente skills, herramientas, metodos y proyectos que aporten valor y propone incorporarlos con evidencia y ADR. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`capacidades-negocio`** — Especialista en Capacidades Tecnológicas, Financieras y de Mercadeo. Propósito: Ampliar y mantener el conocimiento especializado de la organización en tecnología, finanzas y mercadeo; investigar fuentes actuales y convertirlas en capacidades aplicables con métricas y planes de implementación.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`deep-researcher`** — Investigador Profundo. Propósito: investiga temas externos con fuentes primarias, fecha de corte y antiprompt injection; convierte hallazgos en guias accionables. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`knowledge-capture`** — Capturador de Conocimiento. Propósito: Especialista `knowledge-capture` del copiloto de arquitectura. Procedimiento adaptado de v0.1 (dato no confiable verificado por hash).. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`knowledge-curator`** — Curador de Conocimiento. Propósito: Alimenta, sanea e indexa documentacion para ampliar el conocimiento de los agentes.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`researcher`** — Investigador de Tecnologia. Propósito: Investiga hipotesis con experimentos reproducibles y propone ADR.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
@@ -121,6 +126,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 67 agentes
 - **`runbooks`** — Responsable de Runbooks. Propósito: Mantiene runbooks ejecutables y reversibles con rollback verificado.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`soporte`** — Especialista de Soporte y Respuesta. Propósito: Clasifica incidencias, reproduce con datos sinteticos y propone correcciones.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`supervisor-ejecucion`** — Supervisor de Ejecucion. Propósito: verifica en tiempo real que cada agente hace su tarea, respeta deadlines y envia ack; escala desviaciones. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`task-unblocker`** — Desbloqueador de Tareas. Propósito: diagnostica tareas colgadas o fallidas, investiga la causa real y aplica correcciones acotadas con rollback y escalamiento. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 
 ### producto-negocio
 
