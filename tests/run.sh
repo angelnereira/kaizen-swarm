@@ -352,3 +352,8 @@ jq -e '.["investigacion-capacidades"]' "$REPO/.kaizen/team/teams.json" >/dev/nul
 ( cd "$REPO" && scripts/kaizen-vault check >/dev/null 2>&1 ) && ok 'vault check' || bad 'vault check'
 grep -q 'chat NO es canal' "$REPO/docs/kaizen/adr/0037-custodia-secretos-broker-humano.md" 2>/dev/null && ok 'ADR-0037' || bad 'ADR-0037'
 jq -e '.["custodia-secretos"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo custodia' || bad 'equipo custodia'
+
+[ -x "$REPO/scripts/kaizen-doctor" ] && ok 'doctor instalacion' || bad 'doctor instalacion'
+( cd "$REPO" && scripts/kaizen-doctor check >/dev/null 2>&1 ) && ok 'doctor check' || bad 'doctor check'
+[ -x "$REPO/scripts/kaizen-whatsapp-bridge" ] && ok 'bridge whatsapp' || bad 'bridge whatsapp'
+grep -q 'no instales nada en el repo' "$REPO/scripts/lib/opencode_agents.py" && ok 'gobernanza no invasiva' || bad 'gobernanza no invasiva'

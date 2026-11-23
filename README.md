@@ -4,6 +4,20 @@
 
 
 
+
+## Windows sin fricción y doctor
+
+`install.ps1 -Yes` instala los agentes en la **configuración real** de OpenCode (nunca en un directorio temporal), crea la gobernanza global en `~/.local/share/kaizen-swarm/framework` y deja **una sola pregunta**: tu número de WhatsApp. No modifica tus repositorios.
+
+Si algo salió mal, ejecuta desde el repo:
+
+```powershell
+python scripts/kaizen-doctor check
+python scripts/kaizen-doctor fix
+```
+
+El doctor detecta dependencias (`git`, `jq`, `opencode`), cuenta los agentes reales y elimina referencias huérfanas a `/tmp` en `opencode.json` **con backup**. Si `opencode` no está en PATH, instálalo desde https://opencode.ai y vuelve a correr el instalador (ADR-0038).
+
 ## Custodia de secretos (broker humano)
 
 **El chat nunca es un canal seguro para secretos.** No pegues tokens ni contraseñas en la conversación: el texto queda en historial, logs y contexto del modelo. `kaizen-vault` invierte el flujo: el usuario deposita el valor fuera de banda (`set`, sin eco), el agente solo `request`, y un **humano aprueba en su terminal** (`approve`) emitiendo un grant HMAC con TTL. El secreto se entrega por **FD 3** al comando aprobado, nunca al chat ni a logs.
