@@ -1,5 +1,16 @@
 [
   {
+    "id": "access-auditor",
+    "name": "Auditor de Accesos",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
     "id": "adr-author",
     "name": "Autor de ADR",
     "department": "tecnologia",
@@ -132,6 +143,17 @@
     "triggers": "[issue.label:capacidades, research.required:*, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "compliance-secretos",
+    "name": "Especialista en Cumplimiento de Secretos",
+    "department": "cumplimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "compliance",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
     "id": "computer-operator",
     "name": "Operador de Escritorio (Computer Use)",
     "department": "operaciones",
@@ -152,6 +174,17 @@
     "autonomy": "scoped",
     "veto": "scope",
     "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
+  },
+  {
+    "id": "crypto-architect",
+    "name": "Arquitecto Criptografico",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
   },
   {
     "id": "cumplimiento-panama",
@@ -352,6 +385,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "human-approval-gate",
+    "name": "Puerta de Aprobacion Humana",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
     "id": "identity-access-specialist",
     "name": "Especialista en Identidad y Acceso",
     "department": "tecnologia",
@@ -427,6 +471,17 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "leak-responder",
+    "name": "Respondedor de Fugas",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
   },
   {
     "id": "legal-corporativo",
@@ -526,6 +581,17 @@
     "autonomy": "scoped",
     "veto": "security",
     "triggers": "[poc.request:*, experiment.proposed:*]"
+  },
+  {
+    "id": "policy-engineer",
+    "name": "Ingeniero de Politicas",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
   },
   {
     "id": "pr-builder",
@@ -649,6 +715,28 @@
     "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
   },
   {
+    "id": "secret-injector",
+    "name": "Inyector Seguro de Secretos",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
+    "id": "secret-lifecycle",
+    "name": "Gestor de Ciclo de Vida",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
     "id": "secure-review",
     "name": "Revisor Seguro de Codigo",
     "department": "tecnologia",
@@ -735,6 +823,28 @@
     "autonomy": "scoped",
     "veto": "scope",
     "triggers": "[technology.evaluate:*, research.required:*]"
+  },
+  {
+    "id": "vault-custodian",
+    "name": "Custodio de Boveda",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
+    "id": "vault-qa",
+    "name": "QA de Custodia",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
   },
   {
     "id": "verificador-evidencias",

@@ -3,6 +3,28 @@
 **Una organización de agentes para OpenCode que convierte instrucciones en trabajo verificable: por issue, con gobernanza, evidencia y mejora medible.**
 
 
+
+## Custodia de secretos (broker humano)
+
+**El chat nunca es un canal seguro para secretos.** No pegues tokens ni contraseñas en la conversación: el texto queda en historial, logs y contexto del modelo. `kaizen-vault` invierte el flujo: el usuario deposita el valor fuera de banda (`set`, sin eco), el agente solo `request`, y un **humano aprueba en su terminal** (`approve`) emitiendo un grant HMAC con TTL. El secreto se entrega por **FD 3** al comando aprobado, nunca al chat ni a logs.
+
+- Cifrado AES-256-GCM con nonce de 96 bits y AAD vinculante; Argon2id fijado; passphrase nunca persistida.
+- Auditoría append-only con hash-chain, HMAC y anti-rollback (`audit-verify`).
+- `redact` reemplaza valores conocidos por `[REDACTED]`; `custodian` muestra metadata sin valores.
+- 10 agentes dedicados (`custodia-secretos`): custodio, cripto, políticas, auditor, ciclo de vida, fuga, cumplimiento, inyector, QA y aprobación humana.
+- **Estado PILOT**, no adopción plena: queda verificar Windows (G5) y firmar un humano antes de usar secretos reales (ADR-0037). `rekey` local NO sustituye rotar en el proveedor (S-12).
+
+```bash
+scripts/kaizen-vault init            # humano, passphrase sin eco
+scripts/kaizen-vault enroll <agente> # token opaco, modo 600
+scripts/kaizen-vault allow <agente> <scopes> <comandos> <ttl_min>
+scripts/kaizen-vault set <scope> <nombre>
+scripts/kaizen-vault request <token_file> <scope> <purpose> <nota>  # agente: solo solicita
+scripts/kaizen-vault requests && scripts/kaizen-vault approve <id> "<comando>"  # humano, fuera de banda
+scripts/kaizen-vault exec <id> <token_file>   # broker entrega por FD 3
+scripts/kaizen-vault audit-verify && scripts/kaizen-vault custodian
+```
+
 ## Instalación definitiva
 
 Repositorio: **https://github.com/angelnereira/kaizen-swarm**. La instalación es no invasiva: los agentes viven en `~/.config/opencode/agents` y el estado en `~/.local/share/kaizen-swarm`; el repo destino no se toca salvo `--embedded` explícito.
@@ -41,8 +63,8 @@ cd "$env:LOCALAPPDATA\kaizen-swarm"
 
 `kaizen-platform check|json` detecta Linux, WSL, Windows y macOS y selecciona runtime `bash` o `powershell`. `kaizen-invoke detect` confirma los clientes disponibles (OpenCode, Claude Code, Codex). El comportamiento es igual o similar: mismos CLIs Python, mismos prompts, mismos checks. Nunca se asume Linux (K-10).
 
-![Definiciones: 70](https://img.shields.io/badge/definiciones-70-blue)
-![Generados: 70](https://img.shields.io/badge/generados-70-blue)
+![Definiciones: 80](https://img.shields.io/badge/definiciones-80-blue)
+![Generados: 80](https://img.shields.io/badge/generados-80-blue)
 ![Procesos RACI: 12](https://img.shields.io/badge/procesos_RACI-12-teal)
 ![Herramientas REA: 263](https://img.shields.io/badge/herramientas_REA-263-orange)
 ![Pruebas: 191](https://img.shields.io/badge/pruebas-191-brightgreen)

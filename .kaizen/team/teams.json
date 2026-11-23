@@ -285,5 +285,24 @@
     ],
     "kpi": "100% de brechas de conocimiento investigadas con fuentes; 0 tareas colgadas sin diagnostico",
     "model": "opencode/hy4-flash-free"
+  },
+  "custodia-secretos": {
+    "goal": "Custodiar secretos con broker humano: el agente solo solicita, el humano aprueba fuera de banda y la entrega nunca entra al chat",
+    "members": [
+      "vault-custodian",
+      "crypto-architect",
+      "policy-engineer",
+      "access-auditor",
+      "secret-lifecycle",
+      "leak-responder",
+      "compliance-secretos",
+      "secret-injector",
+      "vault-qa",
+      "human-approval-gate",
+      "verificador-evidencias",
+      "facilitador-equipo"
+    ],
+    "kpi": "0 secretos en chat/logs/repo; 100% de accesos con grant humano y auditoria verificada",
+    "model": "opencode/hy4-flash-free"
   }
 }
