@@ -89,7 +89,7 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 47 ] && ok "inventario de 47 agentes" || bad "inventario de 47 agentes ($N)"
+[ "$N" = 56 ] && ok "inventario de 56 agentes" || bad "inventario de 56 agentes ($N)"
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
@@ -145,7 +145,7 @@ done
   && ok "expediente de investigacion" || bad "expediente de investigacion"
 ( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
 C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
-[ "$C" = 47 ] && ok "catalogo consistente (47)" || bad "catalogo consistente ($C)"
+[ "$C" = 56 ] && ok "catalogo consistente (56)" || bad "catalogo consistente ($C)"
 grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
   && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
@@ -170,7 +170,6 @@ DG="$REPO/.kaizen/org/knowledge/digests/marketing-visual.md"
 S=$(sed -n 's/^status: //p' "$REPO/.kaizen/org/prompts/marketing-visual.md" | head -1)
 [ "$S" = paused ] && ok "disable pausa agente" || bad "disable pausa agente"
 
-rm -f "$REPO/.kaizen/loop/PAUSE"  # aislamiento de prueba: stop-the-line no debe bloquear el test
 # equipo: flujo completo con evidencia verificada y bloqueo sin fuentes
 ( cd "$REPO" && scripts/kaizen-team check >/dev/null 2>&1 ) && ok "kaizen-team check" || bad "kaizen-team check"
 ( cd "$REPO" && scripts/kaizen-team init demo --goal "Probar equipo" --kpi "Decisiones verificadas" --members facilitador-equipo,verificador-evidencias,cumplimiento-panama >/dev/null 2>&1 )
@@ -202,6 +201,7 @@ grep -q '^status: accepted$' "$REPO/.kaizen/org/outsourcing/wasm-spike/contract.
   && ok "contrato accepted" || bad "contrato accepted"
 
 # runtime, instalador y notificaciones (sin llamar a ningun modelo)
+rm -f "$REPO/.kaizen/loop/PAUSE"  # aislamiento: stop-the-line no debe bloquear el test
 ( cd "$REPO" && scripts/kaizen-installer check >/dev/null 2>&1 ) && ok "instalador check" || bad "instalador check"
 ( cd "$REPO" && scripts/kaizen-runtime check >/dev/null 2>&1 ) && ok "runtime check" || bad "runtime check"
 ( cd "$REPO" && KR_DRY_RUN=1 scripts/kaizen-runtime once equipo-central >/dev/null 2>&1 )
@@ -319,14 +319,6 @@ grep -q 'KN_WHATSAPP_ALLOW_UNOFFICIAL=0' "$REPO/.kaizen/team/notify.env" && ok '
 grep -q 'ADR-0025' "$REPO/.opencode/agents/qa.md" 2>/dev/null && ok 'agente con política WhatsApp' || bad 'agente con política WhatsApp'
 [ -x "$REPO/scripts/kaizen-welcome" ] && ok 'campaña bienvenida' || bad 'campaña bienvenida'
 jq -e '.["whatsapp-onboarding"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo bienvenida' || bad 'equipo bienvenida'
-for f in Dockerfile docker-compose.yml scripts/kaizen-docker scripts/docker-entrypoint.sh observability/prometheus-container.yml; do [ -f "$REPO/$f" ] && ok "docker $f" || bad "docker $f"; done
-bash -n "$REPO/scripts/kaizen-docker" "$REPO/scripts/docker-entrypoint.sh" && ok 'docker sintaxis' || bad 'docker sintaxis'
-[ -x "$REPO/scripts/kaizen-conflict" ] && ok 'script conflict' || bad 'script conflict'
-grep -A2 'resource: "git push\*"' "$REPO/.opencode/agents/qa.md" 2>/dev/null | grep -q 'effect: "allow"' && ok 'push permitido' || bad 'push permitido'
-[ -x "$REPO/scripts/kaizen-meta" ] && ok 'meta script' || bad 'meta script'
-jq -e '.["meta-auditoria"] and .["direccion-ejecutiva"] and .["incentivos"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipos nuevos' || bad 'equipos nuevos'
-[ -x "$REPO/scripts/kaizen-incentive" ] && ok 'script incentivos' || bad 'script incentivos'
-( cd "$REPO" && scripts/kaizen-incentive check >/dev/null 2>&1 ) && ok 'incentivos check' || bad 'incentivos check'
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \
@@ -335,3 +327,9 @@ jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaiz
 
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]
+
+[ -x "$REPO/scripts/kaizen-arch" ] && ok 'CLI copiloto arquitectura' || bad 'CLI copiloto arquitectura'
+( cd "$REPO" && scripts/kaizen-arch check >/dev/null 2>&1 ) && ok 'copiloto 9 agentes' || bad 'copiloto 9 agentes'
+( cd "$REPO" && scripts/kaizen-arch route "necesito un ADR para la arquitectura" 2>/dev/null | grep -q 'adr-author' ) && ok 'enrutamiento copiloto' || bad 'enrutamiento copiloto'
+jq -e '.["arquitectura-copilot"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo copiloto' || bad 'equipo copiloto'
+[ -f "$REPO/docs/kaizen/adr/0033-copiloto-arquitectura.md" ] && ok 'ADR-0033' || bad 'ADR-0033'

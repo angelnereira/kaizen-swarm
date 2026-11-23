@@ -1,5 +1,16 @@
 [
   {
+    "id": "adr-author",
+    "name": "Autor de ADR",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[decision.proposed, adr.required:*]"
+  },
+  {
     "id": "ai",
     "name": "Experto en IA",
     "department": "tecnologia",
@@ -31,6 +42,28 @@
     "autonomy": "scoped",
     "veto": "scope",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "arch-assessment",
+    "name": "Evaluador de Arquitectura",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "architecture",
+    "triggers": "[architecture.review:*, issue.label:architecture]"
+  },
+  {
+    "id": "arch-copilot",
+    "name": "Copiloto de Arquitectura e Ingenieria",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[request.classify:*, architecture.review:*, *.*]"
   },
   {
     "id": "architect",
@@ -308,6 +341,28 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "jira-planner",
+    "name": "Planificador de Trabajo",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.plan:*, epic.proposed:*]"
+  },
+  {
+    "id": "knowledge-capture",
+    "name": "Capturador de Conocimiento",
+    "department": "conocimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[knowledge.ingest:*, user.remember:*]"
+  },
+  {
     "id": "knowledge-curator",
     "name": "Curador de Conocimiento",
     "department": "conocimiento",
@@ -372,6 +427,17 @@
     "autonomy": "scoped",
     "veto": "none",
     "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
+    "id": "poc-design",
+    "name": "Disenador de POC",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[poc.request:*, experiment.proposed:*]"
   },
   {
     "id": "product",
@@ -462,6 +528,17 @@
     "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
   },
   {
+    "id": "secure-review",
+    "name": "Revisor Seguro de Codigo",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[pull_request.opened, diff.review:*]"
+  },
+  {
     "id": "security",
     "name": "Seguridad y Auditoria",
     "department": "tecnologia",
@@ -495,6 +572,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "tech-evaluation",
+    "name": "Evaluador Tecnologico",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[technology.evaluate:*, research.required:*]"
+  },
+  {
     "id": "verificador-evidencias",
     "name": "Verificador de Evidencias",
     "department": "conocimiento",
@@ -515,5 +603,16 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
+    "id": "work-intake",
+    "name": "Intake de Trabajo",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.label:swarm:ready, request.classify:*]"
   }
 ]

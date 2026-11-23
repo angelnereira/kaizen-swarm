@@ -125,29 +125,6 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
-## Dirección ejecutiva e incentivos
-
-Equipos `direccion-ejecutiva` (criterio normativo, legal, financiero y de negocio con humano como A en decisiones sensibles) e `incentivos` (`kaizen-incentive`: score ponderado Evidencia 25 / Cierre 25 / Proactividad 20 / Mejora 15 / Eficiencia 10 / Seguridad 5; refuerzo ≥70, ajuste 40-69, freno <40). El incentivo no recompensa resultados sin evidencia (ADR-0029).
-
-## Meta-auditoría ejecutora
-
-`scripts/kaizen-meta check|drift|close|guard|recurrence|execute` audita **y corrige**: cierre real (HEAD vs remoto + release), deriva de versión, permisos denegados, supresiones S-10 y recurrencia por clase (3 repeticiones → `stop-the-line`). El equipo `meta-auditoria` ejecuta remediaciones deterministas sin tocar seguridad/dinero/datos (ADR-0028).
-
-## Resolución de conflictos y push
-
-Los agentes pueden hacer push y resolver conflictos en ramas `kaizen/*`, `feature/*` o `fix/*` (nunca `main`) con `scripts/kaizen-conflict status|resolve|commit-push|abort`. La estrategia (`ours`/`theirs`) y cada push quedan auditados en `.kaizen/team/runtime/conflicts.jsonl`. Los 47 agentes generados tienen `git push*` en `allow` (ADR-0027); la negación anterior era la causa de los errores de permisos.
-
-## Despliegue Docker local
-
-```bash
-scripts/kaizen-docker check      # valida compose y sintaxis (sin daemon)
-scripts/kaizen-docker up         # exporter :9101 + Prometheus :9090 + Grafana :3000
-scripts/kaizen-docker status
-scripts/kaizen-docker down       # conserva volúmenes
-```
-
-Imagen base fijada, usuario no root, sin credenciales en la imagen, volúmenes persistentes. Requiere Docker Desktop corriendo; si no está, falla cerrado y documenta en outbox (ADR-0026).
-
 ## WhatsApp oficial
 
 El puente usa **solo Cloud API oficial vía BSP/n8n**: ventana de 24 h, plantillas aprobadas, opt-in explícito y webhooks idempotentes con firma HMAC. `kaizen-whatsapp templates|window|optin|check` aplica la política localmente; Baileys/whatsapp-web.js está prohibido (`KN_WHATSAPP_ALLOW_UNOFFICIAL=0`). Credenciales en n8n/Vault, nunca en el repo (ADR-0025).
@@ -216,3 +193,7 @@ Credenciales locales por defecto (sobrescribibles; **no usar fuera de localhost*
 - Release: https://github.com/angelnereira/kaizen-swarm/releases/tag/v1.2.0
 
 > Los borradores que originaron este README están en `docs/kaizen/org/README_DRAFT_*.md` (estética, coherencia y crítica) y sus hallazgos en `.kaizen/loop/outbox/`.
+
+## Copiloto de arquitectura e ingeniería
+
+Nueve agentes derivados del paquete v0.1: ocho especialistas (`work-intake`, `arch-assessment`, `tech-evaluation`, `poc-design`, `adr-author`, `secure-review`, `knowledge-capture`, `jira-planner`) y el súper agente `arch-copilot`, que clasifica y delega. `scripts/kaizen-arch skills|route|invoke|check` carga solo el skill relevante e invoca con `--dry-run` por defecto (`KZ_DRY_RUN=0` para ejecutar). Los comentarios remotos de arquitectura se enrutan al copiloto (ADR-0033). El ZIP se registra con SHA-256 como PA-ARCHCOP-001; sus políticas internas no están validadas y no se usan como norma.

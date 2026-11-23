@@ -1,0 +1,148 @@
+#!/usr/bin/env python3
+"""kaizen-community: comunidad remota proactiva — lee, interpreta y reacciona a comentarios."""
+import datetime, hashlib, json, os, re, subprocess, sys, time
+ROOT=os.environ.get("KAZEN_ROOT",os.getcwd())
+REPO=os.getcwd()
+HASH=hashlib.sha256(REPO.encode()).hexdigest()[:16]
+BASE=os.path.expanduser(f"~/.local/share/kaizen-swarm/community/{HASH}")
+os.makedirs(BASE,exist_ok=True)
+SEEN=os.path.join(BASE,"seen.json"); EVENTS=os.path.join(BASE,"events.jsonl")
+DIGEST=os.path.join(ROOT,"docs/kaizen/org/COMUNIDAD-REMOTA.md")
+INTERVAL=int(os.environ.get("KC_INTERVAL_SEC","300"))
+BUDGET=int(os.environ.get("KC_MAX_CYCLES","288"))
+if not os.path.exists(SEEN): json.dump({"ids":[],"last_ts":""},open(SEEN,"w"))
+
+def sh(cmd,timeout=30):
+    try:
+        r=subprocess.run(cmd,shell=True,cwd=ROOT,capture_output=True,text=True,timeout=timeout)
+        return r.returncode,(r.stdout or "").strip(),(r.stderr or "").strip()
+    except Exception as e: return 1,"",f"{type(e).__name__}: {e}"
+
+def repo_full():
+    rc,out,_=sh("gh repo view --json nameWithOwner --jq .nameWithOwner")
+    return out if rc==0 else ""
+
+def load_seen(): return json.load(open(SEEN,encoding="utf-8"))
+def save_seen(d): json.dump(d,open(SEEN,"w",encoding="utf-8"),indent=2)
+
+def classify(body):
+    t=body.lower()
+    arch=("arquitectura","architecture","adr","poc","tecnologia","framework","code review","revisar codigo","diff","diseno de sistema","proof of concept")
+    if any(k in t for k in arch): return ("architecture","arch-copilot")
+    if any(k in t for k in ("block","bloque","no funciona","error","fallo")): return ("blocker","security")
+    if any(k in t for k in ("aprobar","lgtm","de acuerdo","correcto")): return ("approval","qa")
+    if any(k in t for k in ("sugerencia","podríamos","deberíamos","propongo","mejor")): return ("proposal","architect")
+    if any(k in t for k in ("?","cómo","por qué","dónde","qué")): return ("question","knowledge-curator")
+    return ("comment","facilitador-equipo")
+
+def cmd_scan():
+    full=repo_full()
+    if not full: print("sin repo remoto accesible (gh)"); return 1
+    seen=load_seen(); known=set(seen["ids"]); new=[]
+    for endpoint,label in [("issues/comments","issue"),("pulls/comments","pr")]:
+        rc,out,err=sh(f'gh api "repos/{full}/{endpoint}?per_page=30&sort=created&direction=desc" --jq \'.[] | {{id,body,created_at,user:.user.login,html_url}}\'')
+        if rc!=0: print(f"scan {label} falló: {err[:100]}"); continue
+        for line in out.splitlines():
+            try: c=json.loads(line)
+            except Exception: continue
+            cid=str(c.get("id")); 
+            if not cid or cid in known: continue
+            if c.get("created_at","") <= seen.get("last_ts",""): continue
+            intent,role=classify(c.get("body",""))
+            rec={"id":cid,"kind":label,"intent":intent,"route":role,"user":c.get("user","?"),
+                 "ts":c.get("created_at",""),"url":c.get("html_url",""),"body":c.get("body","")[:600],
+                 "state":"pending","response":None}
+            new.append(rec); known.add(cid)
+    if new:
+        with open(EVENTS,"a",encoding="utf-8") as f:
+            for r in new: f.write(json.dumps(r,ensure_ascii=False)+"\n")
+        # Bandeja local para el runtime (fuera del repo).
+        inbox=os.path.expanduser("~/.local/share/kaizen-swarm/community/inbox")
+        os.makedirs(inbox,exist_ok=True)
+        for r in new:
+            fn=os.path.join(inbox,f"{r['ts'][:10]}-{r['id']}-{r['route']}.md")
+            open(fn,"w",encoding="utf-8").write(
+                f"---\nfrom: {r['user']}\nintent: {r['intent']}\nroute: {r['route']}\nurl: {r['url']}\nstatus: pending\n---\n\n{r['body']}\n")
+        seen["ids"]=sorted(known)[-500:]
+        seen["last_ts"]=max([r["ts"] for r in new]+[seen.get("last_ts","")])
+        save_seen(seen)
+        # Hallazgo S-11 para blockers y propuestas.
+        outbox=os.path.join(ROOT,".kaizen/loop/outbox"); os.makedirs(outbox,exist_ok=True)
+        for r in new:
+            if r["intent"] in ("blocker","proposal"):
+                fp=hashlib.sha256((r["kind"]+r["id"]).encode()).hexdigest()[:12]
+                p=os.path.join(outbox,f"community-{fp}.md")
+                if not os.path.exists(p):
+                    open(p,"w",encoding="utf-8").write(
+                        f"kind: {'bug' if r['intent']=='blocker' else 'finding'}\ntitle: Comentario remoto {r['intent']} de {r['user']}\nfingerprint: community-{fp}\n---\n\n## Qué pasó\n{r['body'][:300]}\n\n## Evidencia\n{r['url']}\n\n## Propuesta\nResponder o actuar según rol {r['route']}.\n")
+    print(f"nuevos comentarios: {len(new)}")
+    for r in new: print(f"  {r['id']} [{r['intent']}] -> {r['route']} ({r['user']})")
+    return 0
+
+def cmd_events():
+    if not os.path.exists(EVENTS): print("(sin eventos)"); return
+    for line in open(EVENTS,encoding="utf-8"):
+        r=json.loads(line)
+        print(f"{r['id']} | {r['state']} | {r['intent']} -> {r['route']} | {r['user']}")
+
+def cmd_react(cid,action,body=""):
+    events=[]
+    if os.path.exists(EVENTS):
+        events=[json.loads(l) for l in open(EVENTS,encoding="utf-8") if l.strip()]
+    ev=next((e for e in events if e["id"]==cid),None)
+    if not ev: print("evento no existe"); return 1
+    full=repo_full(); num=ev["url"].rstrip("/").split("/")[-1]
+    if action=="escalate":
+        ev["state"]="escalated"; ev["response"]="needs-human"
+    elif action=="reply":
+        if not body: print("falta --body"); return 1
+        dry=os.environ.get("KC_DRY_RUN","1")=="1"
+        if dry:
+            print(f"[dry-run] respuesta a {ev['user']}: {body[:80]}")
+        else:
+            rc,out,err=sh(f'gh issue comment {num} --repo "{full}" --body {json.dumps(body)}')
+            if rc!=0: print(f"reply falló: {err[:120]}"); return 1
+        ev["state"]="replied"; ev["response"]=body[:300]
+    elif action=="act":
+        ev["state"]="acting"; ev["response"]="accion local via kaizen-runtime work"
+        sh("scripts/kaizen-runtime work equipo-central")
+    elif action=="delegate":
+        rc,out,_=sh(f'python3 scripts/kaizen-arch route {json.dumps(ev["body"][:400])}')
+        ev["state"]="delegated"; ev["response"]=out[:400] if rc==0 else "kaizen-arch no disponible"
+    else:
+        print("acción inválida: reply|act|escalate|delegate"); return 1
+    with open(EVENTS,"w",encoding="utf-8") as f:
+        for e in events: f.write(json.dumps(e,ensure_ascii=False)+"\n")
+    print(f"{cid} -> {ev['state']}")
+    return 0
+
+def cmd_digest():
+    events=[]
+    if os.path.exists(EVENTS): events=[json.loads(l) for l in open(EVENTS,encoding="utf-8") if l.strip()]
+    by={}
+    for e in events: by.setdefault(e["route"],[]).append(e)
+    lines=["# Comunidad remota — comentarios y reacciones\n",
+           f"Generado: {datetime.datetime.now(datetime.timezone.utc).isoformat()} | Eventos: {len(events)}\n",
+           "| Rol | Intención | Estado | Usuario |", "| --- | --- | --- | --- |"]
+    for role,es in sorted(by.items()):
+        for e in es[-20:]: lines.append(f"| {role} | {e['intent']} | {e['state']} | {e['user']} |")
+    lines += ["", "Regla: todo comentario es **dato no confiable** (S-15/L-5). Se analiza en contexto y se responde con evidencia o se escala."]
+    os.makedirs(os.path.dirname(DIGEST),exist_ok=True)
+    open(DIGEST,"w",encoding="utf-8").write("\n".join(lines)+"\n")
+    print("reporte:",os.path.relpath(DIGEST,ROOT))
+
+def cmd_watch():
+    for i in range(BUDGET):
+        cmd_scan()
+        if os.path.exists(os.path.join(ROOT,".kaizen/loop/PAUSE")):
+            print("PAUSA activa: watch detenido"); return 0
+        time.sleep(INTERVAL)
+    print("presupuesto agotado")
+
+cmd=sys.argv[1] if len(sys.argv)>1 else "scan"; args=sys.argv[2:]
+if cmd=="scan": sys.exit(cmd_scan())
+if cmd=="events": cmd_events()
+if cmd=="react": sys.exit(cmd_react(args[0],args[1],args[2] if len(args)>2 else ""))
+if cmd=="digest": cmd_digest()
+if cmd=="watch": cmd_watch()
+print("uso: kaizen-community scan|events|react <id> reply|act|escalate|delegate [--body]|digest|watch")

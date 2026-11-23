@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""kaizen-platform: autodetecta el sistema y selecciona el runtime compatible."""
+import json, os, platform, shutil, subprocess, sys
+ROOT=os.environ.get("KAZEN_ROOT",os.getcwd())
+def detect():
+    system=platform.system().lower()
+    wsl="microsoft" in platform.release().lower() or os.path.exists("/proc/version") and "microsoft" in open("/proc/version",errors="replace").read().lower()
+    bash=shutil.which("bash"); pwsh=shutil.which("pwsh") or shutil.which("powershell")
+    py=shutil.which("python3") or shutil.which("python")
+    if wsl or system=="linux":
+        runtime="bash" if bash else ("powershell" if pwsh else "unknown")
+    elif system=="windows":
+        runtime="powershell" if pwsh else ("bash" if bash else "unknown")
+    elif system=="darwin":
+        runtime="bash" if bash else "unknown"
+    else: runtime="unknown"
+    return {"system":system,"release":platform.release(),"wsl":wsl,"machine":platform.machine(),
+            "bash":bool(bash),"powershell":bool(pwsh),"python3":bool(py),"runtime":runtime,
+            "supported":runtime!="unknown","repo":ROOT}
+def check():
+    d=detect(); print(json.dumps(d,indent=2,ensure_ascii=False))
+    return 0 if d["supported"] else 1
+def report():
+    d=detect(); out=os.path.join(ROOT,"docs/kaizen/org/PLATAFORMAS.md"); os.makedirs(os.path.dirname(out),exist_ok=True)
+    lines=["# Portabilidad y autodetección de plataforma\n",
+           f"Detectado: **{d['system']}** ({d['release']}), WSL={d['wsl']}, runtime=`{d['runtime']}`\n",
+           "| Sistema | Runtime | Comandos |", "| --- | --- | --- |",
+           "| Linux / WSL | bash | `scripts/kaizen-*` directo |",
+           "| Windows (PowerShell) | pwsh | `./scripts/kaizen-platform.ps1` + `python scripts/kaizen-*` |",
+           "| macOS | bash | igual que Linux |\n",
+           "## Regla\nLos scripts Python (`kaizen-eval`, `kaizen-gov`, `kaizen-knowledge`, `kaizen-incentive`, `kaizen-meta`, `kaizen-community`, `kaizen-platform`, `kaizen-exporter`) son multiplataforma. "
+           "Los scripts bash requieren Git Bash o WSL en Windows; el entrypoint PowerShell detecta y delega.\n",
+           "## Verificación\n`kaizen-platform check` imprime el estado real; nunca se asume Linux (K-10)."]
+    open(out,"w",encoding="utf-8").write("\n".join(lines)+"\n")
+    print("reporte:",os.path.relpath(out,ROOT))
+cmd=sys.argv[1] if len(sys.argv)>1 else "check"
+if cmd=="json": print(json.dumps(detect(),ensure_ascii=False))
+elif cmd=="check": sys.exit(check())
+elif cmd=="report": report()
+else: print("uso: kaizen-platform json|check|report")
