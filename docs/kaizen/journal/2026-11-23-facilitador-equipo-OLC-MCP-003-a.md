@@ -28,10 +28,15 @@ git ls-files | grep -icE '(^|/)[^/]*\.env(\.[^/]*)?$' → 16 (sin leer; abierto 
 bash scripts/kaizen-team verify opencode-local-config → rc=0
 bash scripts/kaizen-team sync opencode-local-config   → acuses pendientes=0
 ```
-`scripts/kaizen check`: descriptores/políticas/formato/lint en verde, pero **sin resultado
-final** (SIGTERM por reinicio en el primer intento; rc=124/timeout en el registro del equipo).
-No se afirma «check verde». `kaizen-meta drift` → `[block] drift-git local≠origin/main`;
-`kaizen-meta close` → `AttributeError` (mismo bug de desempaquetado que `drift`).
+`scripts/kaizen check` **rc=1 FALLO** (resultado final real, no solo timeout): en la ejecución
+que incluía el pre-push hook fallaron dos validaciones ya corregidas después en el descriptor
+(`## Cierre de issues` y `Closes: none`, ambas presentes en HEAD actual) y, de forma
+persistente, `FALLA: tests` (`$KZ_TEST_CMD` terminado). Otro agente documentó el detalle en
+`.kaizen/loop/outbox/kaizen-check-tests-ledger-tokens.md` (`229 pasadas, 3 fallidas`; una es
+`FALLA ledger tokens`, coherente con `token-ledger-corrupt-concurrent-write`). No se afirma
+«check verde» ni se usó `--no-verify`. `kaizen-meta drift` → `[block] drift-git
+local≠origin/main`; `kaizen-meta close` → `AttributeError` (mismo bug de desempaquetado
+que `drift`).
 
 ## Hallazgos reportados por S-11 (outbox local, no versionado por diseño)
 - `kaizen-meta-drift-crash` — `drift` y `close` confunden `rc` con salida; `close` sigue roto
@@ -52,5 +57,7 @@ escribir evita duplicar una tarea y escribir en el estado de otro agente.
 
 ## Estado de cierre
 Sin cierre formal: `kaizen-meta close` no ejecutable y `HEAD ≠ origin/main`. Push a
-`kaizen/facilitador-opencode-local-config-verificacion` iniciado pero **no confirmado**;
-sin upstream configurado. Se reporta a El Presidente con estado ámbar.
+`kaizen/facilitador-opencode-local-config-verificacion` **falló** (`rc=1`, `error: failed to
+push some refs`) porque el hook de pre-push ejecuta `kaizen check`, que está en rojo por
+`FALLA: tests`; no se eludió el hook (K-10). Sin upstream configurado. Se reporta a El
+Presidente con estado ámbar y la corrección del resultado real del gate.
