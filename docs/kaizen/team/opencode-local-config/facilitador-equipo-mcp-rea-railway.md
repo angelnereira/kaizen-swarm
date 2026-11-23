@@ -86,6 +86,18 @@ documentaba `rea`.
    $ git ls-files | grep -E '(^|/)(\.env|\.env\..*|.*\.pem|.*\.key|id_rsa.*)$' | wc -l
    0
 
+   Nota de precisión: el patrón anterior solo cubre `.env`/`.pem`/`.key`/`id_rsa*` como
+   nombre de archivo. Un barrido más amplio por sufijo `.env` muestra **16 archivos
+   `*.env` versionados** (p. ej. `.kaizen/finops/tokens.env`, `.kaizen/team/notify.env`).
+   **No se leyó ninguno** (S-1/S-2/S-12). Su existencia ya fue reportada por `security` en
+   `.kaizen/loop/outbox/repo-tokens-env-tracked.md`. Por tanto el hallazgo verificable es
+   «0 patrones de secreto en archivos versionados examinados y 0 claves en la config MCP»,
+   **no** «0 credenciales en todo el repo»: el inventario de `.env` es competencia de
+   `security` y sigue abierto.
+
+   $ git ls-files | grep -icE '(^|/)[^/]*\.env(\.[^/]*)?$'
+   16
+
    $ grep -nE '\.env|\.pem|\.key|id_rsa' .gitignore
    2:.env   3:.env.*   4:!example.env   5:*.pem   6:*.key   7:id_rsa*
    ```
@@ -102,7 +114,9 @@ documentaba `rea`.
 
 ## Impacto
 
-- KPI confirmado: `rea` activo, `railway` activo y autenticado, 0 credenciales en repo.
+- KPI confirmado: `rea` activo, `railway` activo y autenticado, 0 secretos embebidos en la
+  configuración MCP y 0 patrones de secreto en archivos versionados examinados. Queda abierto
+  el inventario de 16 archivos `*.env` versionados (sin leer), competencia de `security`.
   `source_ids` verificados; `kaizen-team verify` en verde (REG-EV-01).
 - No se abrió ni se modificó ningún archivo de credenciales. La configuración global guarda
   los binarios y `JAVA_HOME` en la máquina (ADR-0024); el repo solo declara permisos.
