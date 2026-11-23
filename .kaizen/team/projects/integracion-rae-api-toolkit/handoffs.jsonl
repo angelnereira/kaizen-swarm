@@ -1,0 +1,144 @@
+{
+  "id": "H-20261123161721-1",
+  "correlation_id": "integracion-rae-api-toolkit",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "verificador-evidencias",
+  "task": "T1 conciliar estado real vs documentado y validar source_ids",
+  "expects_ack": true,
+  "deadline": "2026-11-30",
+  "source_ids": [
+    "TOOL-001",
+    "TOOL-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T16:16:13Z",
+  "acked_at": "2026-11-23T16:23:55Z"
+}
+{
+  "id": "H-20261123161721-2",
+  "correlation_id": "integracion-rae-api-toolkit",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "reverse-api-specialist",
+  "task": "T2 inventario operativo del toolkit y runbook gobernado (sin capturar)",
+  "expects_ack": true,
+  "deadline": "2026-11-30",
+  "source_ids": [
+    "TOOL-001",
+    "TOOL-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T16:16:13Z",
+  "acked_at": "2026-11-23T16:23:33Z"
+}
+{
+  "id": "H-20261123161721-3",
+  "correlation_id": "integracion-rae-api-toolkit",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "rea-specialist",
+  "task": "T3 factibilidad ruta nativa sin repo externo (REA MCP + automatizacion propia)",
+  "expects_ack": true,
+  "deadline": "2026-11-30",
+  "source_ids": [
+    "TOOL-001",
+    "TOOL-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T16:16:13Z",
+  "acked_at": "2026-11-23T16:23:46Z"
+}
+{
+  "id": "H-20261123161721-4",
+  "correlation_id": "integracion-rae-api-toolkit",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "architect",
+  "task": "T4 ADR comparativo externo vs nativo/hibrido con retador y memorial",
+  "expects_ack": true,
+  "deadline": "2026-11-30",
+  "source_ids": [
+    "TOOL-001",
+    "TOOL-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T16:16:13Z",
+  "acked_at": "2026-11-23T16:22:35Z"
+}
+{
+  "id": "H-20261123161721-5",
+  "correlation_id": "integracion-rae-api-toolkit",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "security",
+  "task": "T5 veto seguridad: S-15/S-12, codigo generado, HAR y skills",
+  "expects_ack": true,
+  "deadline": "2026-11-30",
+  "source_ids": [
+    "TOOL-001",
+    "TOOL-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T16:16:13Z",
+  "acked_at": "2026-11-23T16:23:03Z"
+}
+{
+  "id": "H-20261123161721-6",
+  "correlation_id": "integracion-rae-api-toolkit",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "qa",
+  "task": "T6 criterios de aceptacion verificables y comandos de reproduccion del KPI",
+  "expects_ack": true,
+  "deadline": "2026-11-30",
+  "source_ids": [
+    "TOOL-001",
+    "TOOL-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T16:16:13Z",
+  "acked_at": "2026-11-23T16:19:47Z"
+}
+{
+  "id": "H-20261123161721-7",
+  "correlation_id": "integracion-rae-api-toolkit",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "finops",
+  "task": "T7 coste tokens vs ruta nativa, cuota disco y metricas",
+  "expects_ack": true,
+  "deadline": "2026-11-30",
+  "source_ids": [
+    "TOOL-001",
+    "TOOL-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T16:16:13Z",
+  "acked_at": "2026-11-23T16:23:01Z"
+}
+{
+  "id": "H-20261123161721-8",
+  "correlation_id": "integracion-rae-api-toolkit",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "facilitador-equipo",
+  "task": "T8 standup, blackboard, acuses y orden de turnos",
+  "expects_ack": true,
+  "deadline": "2026-11-30",
+  "source_ids": [
+    "TOOL-001",
+    "TOOL-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T16:16:13Z",
+  "acked_at": "2026-11-23T16:20:07Z"
+}
