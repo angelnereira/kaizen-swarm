@@ -89,7 +89,7 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 45 ] && ok "inventario de 45 agentes" || bad "inventario de 45 agentes ($N)"
+[ "$N" = 47 ] && ok "inventario de 47 agentes" || bad "inventario de 47 agentes ($N)"
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
@@ -145,7 +145,7 @@ done
   && ok "expediente de investigacion" || bad "expediente de investigacion"
 ( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
 C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
-[ "$C" = 45 ] && ok "catalogo consistente (45)" || bad "catalogo consistente ($C)"
+[ "$C" = 47 ] && ok "catalogo consistente (47)" || bad "catalogo consistente ($C)"
 grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
   && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
@@ -170,6 +170,7 @@ DG="$REPO/.kaizen/org/knowledge/digests/marketing-visual.md"
 S=$(sed -n 's/^status: //p' "$REPO/.kaizen/org/prompts/marketing-visual.md" | head -1)
 [ "$S" = paused ] && ok "disable pausa agente" || bad "disable pausa agente"
 
+rm -f "$REPO/.kaizen/loop/PAUSE"  # aislamiento de prueba: stop-the-line no debe bloquear el test
 # equipo: flujo completo con evidencia verificada y bloqueo sin fuentes
 ( cd "$REPO" && scripts/kaizen-team check >/dev/null 2>&1 ) && ok "kaizen-team check" || bad "kaizen-team check"
 ( cd "$REPO" && scripts/kaizen-team init demo --goal "Probar equipo" --kpi "Decisiones verificadas" --members facilitador-equipo,verificador-evidencias,cumplimiento-panama >/dev/null 2>&1 )
