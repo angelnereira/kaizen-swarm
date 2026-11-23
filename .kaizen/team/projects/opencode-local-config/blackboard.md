@@ -14,6 +14,17 @@ Solo hechos con `source_ids` verificados o salida de comando reproducible (TEAM.
 | Denegaciones de secretos (repo) | `*.env`, `**/.env`, `**/.env.*`, `*.pem`, `*.key`, `**/id_rsa*`, `gh auth*`, `rm -rf*`, `curl*`, `wget*`, `env`, `printenv*` | `jq -r '.permissions[]\|select(.effect=="deny")\|.resource' opencode.json` | NIST-001, OWASP-001, AICPA-001 |
 | Divergencia de permisos globales | `read *.env: allow`, `read *.env.*: allow` en config global | `jq -r '.permissions[]\|"\(.action)\t\(.resource)\t\(.effect)"' ~/.config/opencode/opencode.json` | ISO-001, NIST-001 |
 | Handoff `OLC-SEC-002` a `security` | sobre completo, tarea 2 en `ready` con lease/due | `handoffs.jsonl` id `H-1795377637441`; `kaizen-team ack` | AICPA-001, NIST-001 |
+| MCP `rea` activo (revalidado 2026-11-23) | `rea` v6.10.1, 263 tools, SDK 2.3.1, protocolo 2025-11-25, `open=false` | `tools.rea.binary_session({detail:"summary"})` → `server_identity.server.name="rea"`; hash catálogo `ce195f28…` | TOOL-001, ISO-001 |
+| MCP `railway` activo (revalidado 2026-11-23) | responde `{projects: array(3)}`, sin error de transporte/auth | `tools.railway["list-projects"]()` → 3 proyectos (solo conteo; sin `whoami`) | sin `source_id` registrado: comando reproducible (TEAM.md principio 2) |
+| Config MCP sin secretos en línea | `mcp_servers=railway,rea`; ambos `disabled=unset`, `transport=local`; `inline_secret_values=0` | `jq` sobre `~/.config/opencode/opencode.json` (estructura, nunca valores) | ISO-001, NIST-001, OWASP-001 |
+| Handoff `OLC-MCP-003` a `dx` | sobre completo, tarea 3 en `ready` con lease/due, `status: ack` | `handoffs.jsonl` id `H-1795403779907`; `kaizen-team ack` → acked_at `2026-11-23T03:16:57Z` | AICPA-001, NIST-001, TOOL-001 |
+| KPI agentes globales (revalidado 2026-11-23) | **49 instalados vs 47 declarados** — deriva, ver H-2 | `find ~/.config/opencode/agents -maxdepth 1 -name '*.md' -type f \| wc -l` → `49`; nuevos: `auditor-riesgos.md`, `legal-corporativo.md` (`d499180`) | NIST-001 (hallazgo; KPI bajo autoridad de El Presidente) |
+
+| MCP `railway` | activo y autenticado (solo lectura; PII omitida, L-12) | `tools.railway.whoami({})` → fulfilled, 241 bytes, sin error (antes y después del reinicio) | TOOL-001, AICPA-001 |
+| MCP `rea` revalidado post-reinicio | activo | `tools.rea.binary_session({})` → fulfilled, keys `[result]`, sin error | TOOL-001 |
+| Credenciales en repo | 0 | `jq ... has("mcp")` → `MCP_ABSENT`; 5 patrones `git grep` → 0 archivos c/u; `git ls-files` de `.env`/`.pem`/`.key` → 0; `.gitignore` L2-7 | NIST-001, OWASP-001, ISO-001 |
+| Evidencia MCP + handoff | tarea 3 en `ready`, handoff acusado | `docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-rea-railway.md`; `handoffs.jsonl` id `H-1795403633267078428` | ISO-001, NIST-001 |
+| Aclaración conteo de agentes (revalidado 2026-11-23) | 49 `*.md` globales = 47 roles canónicos + `kaizen-equipo` + `kaizen-installer`; 48 prompts org = 47 + `_template` | `ls -1 ~/.config/opencode/agents/*.md \| wc -l` → `49`; `comm -3` contra `.kaizen/org/prompts/*.md` → extras `kaizen-equipo`, `kaizen-installer`, `_template` | ISO-001, NIST-001 |
 
 ## Hallazgo abierto (no resuelto por el facilitador)
 

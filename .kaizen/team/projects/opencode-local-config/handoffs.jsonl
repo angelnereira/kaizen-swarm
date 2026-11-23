@@ -49,3 +49,54 @@
   "created": "2026-11-22T20:00:37Z",
   "acked_at": "2026-11-22T20:01:31Z"
 }
+{
+  "id": "H-1795403633267078428",
+  "correlation_id": "OLC-MCP-003",
+  "from": "facilitador-equipo",
+  "to": "verificador-evidencias",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "Verificar MCP rea y railway activos sin credenciales en repo — evidencia reproducible con source_ids, lista para el dictamen final",
+  "expects_ack": true,
+  "deadline": "2026-11-25T18:00:00Z",
+  "source_ids": [
+    "TOOL-001",
+    "ISO-001",
+    "NIST-001",
+    "OWASP-001",
+    "AICPA-001"
+  ],
+  "refs": [
+    "docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-rea-railway.md",
+    ".kaizen/loop/outbox/kaizen-meta-drift-crash.md"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T03:15:19Z",
+  "acked_at": "2026-11-23T03:15:19Z"
+}
+{
+  "id": "H-1795403779907",
+  "correlation_id": "OLC-MCP-003",
+  "from": "facilitador-equipo",
+  "to": "dx",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "Verificar MCP rea y railway activos sin credenciales en repo — evidencia reproducible con source_ids, tarea lista para dictamen de DX",
+  "expects_ack": true,
+  "deadline": "2026-11-26T18:00:00Z",
+  "source_ids": [
+    "TOOL-001",
+    "ISO-001",
+    "NIST-001",
+    "OWASP-001",
+    "AICPA-001"
+  ],
+  "refs": [
+    "docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-verificacion.md",
+    ".kaizen/loop/outbox/repo-tokens-env-tracked.md",
+    ".kaizen/loop/outbox/opencode-kpi-agent-count-drift.md"
+  ],
+  "status": "ack",
+  "created": "2026-11-23T03:16:19Z",
+  "acked_at": "2026-11-23T03:16:57Z"
+}
