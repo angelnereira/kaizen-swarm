@@ -207,5 +207,18 @@
     ],
     "kpi": "100% de agentes con score monitorizado; 0 incentivos que recompensen resultados sin evidencia",
     "model": "opencode/hy4-flash-free"
+  },
+  "portabilidad-windows": {
+    "goal": "Garantizar que agentes y framework funcionen igual en Windows/PowerShell y Linux con autodeteccion de plataforma",
+    "members": [
+      "platform-engineer",
+      "dx",
+      "qa",
+      "architect",
+      "verificador-evidencias",
+      "knowledge-curator"
+    ],
+    "kpi": "deteccion correcta en 100% de entornos; 0 supuestos de Linux",
+    "model": "opencode/hy4-flash-free"
   }
 }

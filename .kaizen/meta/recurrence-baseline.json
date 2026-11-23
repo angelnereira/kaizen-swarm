@@ -1,0 +1,11 @@
+{
+  "approved": "2026-11-23T03:16:21.170668+00:00",
+  "adr": "0030-resolucion-recurrencia",
+  "classes": {
+    "verificacion": 5,
+    "otros": 12,
+    "infra": 4,
+    "cifras": 3
+  },
+  "rule": "cuarta repeticion posterior a esta fecha dispara stop-the-line nuevamente"
+}

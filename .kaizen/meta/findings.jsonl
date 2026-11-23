@@ -18,3 +18,7 @@
 {"ts": "2026-11-22T20:01:06.685400+00:00", "level": "ok", "rule": "s10-supresiones", "detail": "0 supresiones sin issue", "evidence": ""}
 {"ts": "2026-11-22T20:01:31.366538+00:00", "level": "ok", "rule": "ejecucion", "detail": "13 cambios aplicados", "evidence": "supresiones S-10 corregidas en kaizen-meta; supresiones S-10 corregidas en kaizen-notify; supresiones S-10 corregidas en kaizen-loop; supresiones S-10 corregidas en kaizen-learn; supresiones S-10 corregidas en kaizen; supresiones S-10 corregidas en kaizen-runtime; supresiones S-10 corregidas en kaizen-start; supresiones S-10 corregidas en kaizen-release"}
 {"ts": "2026-11-22T20:01:31.450040+00:00", "level": "block", "rule": "recurrencia", "detail": "clases en tope: ['verificacion', 'otros', 'infra']", "evidence": "{\"verificacion\": 5, \"otros\": 12, \"infra\": 4, \"cifras\": 2}"}
+{"ts": "2026-11-23T03:15:50.747853+00:00", "level": "block", "rule": "recurrencia", "detail": "clases en tope: ['verificacion', 'otros', 'infra', 'cifras']", "evidence": "{\"verificacion\": 5, \"otros\": 15, \"infra\": 4, \"drift\": 1, \"cifras\": 3}"}
+{"ts": "2026-11-23T03:16:21.442399+00:00", "level": "block", "rule": "drift-git", "detail": "local=34fdf4de origin=407ed833", "evidence": ""}
+{"ts": "2026-11-23T03:17:41.602329+00:00", "level": "block", "rule": "drift-git", "detail": "local=34fdf4de origin=407ed833", "evidence": ""}
+{"ts": "2026-11-23T03:28:53.821350+00:00", "level": "block", "rule": "drift-git", "detail": "local=57fd48b4 origin=407ed833", "evidence": ""}

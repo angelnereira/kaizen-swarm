@@ -20867,4 +20867,8 @@
 {"ts":"2026-11-22T23:21:14Z","agent":"facilitador-equipo","task":"Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético","model":"defecto","input":0,"output":0,"cost_usd":0,"saved_estimate":0}
 {"ts":"2026-11-22T23:21:14Z","agent":"facilitador-equipo","task":"Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético","model":"defecto","input":0,"output":0,"cost_usd":0,"saved_estimate":0}
 {"ts":"2026-11-22T23:21:14Z","agent":"facilitador-equipo","task":"Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético","model":"defecto","input":0,"output":0,"cost_usd":0,"saved_estimate":0}
-{"ts":"2
+{"ts":"2{"ts":"2026-11-23T03:17:15Z","agent":"qa","task":"Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético","model":"opencode/hy4-flash-free","input":0,"output":0,"cost_usd":0,"saved_estimate":0}
+{"ts":"2026-11-23T03:19:21Z","agent":"dx","task":"Captura de pantalla no disponible en Xwayland (BadMatch en X_GetImage)","model":"opencode/hy4-flash-free","input":0,"output":0,"cost_usd":0,"saved_estimate":0}
+{"ts":"2026-11-23T03:21:16Z","agent":"gerente","task":"Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético","model":"opencode/hy4-flash-free","input":0,"output":0,"cost_usd":0,"saved_estimate":0}
+{"ts":"2026-11-23T03:22:12Z","agent":"director-producto","task":"Captura de pantalla no disponible en Xwayland (BadMatch en X_GetImage)","model":"opencode/hy4-flash-free","input":0,"output":0,"cost_usd":0,"saved_estimate":0}
+{"ts":"2026-11-23T03:23:10Z","agent":"analista-negocios","task":"Recurrencia — trazabilidad de SOURCES.md rota tras nueva modificación (hash 11e96012)","model":"opencode/hy4-flash-free","input":0,"output":0,"cost_usd":0,"saved_estimate":0}

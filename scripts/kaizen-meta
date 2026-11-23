@@ -64,8 +64,8 @@ def cmd_check():
 
 
 def cmd_drift():
-    local, _, _ = sh("git rev-parse HEAD")
-    remote, _, _ = sh("git rev-parse origin/main")
+    _, local, _ = sh("git rev-parse HEAD")
+    _, remote, _ = sh("git rev-parse origin/main")
     version = open(os.path.join(ROOT, "VERSION"), encoding="utf-8").read().strip()
     observed = os.environ.get(CONF.get("KM_OBSERVED_VERSION_VAR", "KAZEN_OBSERVED_VERSION"), "")
     drift = local != remote

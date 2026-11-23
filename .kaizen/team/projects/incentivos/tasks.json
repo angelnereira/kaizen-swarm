@@ -1,0 +1,22 @@
+[
+  {
+    "task": "Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético",
+    "owner": "qa",
+    "status": "done",
+    "source": "outbox",
+    "finished": "2026-11-23T03:17:15Z"
+  },
+  {
+    "task": "Captura de pantalla no disponible en Xwayland (BadMatch en X_GetImage)",
+    "owner": "dx",
+    "status": "done",
+    "source": "outbox",
+    "finished": "2026-11-23T03:19:21Z"
+  },
+  {
+    "task": "Recurrencia — trazabilidad de SOURCES.md rota tras nueva modificación (hash 11e96012)",
+    "owner": "?",
+    "status": "pending",
+    "source": "outbox"
+  }
+]
