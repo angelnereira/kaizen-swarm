@@ -22,7 +22,8 @@ Solo hechos con `source_ids` verificados o salida de comando reproducible (TEAM.
 
 | MCP `railway` | activo y autenticado (solo lectura; PII omitida, L-12) | `tools.railway.whoami({})` → fulfilled, 241 bytes, sin error (antes y después del reinicio) | TOOL-001, AICPA-001 |
 | MCP `rea` revalidado post-reinicio | activo | `tools.rea.binary_session({})` → fulfilled, keys `[result]`, sin error | TOOL-001 |
-| Credenciales en repo | 0 | `jq ... has("mcp")` → `MCP_ABSENT`; 5 patrones `git grep` → 0 archivos c/u; `git ls-files` de `.env`/`.pem`/`.key` → 0; `.gitignore` L2-7 | NIST-001, OWASP-001, ISO-001 |
+| Secretos embebidos en config MCP | 0 | `jq ... has("mcp")` → `MCP_ABSENT`; 5 patrones `git grep` → 0 archivos c/u; `git ls-files` de `.env`/`.pem`/`.key` → 0; `.gitignore` L2-7 | NIST-001, OWASP-001, ISO-001 |
+| Inventario `*.env` versionado (sin leer) | 16 archivos, abierto en `security` | `git ls-files \| grep -icE '(^|/)[^/]*\.env(\.[^/]*)?$'` → `16`; outbox `repo-tokens-env-tracked.md` (S-1/S-2/S-12) | NIST-001, OWASP-001 |
 | Evidencia MCP + handoff | tarea 3 en `ready`, handoff acusado | `docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-rea-railway.md`; `handoffs.jsonl` id `H-1795403633267078428` | ISO-001, NIST-001 |
 | Aclaración conteo de agentes (revalidado 2026-11-23) | 49 `*.md` globales = 47 roles canónicos + `kaizen-equipo` + `kaizen-installer`; 48 prompts org = 47 + `_template` | `ls -1 ~/.config/opencode/agents/*.md \| wc -l` → `49`; `comm -3` contra `.kaizen/org/prompts/*.md` → extras `kaizen-equipo`, `kaizen-installer`, `_template` | ISO-001, NIST-001 |
 
