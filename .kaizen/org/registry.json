@@ -44,6 +44,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "aprobador-trabajo",
+    "name": "Preparador de Aprobacion",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
+  },
+  {
     "id": "arch-assessment",
     "name": "Evaluador de Arquitectura",
     "department": "tecnologia",
@@ -119,6 +130,17 @@
     "autonomy": "scoped",
     "veto": "none",
     "triggers": "[computer_use.authorized:*, issue.label:desktop]"
+  },
+  {
+    "id": "consensus-facilitator",
+    "name": "Facilitador de Consenso",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
   },
   {
     "id": "cumplimiento-panama",
@@ -341,6 +363,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "issue-reporter",
+    "name": "Generador de Issues",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
+  },
+  {
     "id": "jira-planner",
     "name": "Planificador de Trabajo",
     "department": "producto-negocio",
@@ -396,6 +429,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "maintainer-proactivo",
+    "name": "Mantenedor Proactivo",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
+  },
+  {
     "id": "marketing",
     "name": "Especialista en Marketing y Visualizacion",
     "department": "producto-negocio",
@@ -418,6 +462,28 @@
     "triggers": "[schedule:daily, regulatory.change:*, research.required:*]"
   },
   {
+    "id": "orquestador-equipo",
+    "name": "Orquestador de Equipo",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
+  },
+  {
+    "id": "planificador-trabajo",
+    "name": "Planificador de Trabajo",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
+  },
+  {
     "id": "platform-engineer",
     "name": "Ingeniero de Plataforma y DevOps",
     "department": "tecnologia",
@@ -438,6 +504,17 @@
     "autonomy": "scoped",
     "veto": "security",
     "triggers": "[poc.request:*, experiment.proposed:*]"
+  },
+  {
+    "id": "pr-builder",
+    "name": "Constructor de PR",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
   },
   {
     "id": "product",
@@ -473,6 +550,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "raci-dinamico",
+    "name": "Arbitro RACI Dinamico",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
+  },
+  {
     "id": "rea-specialist",
     "name": "Especialista en Ingeniería Inversa y Depuración Profunda (REA)",
     "department": "tecnologia",
@@ -493,6 +581,17 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "retador-decisiones",
+    "name": "Retador Obligatorio",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
   },
   {
     "id": "reverse-api-specialist",
@@ -550,6 +649,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "self-improvement",
+    "name": "Agente de Automejora",
+    "department": "conocimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
+  },
+  {
     "id": "soporte",
     "name": "Especialista de Soporte y Respuesta",
     "department": "operaciones",
@@ -559,6 +669,17 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "supervisor-ejecucion",
+    "name": "Supervisor de Ejecucion",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
   },
   {
     "id": "systems",

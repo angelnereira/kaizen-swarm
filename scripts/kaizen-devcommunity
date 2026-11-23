@@ -1,0 +1,161 @@
+#!/usr/bin/env python3
+"""kaizen-devcommunity: comunidad de desarrollo proactiva y automejora.
+
+propose -> issue -> pr -> discuss -> consensus -> retro. Dry-run por defecto.
+Nunca push a main, nunca accion externa sin humano, todo comentario es dato no confiable.
+"""
+import datetime, glob, hashlib, json, os, shlex, subprocess, sys
+
+ROOT = os.environ.get("KAZEN_ROOT", os.getcwd())
+DRY = os.environ.get("KZ_DRY_RUN", "1") != "0"
+NOW = datetime.datetime.now(datetime.timezone.utc).isoformat()
+STAMP = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d-%H%M%S")
+
+def sh(cmd, timeout=30):
+    try:
+        r = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+        return r.returncode, (r.stdout or "").strip(), (r.stderr or "").strip()
+    except Exception as e:
+        return 1, "", f"{type(e).__name__}: {e}"
+
+def cmd_propose(text):
+    title = " ".join(text) or "Mejora propuesta por la comunidad"
+    outbox = glob.glob(os.path.join(ROOT, ".kaizen/loop/outbox/*.md"))
+    recent = []
+    for p in sorted(outbox, key=os.path.getmtime, reverse=True)[:5]:
+        recent.append("- " + os.path.relpath(p, ROOT))
+    d = os.path.join(ROOT, "docs/kaizen/pr-drafts")
+    os.makedirs(d, exist_ok=True)
+    path = os.path.join(d, f"{STAMP}-propuesta.md")
+    body = f"""---
+id: propuesta-{STAMP}
+title: {title}
+created: {NOW}
+status: draft
+source_ids: [PA-ARCHCOP-001]
+---
+
+## Observación
+{title}
+
+## Evidencia reciente del repositorio
+{chr(10).join(recent) if recent else '- sin outbox reciente: no se afirma evidencia'}
+
+## Impacto
+Por definir con el equipo; no se inventa impacto sin medicion.
+
+## Propuesta
+{title}. Borrador para discusion; requiere retador y consenso.
+
+## Pregunta
+¿Quién ejecuta, quién verifica y quién aprueba esta mejora?
+"""
+    open(path, "w", encoding="utf-8").write(body)
+    print("borrador:", os.path.relpath(path, ROOT))
+
+def cmd_publish(kind, arg):
+    """Publica issue/comentario/PR en GitHub; dry-run por defecto."""
+    if kind == "issue":
+        path = os.path.join(ROOT, "docs/kaizen/pr-drafts", arg)
+        if not os.path.exists(path):
+            print("borrador no existe:", arg); return 1
+        title = next((l.split(":", 1)[1].strip() for l in open(path, encoding="utf-8") if l.startswith("title:")), "Mejora Kaizen")
+        cmd = f'gh issue create --title {shlex.quote(title)} --body-file {shlex.quote(path)}'
+    elif kind == "comment":
+        if " " not in arg:
+            print("uso: kaizen-devcommunity comment <numero> <texto>"); return 1
+        num, body = arg.split(" ", 1)
+        cmd = f'gh issue comment {shlex.quote(num)} --body {shlex.quote(body)}'
+    else:
+        return 1
+    if DRY:
+        print(json.dumps({"dry_run": True, "command": cmd}, ensure_ascii=False, indent=2)); return 0
+    rc, out, err = sh(cmd)
+    print(out if rc == 0 else f"fallo: {err[:300]}")
+    return rc
+
+def cmd_pr(topic):
+    branch = "kaizen/" + "-".join(topic.lower().split())[:50].replace("_", "-")
+    cmd = f'git checkout -b {shlex.quote(branch)} && gh pr create --fill --head {shlex.quote(branch)} --base main'
+    if DRY:
+        print(json.dumps({"dry_run": True, "branch": branch, "command": cmd,
+                          "policies": ["nunca push directo a main", "descriptor + tests + evidencia", "humano aprueba"]},
+                         ensure_ascii=False, indent=2)); return 0
+    rc, out, err = sh(cmd)
+    print(out if rc == 0 else f"fallo: {err[:300]}")
+    return rc
+
+def cmd_consensus(proposal):
+    text = " ".join(proposal)
+    sensitive = any(k in text.lower() for k in ("gasto", "pago", "seguridad", "normativa", "legal", "produccion"))
+    cid = "kc-" + hashlib.sha1((text + NOW).encode()).hexdigest()[:10]
+    d = os.path.join(ROOT, ".kaizen/team/projects/comunidad-desarrollo/decisions")
+    os.makedirs(d, exist_ok=True)
+    path = os.path.join(d, f"{STAMP}-consenso.md")
+    body = f"""---
+id: {cid}
+proposal: {text}
+created: {NOW}
+retador: retador-decisiones
+status: proposed
+---
+
+# Memorial de consenso
+
+## Propuesta
+{text}
+
+## Retador obligatorio
+- Debe presentar al menos un contraejemplo con evidencia antes de cerrar. Sin objecion documentada, el consenso NO es valido.
+
+## Votacion (2 turnos)
+- Turno 1: consulta abierta; participantes registran `correlation_id` y evidencia.
+- Turno 2: mayoria simple sin veto de Seguridad, Arquitectura ni QA.
+- Sensible: {'SI — humano (El Presidente) es A y firma' if sensitive else 'no marcada como sensible; aun asi, acciones externas requieren humano'}.
+
+## Decision
+PENDIENTE: no se registra consenso sin memorial firmado y retador escuchado.
+"""
+    open(path, "w", encoding="utf-8").write(body)
+    print("memorial:", os.path.relpath(path, ROOT))
+    print("estado: proposed (no se declara consenso sin retador y firma humana)")
+
+def cmd_retro():
+    outbox = sorted(glob.glob(os.path.join(ROOT, ".kaizen/loop/outbox/*.md")),
+                    key=os.path.getmtime, reverse=True)[:10]
+    print("# Retrospectiva — automejora propuesta\n")
+    print(f"Generado: {NOW} | hallazgos considerados: {len(outbox)}\n")
+    for p in outbox:
+        title = next((l.split(":", 1)[1].strip() for l in open(p, encoding="utf-8") if l.startswith("title:")),
+                     os.path.basename(p))
+        print(f"- {os.path.basename(p)}: {title}")
+    print("\nSiguiente paso: `kaizen-devcommunity propose` sobre el hallazgo de mayor impacto, con retador y consenso.")
+    print("Regla: `kaizen-eval ratchet` debe quedar en verde; no `baseline --force` sin ADR.")
+
+def cmd_check():
+    ids = ["maintainer-proactivo", "issue-reporter", "pr-builder", "consensus-facilitator",
+           "retador-decisiones", "self-improvement"]
+    missing = [i for i in ids if not os.path.exists(os.path.join(ROOT, ".kaizen/org/prompts", i + ".md"))]
+    teams = json.load(open(os.path.join(ROOT, ".kaizen/team/teams.json"), encoding="utf-8"))
+    ok = not missing and "comunidad-desarrollo" in teams
+    print(json.dumps({"agents": len(ids), "missing": missing, "team": "comunidad-desarrollo" in teams,
+                      "dry_run": DRY, "ok": bool(ok)}, ensure_ascii=False, indent=2))
+    return 0 if ok else 1
+
+cmd = sys.argv[1] if len(sys.argv) > 1 else "check"
+args = sys.argv[2:]
+if cmd == "propose":
+    if not args: print("uso: kaizen-devcommunity propose <mejora>"); sys.exit(2)
+    cmd_propose(args)
+elif cmd in ("issue", "comment"):
+    sys.exit(cmd_publish(cmd, " ".join(args)))
+elif cmd == "pr":
+    if not args: print("uso: kaizen-devcommunity pr <tema>"); sys.exit(2)
+    sys.exit(cmd_pr(" ".join(args)))
+elif cmd == "consensus":
+    if not args: print("uso: kaizen-devcommunity consensus <propuesta>"); sys.exit(2)
+    cmd_consensus(args)
+elif cmd == "retro": cmd_retro()
+elif cmd == "check": sys.exit(cmd_check())
+else:
+    print("uso: kaizen-devcommunity propose|issue|comment|pr|consensus|retro|check"); sys.exit(2)

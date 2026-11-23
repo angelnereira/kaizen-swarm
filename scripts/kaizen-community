@@ -29,6 +29,10 @@ def classify(body):
     t=body.lower()
     arch=("arquitectura","architecture","adr","poc","tecnologia","framework","code review","revisar codigo","diff","diseno de sistema","proof of concept")
     if any(k in t for k in arch): return ("architecture","arch-copilot")
+    plan=("planificar","orquestar","asignar","delegar","quien hace","jerarquia","raci")
+    if any(k in t for k in plan): return ("orchestration","orquestador-equipo")
+    dev=("issue","pull request","pr","repo","repositorio","mejora","bug","commit","codigo")
+    if any(k in t for k in dev): return ("development","maintainer-proactivo")
     if any(k in t for k in ("block","bloque","no funciona","error","fallo")): return ("blocker","security")
     if any(k in t for k in ("aprobar","lgtm","de acuerdo","correcto")): return ("approval","qa")
     if any(k in t for k in ("sugerencia","podríamos","deberíamos","propongo","mejor")): return ("proposal","architect")
@@ -106,6 +110,9 @@ def cmd_react(cid,action,body=""):
     elif action=="act":
         ev["state"]="acting"; ev["response"]="accion local via kaizen-runtime work"
         sh("scripts/kaizen-runtime work equipo-central")
+    elif action=="plan":
+        rc,out,_=sh(f'python3 scripts/kaizen-orquesta plan {json.dumps(ev["body"][:400])}')
+        ev["state"]="planned"; ev["response"]=out[:400] if rc==0 else "kaizen-orquesta no disponible"
     elif action=="delegate":
         rc,out,_=sh(f'python3 scripts/kaizen-arch route {json.dumps(ev["body"][:400])}')
         ev["state"]="delegated"; ev["response"]=out[:400] if rc==0 else "kaizen-arch no disponible"
@@ -145,4 +152,4 @@ if cmd=="events": cmd_events()
 if cmd=="react": sys.exit(cmd_react(args[0],args[1],args[2] if len(args)>2 else ""))
 if cmd=="digest": cmd_digest()
 if cmd=="watch": cmd_watch()
-print("uso: kaizen-community scan|events|react <id> reply|act|escalate|delegate [--body]|digest|watch")
+print("uso: kaizen-community scan|events|react <id> reply|act|escalate|delegate|plan [--body]|digest|watch")

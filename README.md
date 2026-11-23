@@ -194,6 +194,16 @@ Credenciales locales por defecto (sobrescribibles; **no usar fuera de localhost*
 
 > Los borradores que originaron este README están en `docs/kaizen/org/README_DRAFT_*.md` (estética, coherencia y crítica) y sus hallazgos en `.kaizen/loop/outbox/`.
 
+
+
+## Comunidad de desarrollo y automejora
+
+Seis agentes trabajan en el repositorio como comunidad: `maintainer-proactivo` detecta mejoras con evidencia, `issue-reporter` redacta borradores, `pr-builder` prepara PRs en ramas `kaizen/*`, `consensus-facilitator` modera 2 turnos con memorial, `retador-decisiones` exige contraejemplos y `self-improvement` convierte lecciones en mejoras con ratchet. `kaizen-devcommunity propose|issue|comment|pr|consensus|retro|check` es dry-run por defecto; ningún agente aprueba ni hace push a `main` (ADR-0035).
+
+## Orquestación dinámica y jerarquía por tarea
+
+Cinco agentes separan **planificar** (`planificador-trabajo`), **repartir** (`orquestador-equipo`), **definir rangos/RACI** (`raci-dinamico`), **verificar** (`supervisor-ejecucion`) y **preparar la aprobación** (`aprobador-trabajo`). `scripts/kaizen-orquesta hierarchy|plan|raci|asignar|estado|check` produce un plan de 7 pasos y una matriz R/A/C/I/V/H con rangos R0–R5: el humano (R0) siempre es A y firma; ningún agente aprueba. La jerarquía es por tarea, con `correlation_id`, ack y recursión acotada por `KAZEN_AGENT_DEPTH` (ADR-0034).
+
 ## Copiloto de arquitectura e ingeniería
 
 Nueve agentes derivados del paquete v0.1: ocho especialistas (`work-intake`, `arch-assessment`, `tech-evaluation`, `poc-design`, `adr-author`, `secure-review`, `knowledge-capture`, `jira-planner`) y el súper agente `arch-copilot`, que clasifica y delega. `scripts/kaizen-arch skills|route|invoke|check` carga solo el skill relevante e invoca con `--dry-run` por defecto (`KZ_DRY_RUN=0` para ejecutar). Los comentarios remotos de arquitectura se enrutan al copiloto (ADR-0033). El ZIP se registra con SHA-256 como PA-ARCHCOP-001; sus políticas internas no están validadas y no se usan como norma.

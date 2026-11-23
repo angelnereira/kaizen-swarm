@@ -89,7 +89,7 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 56 ] && ok "inventario de 56 agentes" || bad "inventario de 56 agentes ($N)"
+[ "$N" = 67 ] && ok "inventario de 67 agentes" || bad "inventario de 67 agentes ($N)"
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
@@ -145,7 +145,7 @@ done
   && ok "expediente de investigacion" || bad "expediente de investigacion"
 ( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
 C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
-[ "$C" = 56 ] && ok "catalogo consistente (56)" || bad "catalogo consistente ($C)"
+[ "$C" = 67 ] && ok "catalogo consistente (67)" || bad "catalogo consistente ($C)"
 grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
   && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
@@ -333,3 +333,12 @@ printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 ( cd "$REPO" && scripts/kaizen-arch route "necesito un ADR para la arquitectura" 2>/dev/null | grep -q 'adr-author' ) && ok 'enrutamiento copiloto' || bad 'enrutamiento copiloto'
 jq -e '.["arquitectura-copilot"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo copiloto' || bad 'equipo copiloto'
 [ -f "$REPO/docs/kaizen/adr/0033-copiloto-arquitectura.md" ] && ok 'ADR-0033' || bad 'ADR-0033'
+
+[ -x "$REPO/scripts/kaizen-orquesta" ] && ok 'CLI orquestacion' || bad 'CLI orquestacion'
+( cd "$REPO" && scripts/kaizen-orquesta check >/dev/null 2>&1 ) && ok 'orquestacion 5 agentes' || bad 'orquestacion 5 agentes'
+( cd "$REPO" && scripts/kaizen-orquesta plan "hacer un ADR de seguridad" 2>/dev/null | grep -q '"owner": "Humano' ) && ok 'plan con humano A' || bad 'plan con humano A'
+jq -e '.["orquestacion-dinamica"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo orquestacion' || bad 'equipo orquestacion'
+
+[ -x "$REPO/scripts/kaizen-devcommunity" ] && ok 'CLI comunidad desarrollo' || bad 'CLI comunidad desarrollo'
+( cd "$REPO" && scripts/kaizen-devcommunity check >/dev/null 2>&1 ) && ok 'comunidad 6 agentes' || bad 'comunidad 6 agentes'
+jq -e '.["comunidad-desarrollo"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo comunidad desarrollo' || bad 'equipo comunidad desarrollo'

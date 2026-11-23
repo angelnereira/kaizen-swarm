@@ -238,5 +238,37 @@
     ],
     "kpi": "100% solicitudes enrutadas con evidencia; 0 acciones externas sin aprobacion",
     "model": "opencode/hy4-flash-free"
+  },
+  "orquestacion-dinamica": {
+    "goal": "Repartir dinamicamente roles, rangos, pasos y procedimientos; planificar, asignar, supervisar y preparar aprobaciones con humano al mando",
+    "members": [
+      "orquestador-equipo",
+      "planificador-trabajo",
+      "raci-dinamico",
+      "supervisor-ejecucion",
+      "aprobador-trabajo",
+      "arch-copilot",
+      "verificador-evidencias",
+      "qa",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de tareas con plan, RACI, ack y cierre verificado; 0 aprobaciones emitidas por agentes",
+    "model": "opencode/hy4-flash-free"
+  },
+  "comunidad-desarrollo": {
+    "goal": "Trabajar proactivamente en el repositorio: detectar mejoras, reportar issues, comentar, abrir PRs, discutir y consensuar, y convertirlo en automejora",
+    "members": [
+      "maintainer-proactivo",
+      "issue-reporter",
+      "pr-builder",
+      "consensus-facilitator",
+      "retador-decisiones",
+      "self-improvement",
+      "verificador-evidencias",
+      "qa",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de issues/PR con evidencia y consenso; 0 push a main; 0 regresiones de calidad sin ADR",
+    "model": "opencode/hy4-flash-free"
   }
 }
