@@ -291,6 +291,7 @@ grep -q 'kaizen_sibling_project_stage' "$REPO/scripts/kaizen-exporter.py" \
   && ok "monitoreo de hermanos" || bad "monitoreo de hermanos"
 bash -n "$REPO/scripts/grafana-bootstrap" "$REPO/scripts/kaizen-feedback" && ok "scripts monitoreo sintaxis" || bad "scripts monitoreo sintaxis"
 ( cd "$REPO" && scripts/kaizen-tokens check >/dev/null 2>&1 ) && ok "tokens check" || bad "tokens check"
+rm -f /tmp/kz-test-ledger.jsonl  # aislamiento: ledger de prueba sin estado previo
 KT=$(KT_LEDGER=/tmp/kz-test-ledger.jsonl bash -c "cd '$REPO' && scripts/kaizen-tokens record --agent qa --task t --input 10 --output 2 --cost 0.01 >/dev/null && scripts/kaizen-tokens snapshot" 2>/dev/null)
 case "$KT" in *input_total=10*) ok "ledger tokens";; *) bad "ledger tokens";; esac
 jq -e '.["finops-tokens"].model == "opencode/hy4-flash-free"' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 \
