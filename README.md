@@ -2,13 +2,52 @@
 
 **Una organización de agentes para OpenCode que convierte instrucciones en trabajo verificable: por issue, con gobernanza, evidencia y mejora medible.**
 
-![Definiciones: 45](https://img.shields.io/badge/definiciones-45-blue)
-![Generados: 47](https://img.shields.io/badge/generados-47-blue)
+
+## Instalación definitiva
+
+Repositorio: **https://github.com/angelnereira/kaizen-swarm**. La instalación es no invasiva: los agentes viven en `~/.config/opencode/agents` y el estado en `~/.local/share/kaizen-swarm`; el repo destino no se toca salvo `--embedded` explícito.
+
+### Opción A — pasar el link a tu herramienta de IA (recomendado)
+
+Copia y pega este prompt en **OpenCode, Claude Code, Codex o tu agente preferido**:
+
+> Instala kaizen-swarm desde https://github.com/angelnereira/kaizen-swarm. Clona el repo, ejecuta `scripts/kaizen-installer opencode --global` (o `python scripts/kaizen-installer opencode --global` en Windows), verifica con `scripts/kaizen-platform check`, `scripts/kaizen-gov check` y `scripts/kaizen-eval check`. No modifiques el proyecto destino, no escribas secretos y reporta la salida real de cada comando.
+
+### Opción B — terminal (Linux / WSL / macOS)
+
+```bash
+git clone --depth 1 https://github.com/angelnereira/kaizen-swarm
+cd kaizen-swarm
+scripts/kaizen-installer opencode --global
+scripts/kaizen-platform check
+scripts/kaizen-gov check
+bash tests/run.sh
+```
+
+Para instalar en un proyecto concreto: `scripts/kaizen-installer repo <ruta-del-proyecto>` (o `scripts/kaizen-runtime install`).
+
+### Opción C — Windows (PowerShell)
+
+```powershell
+git clone --depth 1 https://github.com/angelnereira/kaizen-swarm "$env:LOCALAPPDATA\kaizen-swarm"
+cd "$env:LOCALAPPDATA\kaizen-swarm"
+.\install.ps1 -Yes
+.\scripts\kaizen-platform.ps1 check
+```
+
+`install.ps1` sin `-Yes` solo muestra los comandos (dry-run). En Windows los CLIs Python son multiplataforma; los scripts bash requieren Git Bash o WSL y `kaizen-platform check` lo reporta honestamente (ADR-0032).
+
+### Verificación y paridad
+
+`kaizen-platform check|json` detecta Linux, WSL, Windows y macOS y selecciona runtime `bash` o `powershell`. `kaizen-invoke detect` confirma los clientes disponibles (OpenCode, Claude Code, Codex). El comportamiento es igual o similar: mismos CLIs Python, mismos prompts, mismos checks. Nunca se asume Linux (K-10).
+
+![Definiciones: 70](https://img.shields.io/badge/definiciones-70-blue)
+![Generados: 70](https://img.shields.io/badge/generados-70-blue)
 ![Procesos RACI: 12](https://img.shields.io/badge/procesos_RACI-12-teal)
 ![Herramientas REA: 263](https://img.shields.io/badge/herramientas_REA-263-orange)
 ![Pruebas: 191](https://img.shields.io/badge/pruebas-191-brightgreen)
-![Versión: v1.2.0](https://img.shields.io/badge/version-v1.2.0-grey)
-![Corte: 2026-11-22](https://img.shields.io/badge/corte-2026--11--22-lightgrey)
+![Versión: v1.3.0](https://img.shields.io/badge/version-v1.3.0-grey)
+![Corte: 2026-11-23](https://img.shields.io/badge/corte-2026--11--23-lightgrey)
 
 > Badges estáticos con fecha de corte: se actualizan al cortar release. No representan CI remoto. Las mismas cifras están en la tabla siguiente para leer sin red.
 
