@@ -318,6 +318,30 @@
         "base": 150,
         "watch": "/debug",
         "label": "Postmortem y leccion registrada"
+      },
+      {
+        "id": "T-L3-01",
+        "agent": "red-lab",
+        "team": "rojo",
+        "level": "L3",
+        "difficulty": "D2",
+        "base": 600,
+        "path": "/scope/manifest",
+        "flag": "FLAG-LAB-L3-001",
+        "expect": 200,
+        "label": "Control central del laboratorio (L3)",
+        "time_cost_seconds": 1800
+      },
+      {
+        "id": "T-L4-01",
+        "agent": "blue-ir",
+        "team": "azul",
+        "level": "L4",
+        "difficulty": "D2",
+        "base": 1000,
+        "watch": "/debug",
+        "label": "Gestion central del ejercicio (L4)",
+        "time_cost_seconds": 3600
       }
     ],
     "governance_awards": {
@@ -351,6 +375,24 @@
     },
     "efficiency_bonus": 0.1,
     "learned_bonus_percent": 0.05,
-    "collaboration_bonus": 20
+    "collaboration_bonus": 20,
+    "budgets_seconds": {
+      "10min": 600,
+      "1h": 3600,
+      "2h": 7200,
+      "5min": 300
+    },
+    "milestone_time_cost_seconds": {
+      "M1": 60,
+      "M2": 120,
+      "M3": 240,
+      "M4": 360
+    },
+    "level_time_multiplier": {
+      "L1": 1.0,
+      "L2": 1.5,
+      "L3": 3.0,
+      "L4": 5.0
+    }
   }
 }

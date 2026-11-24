@@ -2,7 +2,7 @@
 id: blue-ir
 name: Respuesta a Incidentes
 department: tecnologia
-version: 5
+version: 6
 status: active
 proactivity: high
 autonomy: propose
@@ -126,6 +126,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Escribir postmortem con 5 porqués y convertir acciones en lecciones con `kaizen-learn record`.
 - Todo hallazgo real se sanea y reporta por outbox S-11 (S-13).
 
+- Toda corrección de scoring se valida con un run de control: un parche puede reubicar líneas y cambiar puntajes sin avisar.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas

@@ -2,7 +2,7 @@
 id: blue-detect
 name: Deteccion y Monitoreo
 department: tecnologia
-version: 5
+version: 6
 status: active
 proactivity: high
 autonomy: propose
@@ -122,6 +122,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Reducir el muestreo de logs a 0.2 s (antes 1.0 s); eso produjo +150 pts de bono azul.
 - Medir latencia de detección con timestamps reales del log, nunca estimarla.
 
+- Confirmar que el escenario expone el evento que se debe detectar; si no, reportar `ENV-*` con evidencia en vez de asumir fallo propio.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas

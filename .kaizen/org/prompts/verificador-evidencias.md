@@ -2,7 +2,7 @@
 id: verificador-evidencias
 name: Verificador de Evidencias
 department: conocimiento
-version: 2
+version: 3
 status: active
 proactivity: high
 autonomy: scoped

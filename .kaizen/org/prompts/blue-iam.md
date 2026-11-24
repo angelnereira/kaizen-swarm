@@ -2,7 +2,7 @@
 id: blue-iam
 name: Identidad y Accesos
 department: tecnologia
-version: 5
+version: 6
 status: active
 proactivity: high
 autonomy: propose
@@ -122,6 +122,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Verificar `/admin` → 401 como prueba de regresión del control de acceso.
 - No versionar secretos ni leer credenciales (S-1/S-2).
 
+- Si no aparece ningún evento observable, verificar activamente el control en LAB (`GET /admin` → 401) antes de declarar fallo; clasificar la brecha como `ENV-*`, no como error del agente.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas
