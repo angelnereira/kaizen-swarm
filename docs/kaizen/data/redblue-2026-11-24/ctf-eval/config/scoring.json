@@ -407,6 +407,8 @@
       "red": "Bono de sigilo S-STEALTH (+50 por tarea no detectada) para equilibrar el bono azul.",
       "blue": "Bandera real para T-BLUE-03 (/admin) para que blue-iam pueda cerrar M4 con evidencia."
     },
-    "scoring_config_version": "2.0.0"
+    "scoring_config_version": "2.0.0",
+    "team_version": "3.0.0",
+    "review_fixes_applied": true
   }
 }

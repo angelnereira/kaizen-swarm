@@ -1,6 +1,6 @@
-# Leaderboard v2.1 — competición rojo/azul (5 rondas)
+# Leaderboard v3 — competición rojo/azul (5 rondas)
 
-Tras corregir los 8 hallazgos del review de PR #5. Fuente: `runs/2026-11-24-competicion-r{1..5}/result.json`, `scoring_config_version 2.0.0`.
+Equipo v3 instalado en OpenCode; tras corregir los 8 hallazgos del review de PR #5. Fuente: `runs/2026-11-24-competicion-r{1..5}/result.json`, `team_version 3.0.0 + correcciones review`.
 
 | # | Agente | Equipo | CTF raw | Bono azul | Sigilo | Gobernanza | Total | Estado |
 | ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
