@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kaizen:whatsapp-waha-bridge:metadata",
+  "title": "metadata.json — whatsapp-waha-bridge",
+  "description": "Metadatos separados del original. Contrato normativo en contracts/interfaces.md §3.2. Sin secretos: hmac guarda solo verificacion, nunca el digest ni la clave.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "received",
+    "updated",
+    "sender",
+    "channel",
+    "tipo",
+    "mime",
+    "filename",
+    "sha256",
+    "estado",
+    "resumen",
+    "referencias"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "message-id; coincide con el nombre de carpeta bajo messages/AAAA/MM/DD/"
+    },
+    "received": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Momento de admision (UTC), no de reenvio"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Igual a received al crear; se actualiza en location_update"
+    },
+    "sender": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Id original de message.from antes de safe_name; nunca un secreto"
+    },
+    "channel": {
+      "const": "waha"
+    },
+    "tipo": {
+      "type": "string",
+      "enum": ["text", "image", "video", "audio", "document", "location", "poll", "vcard", "event", "unknown"]
+    },
+    "mime": {
+      "type": ["string", "null"],
+      "description": "Tipo MIME detectado del original"
+    },
+    "filename": {
+      "type": ["string", "null"],
+      "description": "Solo basename, nunca ruta absoluta; validado dentro de KI_DATA_DIR"
+    },
+    "sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Hash de original/; null si no hay media"
+    },
+    "estado": {
+      "type": "string",
+      "enum": ["archived", "dispatched", "processed", "failed", "duplicate-suppressed", "poc-pending"]
+    },
+    "resumen": {
+      "type": "string",
+      "description": "Texto acotado y redactado para el equipo"
+    },
+    "referencias": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "inbox_file devuelto por kaizen-inbox.py, extracted.md, location.json, ids relacionados"
+    },
+    "event_id": { "type": "string" },
+    "chat_id": { "type": "string" },
+    "event_type": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "reply_to": { "type": "string" },
+    "media": { "type": "array", "items": { "type": "object" } },
+    "vCards": { "type": "array", "items": { "type": "object" } },
+    "poll": { "type": "object" },
+    "event": { "type": "object" },
+    "live": { "type": "boolean" },
+    "hmac": {
+      "type": "string",
+      "enum": ["verified", "poc-pending"],
+      "description": "Solo estado de verificacion; NUNCA el digest ni la clave"
+    },
+    "dedupe_key": { "type": "string" },
+    "errors": { "type": "array", "items": { "type": "string" } }
+  }
+}

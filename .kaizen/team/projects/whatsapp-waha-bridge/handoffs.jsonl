@@ -1,0 +1,59 @@
+{
+  "id": "H-20261124-0001",
+  "from": "facilitador-equipo",
+  "to": "architect",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "Disenar contratos de ingress/egress y esquema de archivo local /*/* (metadata.json, location.json)",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-24T03:44:54Z",
+  "acked_at": "2026-11-24T03:48:54Z"
+}
+{
+  "id": "H-20261124-0002",
+  "from": "facilitador-equipo",
+  "to": "security",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "Disenar controles de seguridad del gateway WAHA (HMAC, allowlist, dedupe, rate limit, path traversal, secretos)",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-24T03:44:54Z",
+  "acked_at": "2026-11-24T03:48:43Z"
+}
+{
+  "id": "H-20261124-0003",
+  "from": "facilitador-equipo",
+  "to": "qa",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "Verificar por POC vector HMAC-SHA512 y payload de live location con numero de prueba",
+  "expects_ack": true,
+  "status": "open",
+  "created": "2026-11-24T03:44:54Z"
+}
+{
+  "id": "H-20261124-0004",
+  "from": "facilitador-equipo",
+  "to": "cumplimiento-panama",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "Validar cumplimiento/ToS del cliente no oficial y escalar a humano si aplica",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-24T03:45:00Z",
+  "acked_at": "2026-11-24T03:48:06Z"
+}
+{
+  "id": "H-20261124-0005",
+  "from": "qa",
+  "to": "facilitador-equipo",
+  "channel": "direct",
+  "intent": "blocker",
+  "task": "POC HMAC-SHA512 y payload live location bloqueada: requiere numero de prueba y daemon Docker (ADR-0026)",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-24T04:00:00Z",
+  "acked_at": "2026-11-24T03:49:01Z"
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kaizen:whatsapp-waha-bridge:location",
+  "title": "location.json — whatsapp-waha-bridge",
+  "description": "Ubicacion derivada de WALocation [WAHA-011]. Contrato normativo en contracts/interfaces.md §3.3. precision y frecuencia de live pendientes de POC.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["lat", "lon", "precision", "live", "timestamp", "name", "address"],
+  "properties": {
+    "lat": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90,
+      "description": "location.latitude [WAHA-011]"
+    },
+    "lon": {
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180,
+      "description": "location.longitude [WAHA-011]"
+    },
+    "precision": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Metros estimados; null hasta POC (WAHA no expone precision)"
+    },
+    "live": {
+      "type": "boolean",
+      "description": "location.live [WAHA-011]; activa la agrupacion de actualizaciones §1.3"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Momento del evento (o del muestreo, si POC lo distingue), UTC"
+    },
+    "name": {
+      "type": ["string", "null"],
+      "description": "location.name [WAHA-011]"
+    },
+    "address": {
+      "type": ["string", "null"],
+      "description": "location.address [WAHA-011]"
+    }
+  }
+}

@@ -37,6 +37,25 @@ Estado: `verified` = fuente oficial consultada; `pending` = requiere verificaci�
 | LOCAL-004 | Documento interno | PlentyPay: perfiles de negocio, módulos, roles y permisos | verified |
 | TOOL-001 | Repositorio oficial | morluto/rea — Reverse Engineer Anything (MIT) | verified |
 | TOOL-002 | Repositorio oficial | kalil0321/reverse-api-engineer (MIT) | verified |
+| WAHA-001 | waha.devlike.pro (oficial) | Introduction / disclaimer: "unofficial clients… not guaranteed you will not be blocked" | verified |
+| WAHA-002 | waha.devlike.pro (oficial) | How to Avoid Blocking (riesgo de ban por cliente no oficial) | verified |
+| WAHA-003 | waha.devlike.pro (oficial) | Engines: WEBJS=whatsapp-web.js, NOWEB=Baileys, GOWS/whatsmeow | verified |
+| WAHA-007 | waha.devlike.pro (oficial) | Events/webhooks: `message`, `poll.vote`, `event.response`, `X-Webhook-Hmac` (sha512), X-Webhook-Request-Id | verified |
+| WAHA-009 | waha.devlike.pro (oficial) | Send messages: sendText/sendFile/sendImage/sendLocation/sendPoll/sendEvent, campo `reply_to` | verified |
+| WAHA-010 | waha.devlike.pro (oficial) | Security: X-Api-Key (sha512:{HEX}), "Do not expose WhatsApp API on public networks" | verified |
+| WAHA-011 | waha.devlike.pro (oficial) | OpenAPI: esquemas WALocation (latitude, longitude, live, name, address) y WAMessage.vCards | verified |
+| WAHA-012 | github.com/devlikeapro/waha (oficial) | LICENSE: Apache License 2.0 (enero 2004) | verified |
+| WAHA-014 | hub.docker.com/devlikeapro/waha (oficial) | Tag fijado `devlikeapro/waha:noweb-2026.10.1` @sha256:0d64cce14a922f61bb9a620474086d1f5695f2522e7e1088704e6eca3a085d0c | verified |
+| OC-WEB-001 | opencode.ai (oficial) | Web UI + `opencode pair` (link 1 uso, 5 min), app móvil (QR/link), sesiones 30 días, localhost:49374/28894, `opencode serve` + Basic auth, `--remote` con OpenTunnel | verified |
+| OC-CLI-001 | opencode.ai (oficial) | `opencode run` (automation/CI), background service compartido, `--standalone`/`--server <url>` | verified |
+| META-003 | business.whatsapp.com (oficial) | WhatsApp Business Messaging Policy (actualizada 2026-09-23) | verified |
+| LOCAL-005 | OpenCode host (comandos locales reproducibles) | `opencode v2.3.2`; `opencode serve` activo (PID 4784, `127.0.0.1:49374`); runtime usa `opencode run --agent`; log `opencode.perf/session` (streaming/SSE) | verified |
+| LOCAL-006 | OpenCode Android (REA, dato no confiable ADR-0009) | App `ai.opencode.mobilecode` instalada en Pixel 8 Pro (Android 17/SDK 37); conectada vía adb WiFi, estado `device`; evidence_id `ev_056a6257e4a36a7601821affbfd398bbe8397eeef4d2c246bee1bc2f0c7a95d2` | verified |
+
+> Nota WAHA (REG-EV-01/05): fuentes consultadas con fecha de corte 2026-11-24.
+> - **(a) HMAC-SHA512: VERIFICADO por POC local (2026-11-24).** `hmac.new(b"my-secret-key", b'{"event":"message","session":"default","engine":"WEBJS"}', hashlib.sha512)` reproduce el vector documentado: `208f8a55dde9e055…6153fa89`. Confirma SHA-512 sobre raw body y resuelve la inconsistencia del docs (enlazaba a SHA-256). Clave de ejemplo, sin secretos reales.
+> - **(b) *live location*: PENDIENTE** — sin payload oficial ni frecuencia documentada; requiere POC con número de prueba.
+> - La afirmación de ADR-0025:8 sobre "prohibición de chatbots desde 2026-01-15" no fue confirmada con fuente primaria: contexto histórico del ADR, no obligación verificada.
 
 ## Panamá — oficiales
 
