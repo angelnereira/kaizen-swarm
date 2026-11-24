@@ -3,13 +3,14 @@
 - Estado: Aceptado
 - Fecha: 2026-11-24
 - Responsable: El Presidente (dueño del repositorio)
-- Aplica a: `scripts/kaizen-tokens`, `scripts/kaizen-team`
+- Aplica a: `scripts/kaizen-tokens`, `scripts/kaizen-team`, `scripts/kaizen-runtime`
 
 ## Contexto
 El proyecto `seg-red-rojo-azul` (rama `Debura`) quedó bloqueado en el hook de pre-push porque `scripts/kaizen check` corre `tests/run.sh`, que reportó 4 fallos. Dos causas están identificadas y son preexistentes en `HEAD`:
 
 1. `scripts/kaizen-tokens` trata `KT_LEDGER` como ruta relativa incluso cuando se pasa una ruta absoluta; el test usa `/tmp/kz-test-ledger.jsonl` sobre un clon y falla.
 2. `scripts/kaizen-team` construye IDs de handoff con `("H-"+(now|gsub("[^0-9]";"")))`; `now` es numérico y `gsub` exige cadena, así que los handoffs no se escriben y el archivo queda vacío.
+3. `scripts/kaizen-runtime work` en modo `dry-run` no marca la tarea como cerrada, por lo que reintenta la misma pendiente en un bucle infinito (test `work continuo` termina por timeout).
 
 Ambos archivos están en `scripts/kaizen*`, ruta protegida por L-4. El agente se negó a modificarlos y a usar `--no-verify` (K-10/S-10) sin autorización.
 
