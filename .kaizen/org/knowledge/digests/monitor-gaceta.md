@@ -81,13 +81,13 @@ Estado: `verified` = fuente oficial consultada; `pending` = requiere verificaci�
 | OWASP-001 | OWASP | ASVS 4.0 / Top 10 2021 | verified |
 | INT-001 | FATF | 40 Recomendaciones | verified |
 | INT-002 | IFRS Foundation | IFRS 15/9/16 (adopción local a verificar) | pending |
-
-## Panamá — oficiales
-
-| Tema | Fuente | URL | Nota |
-| --- | --- | --- | --- |
-| Protección de datos (Ley 81/2019) | Gaceta Oficial 28743-A | https://gacetaoficial.gob.pa/pdfTemp/28743_A/72148.pdf | Texto de la ley |
-| Reglamento Ley 81 (DE 285/2021) | ANTAI / vLex | https://antai.gob.pa/reglamentan-ley-81-de-proteccion-de-datos-personales/ | Reglamentación 2021-05-28 |
+| LOCAL-001 | Documento interno | CV Arquitecto IA Generativa (Ángel Nereira) | verified |
+| LOCAL-002 | Documento interno | CV DevOps / Platform Engineering (Ángel Nereira) | verified |
+| LOCAL-003 | Documento interno | gravital-experience-ui (plan de diseño Flutter M3E) | verified |
+| LOCAL-004 | Documento interno | PlentyPay: perfiles de negocio, módulos, roles y permisos | verified |
+| TOOL-001 | Repositorio oficial | morluto/rea — Reverse Engineer Anything (MIT) | verified |
+| TOOL-002 | Repositorio oficial | kalil0321/reverse-api-engineer (MIT) | verified |
+| WAHA-001 | waha.devlike.pro (oficial) | Introduction / disclaimer: "unofficial clients… not guaranteed you will not be blocked" | verified |
 
 ## MAPA-NORMATIVO.md
 # Mapa normativo de cumplimiento — Panamá

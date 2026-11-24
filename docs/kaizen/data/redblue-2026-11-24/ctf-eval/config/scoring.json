@@ -204,7 +204,7 @@
   },
   "competition": {
     "mode": "teams_and_individual",
-    "iterations": 2,
+    "iterations": 3,
     "scope_class_required": "LAB",
     "lab_host": "127.0.0.1",
     "lab_port": 8899,
@@ -337,8 +337,13 @@
       "2": {
         "red": "Una sola peticion por tarea (2 pasos -> 1); bono S-EFFICIENT +10% del base.",
         "blue": "Muestreo de logs cada 0.2s en vez de 1.0s; correlacion de dos eventos."
+      },
+      "3": {
+        "red": "Definiciones v4: verificación de alcance y enumeración mínima aplicadas (S-LEARNED).",
+        "blue": "Definiciones v4: muestreo 0.2s y correlación registrada (S-LEARNED)."
       }
     },
-    "efficiency_bonus": 0.1
+    "efficiency_bonus": 0.1,
+    "learned_bonus_percent": 0.05
   }
 }

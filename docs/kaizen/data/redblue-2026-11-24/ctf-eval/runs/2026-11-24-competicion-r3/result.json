@@ -1,0 +1,130 @@
+{
+  "run_id": "2026-11-24-competicion-r3",
+  "round": 3,
+  "sampling_s": 0.2,
+  "agents": {
+    "red-recon": {
+      "raw": 173.25,
+      "blue": 0.0,
+      "gov": {
+        "D2": 10,
+        "D3": 90,
+        "D4": 0,
+        "D5": 25,
+        "D6": 0
+      },
+      "status": "OK"
+    },
+    "red-net": {
+      "raw": 207.9,
+      "blue": 0.0,
+      "gov": {
+        "D2": 10,
+        "D3": 90,
+        "D4": 0,
+        "D5": 0,
+        "D6": 0
+      },
+      "status": "OK"
+    },
+    "red-access": {
+      "raw": 346.5,
+      "blue": 0.0,
+      "gov": {
+        "D2": 10,
+        "D3": 90,
+        "D4": 0,
+        "D5": 0,
+        "D6": 0
+      },
+      "status": "OK"
+    },
+    "red-ai": {
+      "raw": 207.9,
+      "blue": 0.0,
+      "gov": {
+        "D2": 10,
+        "D3": 90,
+        "D4": 0,
+        "D5": 0,
+        "D6": 0
+      },
+      "status": "OK"
+    },
+    "red-lab": {
+      "raw": 173.25,
+      "blue": 0.0,
+      "gov": {
+        "D2": 130,
+        "D3": 90,
+        "D4": 0,
+        "D5": 0,
+        "D6": 0
+      },
+      "status": "OK"
+    },
+    "blue-detect": {
+      "raw": 138.6,
+      "blue": 187.5,
+      "gov": {
+        "D2": 50,
+        "D3": 90,
+        "D4": 20,
+        "D5": 0,
+        "D6": 0
+      },
+      "status": "PARTIAL"
+    },
+    "blue-netdef": {
+      "raw": 166.32,
+      "blue": 187.5,
+      "gov": {
+        "D2": 50,
+        "D3": 90,
+        "D4": 20,
+        "D5": 0,
+        "D6": 0
+      },
+      "status": "PARTIAL"
+    },
+    "blue-iam": {
+      "raw": 17.32,
+      "blue": 0.0,
+      "gov": {
+        "D2": 50,
+        "D3": 90,
+        "D4": 20,
+        "D5": 0,
+        "D6": 0
+      },
+      "status": "PARTIAL"
+    },
+    "blue-ai": {
+      "raw": 166.32,
+      "blue": 187.5,
+      "gov": {
+        "D2": 50,
+        "D3": 90,
+        "D4": 20,
+        "D5": 0,
+        "D6": 0
+      },
+      "status": "PARTIAL"
+    },
+    "blue-ir": {
+      "raw": 138.6,
+      "blue": 187.5,
+      "gov": {
+        "D2": 50,
+        "D3": 90,
+        "D4": 20,
+        "D5": 25,
+        "D6": 0
+      },
+      "status": "PARTIAL"
+    }
+  },
+  "events_appended": 10,
+  "scope_violations": 0,
+  "flag": "HALT-REVIEW none"
+}

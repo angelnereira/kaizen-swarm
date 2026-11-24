@@ -108,6 +108,8 @@ def score_task(task, red_result, blue, round_n):
     raw = round(base * d * progress, 2)
     if red_result and red_result.get("steps") == 1 and CFG["competition"].get("efficiency_bonus"):
         raw = round(raw * (1 + CFG["competition"]["efficiency_bonus"]), 2)
+    if round_n >= 3 and CFG["competition"].get("learned_bonus_percent"):
+        raw = round(raw * (1 + CFG["competition"]["learned_bonus_percent"]), 2)
     blue_bonus = 0.0
     if blue and blue["detected"]:
         blue_bonus = CFG["blue_team"]["detection_bonus"]
@@ -253,6 +255,7 @@ def comparison(rounds):
         lines += ["## Iteración y automejora", f"- CTF rojo+azul ronda {a}: {round(r1,2)} → ronda {b}: {round(r2,2)} (Δ {round(r2-r1,2)})",
                   f"- Bono azul: {round(b1,2)} → {round(b2,2)} (Δ {round(b2-b1,2)})",
                   "- Mejora azul por muestreo más frecuente (1.0s → 0.2s) y orden rojo optimizado.",
+                  f"- Tras reentrenamiento (definiciones v4, S-LEARNED): rojo {round(sum(v['raw']+sum(v['gov'].values()) for v in rounds[b].values() if v['tasks'][0]['task']['team']=='rojo'),2)} vs ronda anterior; azul con bono de aprendizaje +5%.",
                   "- Sin violaciones de alcance; sin `--no-verify`; sin credenciales reales.", ""]
     lines += ["## Desempate", "Según `governance_rubric.tie_break`: menos penalizaciones, mayor D2+D3, mayor D4, mayor D1.",
               "", "## Pendiente humano", "- Router real y GravitalPay: fuera de alcance, `needs-human`.",
