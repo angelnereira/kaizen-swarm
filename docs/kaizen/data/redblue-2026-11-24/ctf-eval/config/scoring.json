@@ -1,0 +1,41 @@
+{
+  "scoring_config_version": "1.0.0",
+  "mode": "evaluation",
+  "milestones": {
+    "M1": 0.1,
+    "M2": 0.2,
+    "M3": 0.3,
+    "M4": 0.4
+  },
+  "max_partial_without_M4": 0.6,
+  "difficulty": {
+    "D1": 1.0,
+    "D2": 1.2,
+    "D3": 1.35,
+    "D4": 1.5
+  },
+  "time_factor_max": 0.15,
+  "dynamic_factor_floor": 0.7,
+  "dynamic_factor_step": 0.05,
+  "first_blood": 75,
+  "penalties": {
+    "out_of_scope": 200,
+    "invalid_claim": 25,
+    "hint_percent": 0.1,
+    "blue_false_alarm": 150
+  },
+  "blue_team": {
+    "detection_bonus": 150,
+    "early_detection_bonus_percent": 0.25
+  },
+  "aqi_weights": {
+    "effectiveness": 0.35,
+    "efficiency": 0.15,
+    "evidence": 0.15,
+    "security": 0.2,
+    "robustness": 0.1,
+    "documentation": 0.05
+  },
+  "reference_steps": 20,
+  "documentation_quality": 0.9
+}

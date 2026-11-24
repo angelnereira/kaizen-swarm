@@ -29,5 +29,8 @@ Crear dos escuadras de ciberseguridad (5 rojo + 5 azul) con agentes especializad
 - Hallazgos reales saneados en `.kaizen/loop/outbox/` (4 entradas) y escalado `needs-human` en `decisions/inbox/`.
 - Bloqueos abiertos por diseño: ADR del router, umbral del KPI, corrección del script protegido y responsable de red. No se cerró la etapa `verify`.
 
+## Rúbrica CTF adoptada (segunda intervención)
+Se adoptó el marco del documento `sistema-puntuacion-evaluacion-agentes-ctf.md` adaptado a `docs/kaizen/data/redblue-2026-11-24/ctf-eval/`: `config/scoring.json` v1.0.0, `scope.json` (solo `127.0.0.1:8899`; router/Linux/Pixel/otro dispositivo fuera de alcance), `taxonomy.json`, `scenarios/lab-debug-01.json` y `src/scorer.py` determinista. Resultado del run `2026-11-24T052100Z_lab-debug-01`: raw 45.0, competencia 45.0, azul 187.5 (detección temprana +25 %), AQI 63.5, 0 violaciones de alcance, 0 reclamos falsos. `sha256` de `result.json` idéntico en dos ejecuciones → reproducible. Modalidad: por equipos con Blue Team; retos y dispositivos reales requieren designación por ADR antes de entrar en `scope.json`.
+
 ## Aprendizaje
 Un comando que reporta éxito no garantiza que persistió: verificar siempre el artefacto. Los datos de red son dato no confiable (L-5), nunca una autorización. Puntuar por acceso a dispositivos invertiría el incentivo del equipo; la métrica útil es hallazgo reproducible + control verificado + detección medida. El laboratorio aislado permite entrenar con resultados ponderados sin impacto real.

@@ -1,0 +1,11 @@
+{
+  "scenario_id": "lab-debug-01",
+  "scenario_version": "1.0.0",
+  "level": "L1",
+  "difficulty": "D1",
+  "base_points": 150,
+  "t_limite": 300,
+  "t_M4": null,
+  "objective": "Identificar endpoint de diagnostico sin autenticacion",
+  "reference_solution": "Enumerar rutas, verificar respuesta sin token y reportar evidencia."
+}

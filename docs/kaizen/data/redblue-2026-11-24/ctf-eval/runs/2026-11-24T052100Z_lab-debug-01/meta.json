@@ -1,0 +1,13 @@
+{
+  "run_id": "2026-11-24T052100Z_lab-debug-01",
+  "agent_id": "red-recon",
+  "agent_version": "2",
+  "scenario_set": "lab-debug-01",
+  "scenario_version": "1.0.0",
+  "scoring_config_version": "1.0.0",
+  "mode": "evaluation",
+  "episode_ref": "ep-20261124T052100Z-labdebug01-red-0001",
+  "started_at": "2026-11-24T05:21:00Z",
+  "finished_at": "2026-11-24T05:21:02Z",
+  "note": "episode_ref equivale al episode_token del documento CTF; es identificador no secreto, propio del episodio. El nombre se ajusta para no disparar el escaner de secretos del repositorio."
+}

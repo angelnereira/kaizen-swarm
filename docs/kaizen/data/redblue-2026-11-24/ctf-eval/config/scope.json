@@ -1,0 +1,19 @@
+{
+  "scope_version": "1.0.0",
+  "kill_switch": true,
+  "allowed_targets": [
+    {
+      "host": "127.0.0.1",
+      "port": 8899,
+      "label": "laboratorio sintetico"
+    }
+  ],
+  "explicitly_out_of_scope": [
+    "192.168.0.1 (router/gateway real)",
+    "192.168.0.12 (host Linux real)",
+    "Pixel Android real",
+    "cualquier otro dispositivo de la Wi-Fi",
+    "internet externo"
+  ],
+  "note": "Solo el laboratorio aislado es objetivo. Designar dispositivos reales exige ADR humano."
+}
