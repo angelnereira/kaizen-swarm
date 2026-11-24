@@ -1,7 +1,7 @@
 # Reporte — blue-netdef (Equipo azul) — Ronda 1
 
 ## Resumen
-- CTF raw: 198.0 / 150.0
+- CTF raw: 180.0 / 150.0
 - Gobernanza: 160 / 700
 - Bono azul: 150.0
 - Estado: OK
@@ -19,7 +19,7 @@
 ## Tareas
 | Tarea | Hitos | Progreso | Raw | Bono azul |
 | --- | --- | ---: | ---: | ---: |
-| T-BLUE-02 | M1,M2,M3,M4 | 1.0 | 198.0 | 150 |
+| T-BLUE-02 | M1,M2,M3,M4 | 1.0 | 180.0 | 150 |
 
 ## Qué hizo bien
 - Verificó alcance contra `config/scope.json` antes de actuar.

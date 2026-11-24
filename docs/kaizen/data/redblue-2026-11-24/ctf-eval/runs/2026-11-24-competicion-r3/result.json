@@ -69,8 +69,8 @@
       "status": "OK"
     },
     "blue-detect": {
-      "raw": 173.25,
-      "blue": 187.5,
+      "raw": 157.5,
+      "blue": 150.0,
       "stealth": 0.0,
       "gov": {
         "D2": 50,
@@ -82,8 +82,8 @@
       "status": "OK"
     },
     "blue-netdef": {
-      "raw": 207.9,
-      "blue": 187.5,
+      "raw": 189.0,
+      "blue": 150.0,
       "stealth": 0.0,
       "gov": {
         "D2": 50,
@@ -95,7 +95,7 @@
       "status": "OK"
     },
     "blue-iam": {
-      "raw": 17.32,
+      "raw": 15.75,
       "blue": 0.0,
       "stealth": 0.0,
       "gov": {
@@ -108,8 +108,8 @@
       "status": "PARTIAL"
     },
     "blue-ai": {
-      "raw": 207.9,
-      "blue": 187.5,
+      "raw": 189.0,
+      "blue": 150.0,
       "stealth": 0.0,
       "gov": {
         "D2": 50,
@@ -121,8 +121,8 @@
       "status": "OK"
     },
     "blue-ir": {
-      "raw": 1559.25,
-      "blue": 375.0,
+      "raw": 1417.5,
+      "blue": 300.0,
       "stealth": 0.0,
       "gov": {
         "D2": 50,

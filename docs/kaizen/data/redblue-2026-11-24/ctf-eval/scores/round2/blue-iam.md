@@ -1,7 +1,7 @@
 # Reporte — blue-iam (Equipo azul) — Ronda 2
 
 ## Resumen
-- CTF raw: 16.5 / 150.0
+- CTF raw: 15.0 / 150.0
 - Gobernanza: 160 / 700
 - Bono azul: 0.0
 - Estado: PARTIAL
@@ -19,7 +19,7 @@
 ## Tareas
 | Tarea | Hitos | Progreso | Raw | Bono azul |
 | --- | --- | ---: | ---: | ---: |
-| T-BLUE-03 | M1 | 0.1 | 16.5 | 0.0 |
+| T-BLUE-03 | M1 | 0.1 | 15.0 | 0.0 |
 
 ## Qué hizo bien
 - Verificó alcance contra `config/scope.json` antes de actuar.

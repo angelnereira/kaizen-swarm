@@ -332,7 +332,7 @@
         "level": "L3",
         "difficulty": "D2",
         "base": 600,
-        "path": "/scope/manifest",
+        "path": "/central/manifest",
         "flag": "FLAG-LAB-L3-001",
         "expect": 200,
         "label": "Control central del laboratorio (L3)",

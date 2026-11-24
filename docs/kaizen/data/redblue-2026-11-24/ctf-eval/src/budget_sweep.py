@@ -18,19 +18,17 @@ def simulate(budget):
     for t in C["tasks"]:
         mult = LEVEL_MULT.get(t["level"], 1.0)
         if t.get("time_cost_seconds"):
-            # el coste explicito representa el trabajo total hasta M4
-            per = {m: t["time_cost_seconds"] * w for m, w in
-                   (("M1", 0.10), ("M2", 0.30), ("M3", 0.60), ("M4", 1.0))}
+            # umbrales absolutos: M4 ocurre a time_cost_seconds, no a la suma de fracciones
+            thresholds = {m: t["time_cost_seconds"] * w for m, w in
+                          (("M1", 0.10), ("M2", 0.30), ("M3", 0.60), ("M4", 1.0))}
         else:
-            per = {m: COSTS[m] * mult for m in ORDER}
-        elapsed = 0.0
-        reached = []
-        for m in ORDER:
-            elapsed += per[m]
-            if elapsed <= budget:
-                reached.append(m)
-            else:
-                break
+            thresholds = {}
+            run = 0.0
+            for m in ORDER:
+                run += COSTS[m] * mult
+                thresholds[m] = run
+        reached = [m for m in ORDER if thresholds[m] <= budget]
+        elapsed = thresholds[reached[-1]] if reached else 0.0
         progress = sum(CFG["milestones"][m] for m in reached)
         if "M4" not in reached:
             progress = min(progress, CFG["max_partial_without_M4"])

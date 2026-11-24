@@ -1,7 +1,7 @@
 # Reporte — blue-ir (Equipo azul) — Ronda 1
 
 ## Resumen
-- CTF raw: 1485.0 / 1150.0
+- CTF raw: 1350.0 / 1150.0
 - Gobernanza: 185 / 700
 - Bono azul: 300.0
 - Estado: OK
@@ -19,8 +19,8 @@
 ## Tareas
 | Tarea | Hitos | Progreso | Raw | Bono azul |
 | --- | --- | ---: | ---: | ---: |
-| T-BLUE-05 | M1,M2,M3,M4 | 1.0 | 165.0 | 150 |
-| T-L4-01 | M1,M2,M3,M4 | 1.0 | 1320.0 | 150 |
+| T-BLUE-05 | M1,M2,M3,M4 | 1.0 | 150.0 | 150 |
+| T-L4-01 | M1,M2,M3,M4 | 1.0 | 1200.0 | 150 |
 
 ## Qué hizo bien
 - Verificó alcance contra `config/scope.json` antes de actuar.

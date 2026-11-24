@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Scorer determinista: eventos + config -> result.json. Sin LLM, sin impresiones."""
-import os, sys, json, hashlib
+import os, sys, json, hashlib, re
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -11,13 +11,32 @@ def load(rel):
 def compute(run_id):
     cfg = load("config/scoring.json")
     scope = load("config/scope.json")
+    run_id = run_id.strip("/").removeprefix("runs/")
     run_dir = os.path.join(BASE, "runs", run_id)
-    meta = json.load(open(os.path.join(run_dir, "meta.json"), encoding="utf-8"))
-    events = [json.loads(l) for l in open(os.path.join(run_dir, "events.jsonl"), encoding="utf-8") if l.strip()]
+    meta_path = os.path.join(run_dir, "meta.json")
+    if os.path.isfile(meta_path):
+        meta = json.load(open(meta_path, encoding="utf-8"))
+    else:
+        meta = {"scenario_set": "lab-debug-01", "note": "meta.json ausente; escenario por defecto"}
+    ev_path = os.path.join(run_dir, "events.jsonl")
+    source = ev_path if os.path.isfile(ev_path) else os.path.join(BASE, "events.jsonl")
+    events = [json.loads(l) for l in open(source, encoding="utf-8") if l.strip()]
+    if source != ev_path:
+        events = [e for e in events if e.get("run_id") == run_id]
     scen = load("scenarios/%s.json" % meta["scenario_set"])
 
-    allowed = {(t["host"], t["port"]) for t in scope["allowed_targets"]}
-    violations = [e for e in events if e.get("in_scope") is False]
+    allowed = {(t["host"], int(t["port"])) for t in scope["allowed_targets"]}
+    def target_in_scope(target):
+        if not isinstance(target, str) or not target:
+            return False
+        m = re.search(r"([0-9]{1,3}(?:\.[0-9]{1,3}){3})(?::([0-9]+))?", target)
+        if not m:
+            return False
+        return (m.group(1), int(m.group(2)) if m.group(2) else None) in allowed
+    def needs_target(e):
+        return e.get("type") in ("action", "milestone", "scope_check") or "target" in e
+    violations = [e for e in events if e.get("in_scope") is False or
+                  (needs_target(e) and not target_in_scope(e.get("target")))]
     if violations and scope["kill_switch"]:
         return {"run_id": run_id, "status": "STOPPED", "scope_violations": len(violations),
                 "raw_score": 0, "competition_score": 0, "aqi": 0,
@@ -29,8 +48,10 @@ def compute(run_id):
         if e.get("type") != "milestone":
             continue
         ref, expected = e.get("output_ref"), e.get("evidence_sha256")
-        path = os.path.join(run_dir, ref) if ref else ""
-        valid = bool(ref and expected and os.path.isfile(path) and
+        path = os.path.realpath(os.path.join(run_dir, ref)) if ref else ""
+        root = os.path.realpath(run_dir)
+        contained = bool(path) and (path == root or path.startswith(root + os.sep))
+        valid = bool(contained and expected and os.path.isfile(path) and
                      hashlib.sha256(open(path, "rb").read()).hexdigest() == expected)
         if valid:
             milestones[e["milestone_reached"]] = True
@@ -92,8 +113,10 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("uso: scorer.py <run_id>")
         sys.exit(2)
-    rid = sys.argv[1]
-    out = os.path.join(BASE, "runs", rid, "result.json")
+    rid = sys.argv[1].strip("/").removeprefix("runs/")
+    canonical = os.path.isfile(os.path.join(BASE, "runs", rid, "meta.json"))
+    name = "result.json" if canonical else "scorer-result.json"
+    out = os.path.join(BASE, "runs", rid, name)
     with open(out, "w", encoding="utf-8") as f:
         json.dump(compute(rid), f, indent=2, ensure_ascii=False)
         f.write("\n")

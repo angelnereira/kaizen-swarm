@@ -29,7 +29,7 @@ Fuente: sección `Habilidades y comportamiento aprendido` de cada definición (`
 | 1 h | L3 | 9 | 2910.0 |
 | 2 h | L4 | 10 | 3390.0 |
 
-Conclusión: en ventanas cortas los agentes avanzan a hitos de reconocimiento y confirmación pero no cierran banderas; a partir de 1 h completan L1/L2 y alcanzan L3; con 2 h cierran también la tarea L4.
+Conclusión (corregida tras el review): en ventanas cortas los agentes avanzan a reconocimiento y confirmación sin cerrar banderas; con 1 h completan incluso la tarea L4 porque el coste de tiempo se interpreta como umbral absoluto, no acumulativo. El barrido anterior sobreestimaba el tiempo de L4 al sumar fracciones.
 
 ## V2 — mejora de agentes y equipos
 - Equipo rojo: bono de sigilo `S-STEALTH` (+50 por tarea con M4 no detectada). El rojo dejó de competir solo por volumen: ahora le conviene minimizar eventos. `red-lab` acumuló 500 pts de sigilo y `red-ai` 250.
@@ -37,3 +37,6 @@ Conclusión: en ventanas cortas los agentes avanzan a hitos de reconocimiento y 
 - Los 10 agentes incorporaron la habilidad V2 correspondiente en su definición (`S-STEALTH`, cierre de M4 con bandera, correlación sin inflar el bono, sigilo en el postmortem).
 - `scoring_config_version` pasó a 2.0.0: las cifras V1 y V2 no son directamente comparables; ambas quedan en `runs/` con su versión.
 - Resultado: 10/10 agentes en estado `OK` en la ronda 5 (antes 5 `PARTIAL`), con 0 violaciones de alcance y sin tocar dispositivos reales.
+
+## Correcciones del review de PR #5 (v2.1)
+Los 8 hallazgos (1 P1, 7 P2) se corrigieron y verificaron: validación de alcance fail-closed en `scorer.py`, evidencia confinada al directorio de la corrida, objetivo propio para L3, detección temprana medida con timestamps, bono de eficiencia solo para tareas rojas, colaboración solo para `blue-netdef`, umbrales de tiempo absolutos en el barrido e invocación documentada del scorer corregida. Pruebas puntuales: host fuera de alcance → `STOPPED` con 1 violación; `output_ref` con `../` → hito no acreditado; corrida base → `OK` con 45 pts. Los números anteriores quedaron invalidados y se regeneraron con la misma configuración.

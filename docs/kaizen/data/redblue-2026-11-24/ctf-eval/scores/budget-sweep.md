@@ -10,7 +10,7 @@ Presupuestos: 10min (600s), 1h (3600s), 2h (7200s), 5min (300s)
 | 10min | red-net | rojo | L1 | M1,M2,M3 | 0.6 | 108.0 |
 | 10min | red-access | rojo | L2 | M1,M2 | 0.3 | 90.0 |
 | 10min | red-ai | rojo | L1 | M1,M2,M3 | 0.6 | 108.0 |
-| 10min | red-lab | rojo | L3 | M1 | 0.1 | 72.0 |
+| 10min | red-lab | rojo | L3 | M1,M2 | 0.3 | 216.0 |
 | 10min | blue-detect | azul | L1 | M1,M2,M3 | 0.6 | 90.0 |
 | 10min | blue-netdef | azul | L1 | M1,M2,M3 | 0.6 | 108.0 |
 | 10min | blue-iam | azul | L1 | M1,M2,M3 | 0.6 | 90.0 |
@@ -25,7 +25,7 @@ Presupuestos: 10min (600s), 1h (3600s), 2h (7200s), 5min (300s)
 | 1h | blue-netdef | azul | L1 | M1,M2,M3,M4 | 1.0 | 180.0 |
 | 1h | blue-iam | azul | L1 | M1,M2,M3,M4 | 1.0 | 150.0 |
 | 1h | blue-ai | azul | L1 | M1,M2,M3,M4 | 1.0 | 180.0 |
-| 1h | blue-ir | azul | L4 | M1,M2,M3 | 0.6 | 720.0 |
+| 1h | blue-ir | azul | L4 | M1,M2,M3,M4 | 1.0 | 1200.0 |
 | 2h | red-recon | rojo | L1 | M1,M2,M3,M4 | 1.0 | 150.0 |
 | 2h | red-net | rojo | L1 | M1,M2,M3,M4 | 1.0 | 180.0 |
 | 2h | red-access | rojo | L2 | M1,M2,M3,M4 | 1.0 | 300.0 |
@@ -55,21 +55,21 @@ Presupuestos: 10min (600s), 1h (3600s), 2h (7200s), 5min (300s)
 | red-net | L1 (M2) | L1 (M2) | L1 completo | L1 completo |
 | red-access | L2 (M2) | L2 (M2) | L2 completo | L2 completo |
 | red-ai | L1 (M2) | L1 (M2) | L1 completo | L1 completo |
-| red-lab | M1 | M1 | L3 completo | L3 completo |
+| red-lab | M1 | L3 (M2) | L3 completo | L3 completo |
 | blue-detect | L1 (M2) | L1 (M2) | L1 completo | L1 completo |
 | blue-netdef | L1 (M2) | L1 (M2) | L1 completo | L1 completo |
 | blue-iam | L1 (M2) | L1 (M2) | L1 completo | L1 completo |
 | blue-ai | L1 (M2) | L1 (M2) | L1 completo | L1 completo |
-| blue-ir | sin avance | M1 | L4 (M2) | L4 completo |
-| red-lab | M1 | M1 | L3 completo | L3 completo |
-| blue-ir | sin avance | M1 | L4 (M2) | L4 completo |
+| blue-ir | sin avance | M1 | L4 completo | L4 completo |
+| red-lab | M1 | L3 (M2) | L3 completo | L3 completo |
+| blue-ir | sin avance | M1 | L4 completo | L4 completo |
 
 ## Totales por presupuesto
 
 | Presupuesto | Raw total | M4 completados | Nivel más alto |
 | --- | ---: | ---: | --- |
-| 10min | 984.0 | 0 | L0 |
-| 1h | 2910.0 | 9 | L3 |
+| 10min | 1128.0 | 0 | L0 |
+| 1h | 3390.0 | 10 | L4 |
 | 2h | 3390.0 | 10 | L4 |
 | 5min | 513.0 | 0 | L0 |
 

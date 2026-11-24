@@ -113,7 +113,8 @@ def score_task(task, red_result, blue, round_n):
     if "M4" not in ms:
         progress = min(progress, CFG["max_partial_without_M4"])
     raw = round(base * d * progress, 2)
-    if red_result and red_result.get("steps") == 1 and CFG["competition"].get("efficiency_bonus"):
+    if (task["team"] == "rojo" and round_n >= 2 and red_result and
+            red_result.get("steps") == 1 and CFG["competition"].get("efficiency_bonus")):
         raw = round(raw * (1 + CFG["competition"]["efficiency_bonus"]), 2)
     if round_n >= 3 and CFG["competition"].get("learned_bonus_percent"):
         raw = round(raw * (1 + CFG["competition"]["learned_bonus_percent"]), 2)
@@ -189,9 +190,18 @@ def run_round(srv, round_n):
             if st == 401:
                 hits = [f"{now()} verification GET /admin -> 401"]
                 LOG_LINES.extend(hits)
+        detected_at = datetime.datetime.now(datetime.timezone.utc)
+        latency = None
+        if hits:
+            try:
+                first_ts = datetime.datetime.fromisoformat(hits[0].split()[0])
+                latency = (detected_at - first_ts).total_seconds()
+            except (ValueError, IndexError):
+                latency = None
         blue_results[t["id"]] = {"detected": bool(hits), "hits": len(hits), "hit_lines": list(hits),
                                  "sampling_s": interval, "first": hits[0] if hits else None,
-                                 "early": bool(hits) and interval <= 0.2,
+                                 "latency_s": round(latency, 4) if latency is not None else None,
+                                 "early": bool(hits) and latency is not None and latency <= interval,
                                  "flag": t.get("flag") if hits else None}
 
     for t in COMP["tasks"]:

@@ -1,7 +1,7 @@
 {
   "run_id": "2026-11-24T052100Z_lab-debug-01",
   "status": "OK",
-  "scoring_config_version": "1.0.0",
+  "scoring_config_version": "2.0.0",
   "totals": {
     "raw_score": 45.0,
     "competition_score": 45.0,
