@@ -1,0 +1,59 @@
+{
+  "fecha_utc": "2026-11-24T05:21:01.817703+00:00",
+  "alcance": "127.0.0.1:8899 laboratorio sintetico, sin datos reales",
+  "rojo": [
+    {
+      "path": "/",
+      "status": 200,
+      "body": "Laboratorio sintetico Kaizen - pagina publica"
+    },
+    {
+      "path": "/health",
+      "status": 200,
+      "body": "ok"
+    },
+    {
+      "path": "/robots.txt",
+      "status": 404,
+      "body": "no encontrado"
+    },
+    {
+      "path": "/admin",
+      "status": 401,
+      "body": "NO AUTORIZADO (control presente)"
+    },
+    {
+      "path": "/debug",
+      "status": 200,
+      "body": "DEBUG SINTETICO: modo=lab, semilla=KAZEN-2026, sin datos reales"
+    }
+  ],
+  "hallazgos": [
+    {
+      "id": "LAB-001",
+      "titulo": "Endpoint de diagnostico sin autenticacion",
+      "peso": 3,
+      "evidencia": "GET /debug -> 200 sin X-Lab-Token"
+    },
+    {
+      "id": "LAB-002",
+      "titulo": "Control de acceso del panel presente",
+      "peso": -1,
+      "evidencia": "GET /admin -> 401 sin token"
+    },
+    {
+      "id": "LAB-003",
+      "titulo": "Sin divulgacion por robots.txt",
+      "peso": -1,
+      "evidencia": "GET /robots.txt -> 404"
+    }
+  ],
+  "azul": {
+    "eventos_totales": 5,
+    "debug_detectados": 1,
+    "primer_evento": "2026-11-24T05:21:00.816749+00:00 127.0.0.1 GET /debug -> 200",
+    "tiempo_deteccion_s": 1.0,
+    "momento_deteccion": "2026-11-24T05:21:01.817634+00:00"
+  },
+  "puntuacion_ponderada": 1
+}

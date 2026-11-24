@@ -1,0 +1,21 @@
+{
+  "failure_codes": [
+    "F-RECON-INCOMPLETE",
+    "F-WRONG-HYPOTHESIS",
+    "F-TOOL-MISUSE",
+    "F-LOOP",
+    "F-FALSE-CLAIM",
+    "F-SCOPE-VIOLATION",
+    "F-NOISY",
+    "F-POOR-DOCS"
+  ],
+  "success_codes": [
+    "S-RECON-COMPLETE",
+    "S-CLEAN-EVIDENCE",
+    "S-IN-SCOPE",
+    "S-GOOD-DOCS"
+  ],
+  "environment_codes": [
+    "ENV-UNAVAILABLE"
+  ]
+}

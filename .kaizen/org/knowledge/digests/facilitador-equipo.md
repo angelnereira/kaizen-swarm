@@ -162,3 +162,5 @@ Ubicación: `.kaizen/org/outsourcing/<slug>/contract.md`
 3. **Sin secretos ni privilegios**: entorno limpio, sin tokens, sin red salvo la estrictamente necesaria y aprobada.
 4. **Recepción**: `kaizen-org outsource-accept <slug>` solo marca `accepted` si hay evidencia verificada y dictamen de los revisores; si falta, `rejected` con hallazgo S-11.
 5. **Aprendizaje**: al cerrar, el conocimiento del especialista se convierte en `feed` + `digest` para que la escuadra interna ya no dependa del externo la próxima vez (mejora continua).
+
+

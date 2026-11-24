@@ -1,0 +1,52 @@
+# Evidencia de descubrimiento — 2026-11-24
+
+## Fecha UTC
+2026-11-24T05:16:28Z
+
+## Host
+angel-nereira-HP-ProBook-440-14-inch-G9-Notebook-PC
+
+## Interfaces
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp3s0           DOWN           
+wlp0s20f3        UP             192.168.0.12/24 fe80::e7a3:2b11:8282:2a54/64 
+
+## Rutas
+default via 192.168.0.1 dev wlp0s20f3 proto dhcp src 192.168.0.12 metric 600 
+192.168.0.0/24 dev wlp0s20f3 proto kernel scope link src 192.168.0.12 metric 600 
+
+## Cache ARP
+192.168.0.253 dev wlp0s20f3 lladdr 00:00:ca:01:02:03 STALE 
+192.168.0.5 dev wlp0s20f3 lladdr e6:ed:61:13:a8:3a REACHABLE 
+192.168.0.1 dev wlp0s20f3 lladdr a4:98:13:d8:9c:fd REACHABLE 
+192.168.0.8 dev wlp0s20f3 lladdr 46:58:31:90:a9:48 STALE 
+192.168.0.254 dev wlp0s20f3 lladdr 00:00:ca:01:02:04 STALE 
+192.168.0.3 dev wlp0s20f3 lladdr ca:04:e0:d1:b7:f7 STALE 
+fe80::a698:13ff:fed8:9cfd dev wlp0s20f3 lladdr a4:98:13:d8:9c:fd router STALE 
+
+## Puertos en escucha del host propio
+Netid State  Recv-Q Send-Q                         Local Address:Port  Peer Address:PortProcess                             
+udp   UNCONN 0      0                                 127.0.0.54:53         0.0.0.0:*                                       
+udp   UNCONN 0      0                              127.0.0.53%lo:53         0.0.0.0:*                                       
+udp   UNCONN 0      0                                  127.0.0.1:323        0.0.0.0:*                                       
+udp   UNCONN 0      0                                  127.0.0.1:33797      0.0.0.0:*    users:(("adb",pid=1725091,fd=7))   
+udp   UNCONN 0      0                                    0.0.0.0:5353       0.0.0.0:*    users:(("adb",pid=1725091,fd=4))   
+udp   UNCONN 0      0                                    0.0.0.0:5353       0.0.0.0:*                                       
+udp   UNCONN 0      0                                      [::1]:323           [::]:*                                       
+udp   UNCONN 0      0      [fe80::e7a3:2b11:8282:2a54]%wlp0s20f3:546           [::]:*                                       
+udp   UNCONN 0      0                                       [::]:5353          [::]:*                                       
+tcp   LISTEN 0      4096                           127.0.0.53%lo:53         0.0.0.0:*                                       
+tcp   LISTEN 0      5                                  127.0.0.1:8788       0.0.0.0:*    users:(("python3",pid=508211,fd=3))
+tcp   LISTEN 0      4096                               127.0.0.1:39375      0.0.0.0:*                                       
+tcp   LISTEN 0      128                                127.0.0.1:5037       0.0.0.0:*    users:(("adb",pid=1725091,fd=10))  
+tcp   LISTEN 0      200                                127.0.0.1:5432       0.0.0.0:*                                       
+tcp   LISTEN 0      4096                              127.0.0.54:53         0.0.0.0:*                                       
+tcp   LISTEN 0      151                                127.0.0.1:3306       0.0.0.0:*                                       
+tcp   LISTEN 0      4096                               127.0.0.1:3903       0.0.0.0:*                                       
+tcp   LISTEN 0      4096                               127.0.0.1:3900       0.0.0.0:*                                       
+tcp   LISTEN 0      70                                 127.0.0.1:33060      0.0.0.0:*                                       
+tcp   LISTEN 0      512                                127.0.0.1:49374      0.0.0.0:*    users:(("opencode",pid=4784,fd=10))
+tcp   LISTEN 0      4096                               127.0.0.1:631        0.0.0.0:*                                       
+tcp   LISTEN 0      4096                                   [::1]:631           [::]:*                                       
+tcp   LISTEN 0      4096                                       *:8081             *:*                                       
+tcp   LISTEN 0      4096                                       *:8080             *:*                                       

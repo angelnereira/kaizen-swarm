@@ -2,7 +2,7 @@
 
 Fuente única: `.kaizen/org/prompts/<id>.md`. Generado por `scripts/kaizen-org catalog`; no editar a mano.
 
-Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 47 agentes
+Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-24 | Total: 57 agentes
 
 ## Resumen por departamento
 
@@ -13,7 +13,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 47 agentes
 | gerencia | 3 | 3 | none, resource |
 | operaciones | 3 | 2 | none |
 | producto-negocio | 8 | 8 | none, scope, security |
-| tecnologia | 26 | 26 | architecture, none, qa, security |
+| tecnologia | 36 | 36 | architecture, none, qa, security |
 
 ## Inventario
 
@@ -24,6 +24,11 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 47 agentes
 | `analista-negocios` | Analista Oficial de Negocios | producto-negocio | active | high | scoped | scope | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Criterios de aceptacion completos y trazables] |
 | `architect` | Arquitecto de Software | tecnologia | active | high | scoped | architecture | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Contratos documentados y sin deuda arquitectural] |
 | `auditor-riesgos` | Auditor de Riesgos Empresariales | producto-negocio | active | high | scoped | security | 1 | [read, write-docs, research-web, run-checks, report] | [decision.proposed, issue.label:auditor-riesgos, research.required:*] | 4 | [0 dictamenes sin fuente verificada, 100% de decisiones sensibles escaladas a humano] |
+| `blue-ai` | IA Defensiva | tecnologia | active | high | propose | none | 6 | [read, write-docs, run-checks, report] | [task.assigned:ai-defense, handoff.from:blue-detect] | 5 | [0 datos personales en telemetria; precision medida con datos sinteticos, raw >= 150 por ronda; 0 violaciones de alcance] |
+| `blue-detect` | Deteccion y Monitoreo | tecnologia | active | high | propose | none | 8 | [read, write-docs, run-checks, report] | [task.assigned:detect, alert.from:red-*] | 5 | [tiempo de deteccion medido en laboratorio; 100% de eventos con timestamp y fuente, raw >= 150 por ronda; 0 violaciones de alcance] |
+| `blue-iam` | Identidad y Accesos | tecnologia | active | high | propose | none | 8 | [read, write-docs, run-checks, report] | [task.assigned:iam, handoff.from:red-access] | 5 | [0 accesos remotos sin control documentado; 0 secretos en repositorio, raw >= 150 por ronda; 0 violaciones de alcance] |
+| `blue-ir` | Respuesta a Incidentes | tecnologia | active | high | propose | none | 8 | [read, write-docs, run-checks, report] | [alert.*, task.assigned:ir, project.created] | 6 | [100% de hallazgos con leccion registrada en <=5 dias; 0 secretos, raw >= 150 por ronda; 0 violaciones de alcance] |
+| `blue-netdef` | Defensa de Red | tecnologia | active | high | propose | none | 6 | [read, write-docs, run-checks, report] | [task.assigned:netdef, handoff.from:red-net] | 5 | [>=1 control propuesto con source_id (NIST-001/OWASP-001/ISO-001), raw >= 150 por ronda; 0 violaciones de alcance] |
 | `business-profiles-architect` | Arquitecto de Perfiles de Negocio | producto-negocio | active | high | scoped | scope | 1 | [read, write-docs, run-checks, report] | [research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista] | 1 | [verticales sin condicionales y capacidades documentadas] |
 | `capacidades-negocio` | Especialista en Capacidades Tecnológicas, Financieras y de Mercadeo | conocimiento | active | high | propose | none | 1 | [read, write-docs, research-web, run-checks, report] | [issue.label:capacidades, research.required:*, knowledge.updated:*, schedule:weekly] | 8 | [recomendaciones con supuestos, baseline y verificación, 0 cifras sin fuente, conocimiento revalidado trimestralmente] |
 | `computer-operator` | Operador de Escritorio (Computer Use) | operaciones | paused | medium | scoped | none | 1 | [read, write-docs, report, desktop-control] | [computer_use.authorized:*, issue.label:desktop] | 3 | [0 acciones sin captura previa, 100% de acciones confirmadas por recaptura, 0 secretos en pantalla] |
@@ -57,6 +62,11 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 47 agentes
 | `product-owner` | Product Owner | producto-negocio | active | high | scoped | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Backlog sin items ambiguos y cierre con evidencia] |
 | `qa` | Equipo de QA | tecnologia | active | high | scoped | qa | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Toda correccion con prueba que falla primero] |
 | `rea-specialist` | Especialista en Ingeniería Inversa y Depuración Profunda (REA) | tecnologia | active | high | scoped | none | 1 | [read, write-docs, research-web, run-checks, report, rea-mcp] | [research.required:*, issue.label:depuracion, reverse_engineering.authorized:*, knowledge.updated:*] | 4 | [hallazgos con evidencia reproducible, 0 análisis sin autorización escrita, 0 secretos en reportes] |
+| `red-access` | Pruebas de Acceso | tecnologia | active | high | propose | none | 6 | [read, write-docs, run-checks, report] | [task.assigned:access, handoff.from:red-net] | 6 | [0 credenciales reales usadas; 100% de intentos en laboratorio; hallazgos en S-11, raw >= 150 por ronda; 0 violaciones de alcance] |
+| `red-ai` | IA Ofensiva Controlada | tecnologia | active | high | propose | none | 6 | [read, write-docs, run-checks, report] | [task.assigned:ai-offense, handoff.from:red-lab] | 5 | [casos generados con semilla y salida reproducible; 0 prompts con secretos, raw >= 150 por ronda; 0 violaciones de alcance] |
+| `red-lab` | Laboratorio y Alcance Rojo | tecnologia | active | high | propose | none | 6 | [read, write-docs, run-checks, report] | [project.created, task.assigned:lab, blocker.*] | 5 | [100% de pruebas con alcance aprobado y rollback; 0 pruebas fuera de rango, raw >= 150 por ronda; 0 violaciones de alcance] |
+| `red-net` | Redes y Protocolos Ofensivos | tecnologia | active | high | propose | none | 6 | [read, write-docs, run-checks, report] | [task.assigned:net, handoff.from:red-recon, schedule:daily] | 6 | [>=1 hallazgo de protocolo con evidencia reproducible; 0 interrupciones de servicio, raw >= 150 por ronda; 0 violaciones de alcance] |
+| `red-recon` | Reconocimiento Ofensivo | tecnologia | active | high | propose | none | 6 | [read, write-docs, run-checks, report] | [project.created, task.assigned:recon, schedule:daily] | 8 | [100% de hosts listados con comando reproducible; 0 secretos; 0 dispositivos fuera de alcance, raw >= 150 por ronda; 0 violaciones de alcance] |
 | `researcher` | Investigador de Tecnologia | conocimiento | active | medium | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Experimentos con numeros reales y decision registrada] |
 | `reverse-api-specialist` | Especialista en Ingeniería Inversa de APIs Web | tecnologia | active | high | scoped | none | 1 | [read, write-docs, research-web, run-checks, report, rae-api-cli] | [issue.label:api-recon, api_reverse_engineering.authorized:*, research.required:*, knowledge.updated:*] | 5 | [0 capturas sin autorización, 100% de clientes generados con run_id y HAR, 0 secretos en HAR versionado] |
 | `runbooks` | Responsable de Runbooks | operaciones | active | medium | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Runbooks probados y al dia] |
@@ -64,7 +74,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 47 agentes
 | `security` | Seguridad y Auditoria | tecnologia | active | high | propose | security | 1 | [read, audit, report] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [0 secretos y 0 supresiones sin issue] |
 | `soporte` | Especialista de Soporte y Respuesta | operaciones | active | high | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Reproducciones documentadas y respuesta medida] |
 | `systems` | Ingeniero de Sistemas | tecnologia | active | medium | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Diseno con bajo acoplamiento] |
-| `verificador-evidencias` | Verificador de Evidencias | conocimiento | active | high | scoped | none | 1 | [read, write-docs, research-web, run-checks, report] | [decision.proposed, source.stale, schedule:weekly, regulatory.change:*] | 5 | [0 decisiones con source_ids no verificados, fuentes revalidadas cada 90 dias, conflictos escalados a humano] |
+| `verificador-evidencias` | Verificador de Evidencias | conocimiento | active | high | scoped | none | 3 | [read, write-docs, research-web, run-checks, report] | [decision.proposed, source.stale, schedule:weekly, regulatory.change:*] | 5 | [0 decisiones con source_ids no verificados, fuentes revalidadas cada 90 dias, conflictos escalados a humano] |
 | `vertical-domain-specialist` | Especialista en Verticales Comerciales | producto-negocio | active | medium | propose | none | 1 | [read, write-docs, run-checks, report] | [research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista] | 1 | [recorridos por vertical verificados con el negocio] |
 
 ## Fichas por departamento
@@ -110,6 +120,11 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 47 agentes
 - **`ai`** — Experto en IA. Propósito: Disena prompts, guardrails y evaluacion de agentes.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`ai-rag-engineer`** — Ingeniero de IA y RAG. Propósito: Diseña recuperación semántica con PostgreSQL y pgvector, orquestación n8n y evaluaciones reproducibles.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`architect`** — Arquitecto de Software. Propósito: Define limites, contratos y ADR; arbitra disputas tecnicas.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`blue-ai`** — IA Defensiva. Propósito: Detectar anomalias con IA y correlacionar telemetria saneada sin datos personales.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`blue-detect`** — Deteccion y Monitoreo. Propósito: Detectar y correlacionar actividad de la red propia usando logs y observabilidad local.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`blue-iam`** — Identidad y Accesos. Propósito: Verificar identidad, privilegio minimo y superficies de acceso remoto.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`blue-ir`** — Respuesta a Incidentes. Propósito: Contener, documentar y aprender de los incidentes del ejercicio rojo/azul.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`blue-netdef`** — Defensa de Red. Propósito: Endurecer protocolos y comunicaciones: segmentacion, firewall, DNS y Wi-Fi.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`data-expert`** — Experto en Datos. Propósito: Define schemas, calidad de datos y privacidad.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`dev1-core`** — Dev Core y Dominio. Propósito: Implementa invariantes y modelos de negocio.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`dev2-api`** — Dev API e Integraciones. Propósito: Expone contratos, eventos y conectores.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
@@ -129,6 +144,11 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-23 | Total: 47 agentes
 - **`product`** — Analista de Producto y Alcance. Propósito: Valida criterios y alcance minimo del issue.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`qa`** — Equipo de QA. Propósito: Escribe pruebas de reproduccion, regresion e integracion.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`rea-specialist`** — Especialista en Ingeniería Inversa y Depuración Profunda (REA). Propósito: Profundizar en el análisis de sistemas —binarios, Electron/.NET, Android, firmware, tráfico y comportamiento en runtime— usando REA cuando el humano lo autoriza, para convertir hallazgos difíciles en evidencia verificable y cambios seguros.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`red-access`** — Pruebas de Acceso. Propósito: Probar controles de autenticacion y acceso remoto en activos propios, sin credenciales reales.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`red-ai`** — IA Ofensiva Controlada. Propósito: Aplicar IA a fuzzing, generacion de casos y evasion de deteccion dentro del laboratorio aislado.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`red-lab`** — Laboratorio y Alcance Rojo. Propósito: Mantener el rango aislado, el alcance aprobado y la reversibilidad de cada prueba ofensiva.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`red-net`** — Redes y Protocolos Ofensivos. Propósito: Analizar protocolos y comunicaciones de la red propia para encontrar debilidades de forma controlada.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`red-recon`** — Reconocimiento Ofensivo. Propósito: Descubrir la superficie de ataque de los activos propios con evidencia reproducible.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`reverse-api-specialist`** — Especialista en Ingeniería Inversa de APIs Web. Propósito: Convertir sitios web autorizados en clientes de API tipados con `reverse-api-engineer`, entregando código revisado, evidencia de la captura (HAR + `run_id`) y成本控制 bajo supervisión humana.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`rust-systems-specialist`** — Especialista en Rust y Sistemas. Propósito: Trabaja en runtime WebAssembly, WASI, no_std, C FFI y audio de baja latencia con benchmarks.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`security`** — Seguridad y Auditoria. Propósito: Audita secretos, supresiones y privilegios; bloquea riesgos.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].

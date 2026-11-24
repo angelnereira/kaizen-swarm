@@ -69,7 +69,7 @@ cmd_assign() {
   jq --arg t "$task" --arg a "$agent" --arg due "$due" --arg now "$(date -u +%FT%TZ)" \
      '. + [{task:$t,owner:$a,due:$due,status:"assigned",created:$now}]' "$d/tasks.json" > "$d/tasks.tmp" && mv "$d/tasks.tmp" "$d/tasks.json"
   jq -cn --arg from "$KT_FACILITATOR" --arg to "$agent" --arg task "$task" --arg now "$(date -u +%FT%TZ)" \
-     '{id:("H-"+(now|gsub("[^0-9]";""))),from:$from,to:$to,channel:"direct",intent:"handoff",task:$task,expects_ack:true,status:"open",created:$now}' >> "$d/handoffs.jsonl"
+     '{id:("H-"+(now|tostring|gsub("[^0-9]";""))),from:$from,to:$to,channel:"direct",intent:"handoff",task:$task,expects_ack:true,status:"open",created:$now}' >> "$d/handoffs.jsonl"
   jq --arg now "$(date -u +%FT%TZ)" '.stage="execute" | .updated=$now' "$d/state.json" > "$d/state.tmp" && mv "$d/state.tmp" "$d/state.json"
   klog "tarea asignada: $task -> $agent (due $due)"
 }
@@ -79,7 +79,7 @@ cmd_handoff() { # slug from to intent text [source_ids]
   local d ids="${1:-}"; d="$(proj "$slug")"; proj_ok "$slug" || return 2
   jq -cn --arg from "$from" --arg to "$to" --arg intent "$intent" --arg text "$text" --arg ids "$ids" \
      --arg now "$(date -u +%FT%TZ)" \
-     '{id:("H-"+(now|gsub("[^0-9]";""))),from:$from,to:$to,channel:"direct",intent:$intent,text:$text,source_ids:$ids,expects_ack:true,status:"open",created:$now}' >> "$d/handoffs.jsonl"
+     '{id:("H-"+(now|tostring|gsub("[^0-9]";""))),from:$from,to:$to,channel:"direct",intent:$intent,text:$text,source_ids:$ids,expects_ack:true,status:"open",created:$now}' >> "$d/handoffs.jsonl"
   klog "mensaje $intent: $from -> $to"
 }
 

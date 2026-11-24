@@ -55,6 +55,61 @@
     "triggers": "[decision.proposed, issue.label:auditor-riesgos, research.required:*]"
   },
   {
+    "id": "blue-ai",
+    "name": "IA Defensiva",
+    "department": "tecnologia",
+    "version": 6,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[task.assigned:ai-defense, handoff.from:blue-detect]"
+  },
+  {
+    "id": "blue-detect",
+    "name": "Deteccion y Monitoreo",
+    "department": "tecnologia",
+    "version": 8,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[task.assigned:detect, alert.from:red-*]"
+  },
+  {
+    "id": "blue-iam",
+    "name": "Identidad y Accesos",
+    "department": "tecnologia",
+    "version": 8,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[task.assigned:iam, handoff.from:red-access]"
+  },
+  {
+    "id": "blue-ir",
+    "name": "Respuesta a Incidentes",
+    "department": "tecnologia",
+    "version": 8,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[alert.*, task.assigned:ir, project.created]"
+  },
+  {
+    "id": "blue-netdef",
+    "name": "Defensa de Red",
+    "department": "tecnologia",
+    "version": 6,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[task.assigned:netdef, handoff.from:red-net]"
+  },
+  {
     "id": "business-profiles-architect",
     "name": "Arquitecto de Perfiles de Negocio",
     "department": "producto-negocio",
@@ -418,6 +473,61 @@
     "triggers": "[research.required:*, issue.label:depuracion, reverse_engineering.authorized:*, knowledge.updated:*]"
   },
   {
+    "id": "red-access",
+    "name": "Pruebas de Acceso",
+    "department": "tecnologia",
+    "version": 6,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[task.assigned:access, handoff.from:red-net]"
+  },
+  {
+    "id": "red-ai",
+    "name": "IA Ofensiva Controlada",
+    "department": "tecnologia",
+    "version": 6,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[task.assigned:ai-offense, handoff.from:red-lab]"
+  },
+  {
+    "id": "red-lab",
+    "name": "Laboratorio y Alcance Rojo",
+    "department": "tecnologia",
+    "version": 6,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[project.created, task.assigned:lab, blocker.*]"
+  },
+  {
+    "id": "red-net",
+    "name": "Redes y Protocolos Ofensivos",
+    "department": "tecnologia",
+    "version": 6,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[task.assigned:net, handoff.from:red-recon, schedule:daily]"
+  },
+  {
+    "id": "red-recon",
+    "name": "Reconocimiento Ofensivo",
+    "department": "tecnologia",
+    "version": 6,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[project.created, task.assigned:recon, schedule:daily]"
+  },
+  {
     "id": "researcher",
     "name": "Investigador de Tecnologia",
     "department": "conocimiento",
@@ -498,7 +608,7 @@
     "id": "verificador-evidencias",
     "name": "Verificador de Evidencias",
     "department": "conocimiento",
-    "version": 1,
+    "version": 3,
     "status": "active",
     "proactivity": "high",
     "autonomy": "scoped",
