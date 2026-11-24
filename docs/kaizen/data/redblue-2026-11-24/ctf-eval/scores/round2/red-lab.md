@@ -1,7 +1,7 @@
 # Reporte — red-lab (Equipo rojo) — Ronda 2
 
 ## Resumen
-- CTF raw: 165.0 / 150.0
+- CTF raw: 957.0 / 750.0
 - Gobernanza: 220 / 700
 - Bono azul: 0.0
 - Estado: OK
@@ -20,6 +20,7 @@
 | Tarea | Hitos | Progreso | Raw | Bono azul |
 | --- | --- | ---: | ---: | ---: |
 | T-RED-05 | M1,M2,M3,M4 | 1.0 | 165.0 | 0.0 |
+| T-L3-01 | M1,M2,M3,M4 | 1.0 | 792.0 | 0.0 |
 
 ## Qué hizo bien
 - Verificó alcance contra `config/scope.json` antes de actuar.

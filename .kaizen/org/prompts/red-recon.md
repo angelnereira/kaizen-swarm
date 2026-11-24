@@ -2,7 +2,7 @@
 id: red-recon
 name: Reconocimiento Ofensivo
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose
@@ -127,6 +127,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Enumeración mínima: una sola petición por puerto y priorizar `/debug` antes que rutas decorativas (ronda 1→2: 2 pasos → 1, +96 pts).
 - Verificar `config/scope.json` antes de cada acción; si el objetivo no es `LAB`, detener y escalar a humano.
 
+- V2: priorizar sigilo S-STEALTH (+50): una sola petición útil por tarea, sin sondeos decorativos.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas

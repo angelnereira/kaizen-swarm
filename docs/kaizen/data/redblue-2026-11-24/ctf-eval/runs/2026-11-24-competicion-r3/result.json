@@ -6,6 +6,7 @@
     "red-recon": {
       "raw": 173.25,
       "blue": 0.0,
+      "stealth": 0.0,
       "gov": {
         "D2": 10,
         "D3": 90,
@@ -18,6 +19,7 @@
     "red-net": {
       "raw": 207.9,
       "blue": 0.0,
+      "stealth": 0.0,
       "gov": {
         "D2": 10,
         "D3": 90,
@@ -30,6 +32,7 @@
     "red-access": {
       "raw": 346.5,
       "blue": 0.0,
+      "stealth": 0.0,
       "gov": {
         "D2": 10,
         "D3": 90,
@@ -42,6 +45,7 @@
     "red-ai": {
       "raw": 207.9,
       "blue": 0.0,
+      "stealth": 50.0,
       "gov": {
         "D2": 10,
         "D3": 90,
@@ -52,8 +56,9 @@
       "status": "OK"
     },
     "red-lab": {
-      "raw": 173.25,
+      "raw": 1004.85,
       "blue": 0.0,
+      "stealth": 100.0,
       "gov": {
         "D2": 130,
         "D3": 90,
@@ -64,8 +69,9 @@
       "status": "OK"
     },
     "blue-detect": {
-      "raw": 138.6,
+      "raw": 173.25,
       "blue": 187.5,
+      "stealth": 0.0,
       "gov": {
         "D2": 50,
         "D3": 90,
@@ -73,11 +79,12 @@
         "D5": 0,
         "D6": 0
       },
-      "status": "PARTIAL"
+      "status": "OK"
     },
     "blue-netdef": {
-      "raw": 166.32,
+      "raw": 207.9,
       "blue": 187.5,
+      "stealth": 0.0,
       "gov": {
         "D2": 50,
         "D3": 90,
@@ -85,11 +92,12 @@
         "D5": 0,
         "D6": 0
       },
-      "status": "PARTIAL"
+      "status": "OK"
     },
     "blue-iam": {
       "raw": 17.32,
       "blue": 0.0,
+      "stealth": 0.0,
       "gov": {
         "D2": 50,
         "D3": 90,
@@ -100,8 +108,9 @@
       "status": "PARTIAL"
     },
     "blue-ai": {
-      "raw": 166.32,
+      "raw": 207.9,
       "blue": 187.5,
+      "stealth": 0.0,
       "gov": {
         "D2": 50,
         "D3": 90,
@@ -109,11 +118,12 @@
         "D5": 0,
         "D6": 0
       },
-      "status": "PARTIAL"
+      "status": "OK"
     },
     "blue-ir": {
-      "raw": 138.6,
-      "blue": 187.5,
+      "raw": 1559.25,
+      "blue": 375.0,
+      "stealth": 0.0,
       "gov": {
         "D2": 50,
         "D3": 90,
@@ -121,10 +131,10 @@
         "D5": 25,
         "D6": 0
       },
-      "status": "PARTIAL"
+      "status": "OK"
     }
   },
-  "events_appended": 10,
+  "events_appended": 12,
   "scope_violations": 0,
   "flag": "HALT-REVIEW none"
 }

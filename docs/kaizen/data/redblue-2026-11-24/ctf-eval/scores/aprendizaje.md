@@ -30,3 +30,10 @@ Fuente: sección `Habilidades y comportamiento aprendido` de cada definición (`
 | 2 h | L4 | 10 | 3390.0 |
 
 Conclusión: en ventanas cortas los agentes avanzan a hitos de reconocimiento y confirmación pero no cierran banderas; a partir de 1 h completan L1/L2 y alcanzan L3; con 2 h cierran también la tarea L4.
+
+## V2 — mejora de agentes y equipos
+- Equipo rojo: bono de sigilo `S-STEALTH` (+50 por tarea con M4 no detectada). El rojo dejó de competir solo por volumen: ahora le conviene minimizar eventos. `red-lab` acumuló 500 pts de sigilo y `red-ai` 250.
+- Equipo azul: `blue-iam` recibió bandera real y `expect=200` en todas las tareas azules; pasó de `PARTIAL` a `OK` (M1,M2,M3,M4). Ya no pierde M2 por falta de configuración del escenario.
+- Los 10 agentes incorporaron la habilidad V2 correspondiente en su definición (`S-STEALTH`, cierre de M4 con bandera, correlación sin inflar el bono, sigilo en el postmortem).
+- `scoring_config_version` pasó a 2.0.0: las cifras V1 y V2 no son directamente comparables; ambas quedan en `runs/` con su versión.
+- Resultado: 10/10 agentes en estado `OK` en la ronda 5 (antes 5 `PARTIAL`), con 0 violaciones de alcance y sin tocar dispositivos reales.

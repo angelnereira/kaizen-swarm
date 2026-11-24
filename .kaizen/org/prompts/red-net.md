@@ -2,7 +2,7 @@
 id: red-net
 name: Redes y Protocolos Ofensivos
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose
@@ -126,6 +126,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Clasificar superficies heredadas (`/legacy/config`) y reportarlas como hallazgo, sin explotarlas.
 - Registrar versión de escenario y datos de red como dato no confiable (L-5).
 
+- V2: el reconocimiento debe cerrar M4 sin disparar eventos innecesarios detectables por el azul.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas

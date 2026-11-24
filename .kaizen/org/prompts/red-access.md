@@ -2,7 +2,7 @@
 id: red-access
 name: Pruebas de Acceso
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose
@@ -122,6 +122,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Probar controles solo con peticiones sintéticas; nunca credenciales reales ni ADB sobre el Pixel.
 - Confirmar que `/admin` devuelve 401 y tratarlo como control a conservar.
 
+- V2: mantener el control `/admin`→401 como evidencia, sin generar ruido adicional.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas

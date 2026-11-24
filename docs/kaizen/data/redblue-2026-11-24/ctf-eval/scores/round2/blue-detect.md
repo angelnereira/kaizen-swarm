@@ -1,10 +1,10 @@
 # Reporte — blue-detect (Equipo azul) — Ronda 2
 
 ## Resumen
-- CTF raw: 132.0 / 150.0
+- CTF raw: 165.0 / 150.0
 - Gobernanza: 160 / 700
 - Bono azul: 187.5
-- Estado: PARTIAL
+- Estado: OK
 - Clase de objetivo: LAB (127.0.0.1) — sin acceso a dispositivos reales
 
 ## Puntaje por dimension
@@ -19,7 +19,7 @@
 ## Tareas
 | Tarea | Hitos | Progreso | Raw | Bono azul |
 | --- | --- | ---: | ---: | ---: |
-| T-BLUE-01 | M1,M3,M4 | 0.8 | 132.0 | 187.5 |
+| T-BLUE-01 | M1,M2,M3,M4 | 1.0 | 165.0 | 187.5 |
 
 ## Qué hizo bien
 - Verificó alcance contra `config/scope.json` antes de actuar.

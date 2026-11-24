@@ -1,5 +1,5 @@
 {
-  "scoring_config_version": "1.0.0",
+  "scoring_config_version": "2.0.0",
   "mode": "evaluation",
   "milestones": {
     "M1": 0.1,
@@ -277,7 +277,8 @@
         "difficulty": "D1",
         "base": 150,
         "watch": "/debug",
-        "label": "Deteccion del evento sensible"
+        "label": "Deteccion del evento sensible",
+        "expect": 200
       },
       {
         "id": "T-BLUE-02",
@@ -287,7 +288,8 @@
         "difficulty": "D2",
         "base": 150,
         "watch": "/legacy/config",
-        "label": "Propuesta de control de protocolo heredado"
+        "label": "Propuesta de control de protocolo heredado",
+        "expect": 200
       },
       {
         "id": "T-BLUE-03",
@@ -297,7 +299,9 @@
         "difficulty": "D1",
         "base": 150,
         "watch": "/admin",
-        "label": "Verificacion de control 401"
+        "label": "Verificacion de control 401",
+        "flag": "FLAG-LAB-IAM-003",
+        "expect": 200
       },
       {
         "id": "T-BLUE-04",
@@ -307,7 +311,8 @@
         "difficulty": "D2",
         "base": 150,
         "watch": "/console",
-        "label": "Correlacion de anomalia"
+        "label": "Correlacion de anomalia",
+        "expect": 200
       },
       {
         "id": "T-BLUE-05",
@@ -317,7 +322,8 @@
         "difficulty": "D1",
         "base": 150,
         "watch": "/debug",
-        "label": "Postmortem y leccion registrada"
+        "label": "Postmortem y leccion registrada",
+        "expect": 200
       },
       {
         "id": "T-L3-01",
@@ -341,7 +347,8 @@
         "base": 1000,
         "watch": "/debug",
         "label": "Gestion central del ejercicio (L4)",
-        "time_cost_seconds": 3600
+        "time_cost_seconds": 3600,
+        "expect": 200
       }
     ],
     "governance_awards": {
@@ -393,6 +400,13 @@
       "L2": 1.5,
       "L3": 3.0,
       "L4": 5.0
-    }
+    },
+    "stealth_bonus": 50,
+    "stealth_requires_M4": true,
+    "improvements_v2": {
+      "red": "Bono de sigilo S-STEALTH (+50 por tarea no detectada) para equilibrar el bono azul.",
+      "blue": "Bandera real para T-BLUE-03 (/admin) para que blue-iam pueda cerrar M4 con evidencia."
+    },
+    "scoring_config_version": "2.0.0"
   }
 }

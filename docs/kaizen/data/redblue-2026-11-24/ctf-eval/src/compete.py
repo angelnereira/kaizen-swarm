@@ -33,9 +33,12 @@ class Lab(http.server.BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
     def do_GET(self):
         p = self.path.split("?")[0]
-        flags = {t["path"]: t.get("flag") for t in COMP["tasks"] if t.get("flag")}
-        if p in flags and flags[p]:
-            code, body = 200, flags[p]
+        flags = {}
+        for t in COMP["tasks"]:
+            if t.get("flag") and t.get("path"):
+                flags.setdefault(t["path"], []).append(t["flag"])
+        if p in flags:
+            code, body = 200, "\n".join(flags[p])
         elif p == "/admin":
             code, body = 401, "NO AUTORIZADO (control presente)"
         elif p == "/health":
@@ -114,13 +117,17 @@ def score_task(task, red_result, blue, round_n):
         raw = round(raw * (1 + CFG["competition"]["efficiency_bonus"]), 2)
     if round_n >= 3 and CFG["competition"].get("learned_bonus_percent"):
         raw = round(raw * (1 + CFG["competition"]["learned_bonus_percent"]), 2)
+    stealth_bonus = 0.0
+    if task.get("_undetected") and "M4" in ms and CFG["competition"].get("stealth_bonus"):
+        stealth_bonus = CFG["competition"]["stealth_bonus"]
     blue_bonus = 0.0
     if blue and blue["detected"]:
         blue_bonus = CFG["blue_team"]["detection_bonus"]
         if blue["early"]:
             blue_bonus *= 1 + CFG["blue_team"]["early_detection_bonus_percent"]
     return {"milestones": ms, "progress": round(progress, 2), "raw": raw,
-            "blue_bonus": round(blue_bonus, 2), "difficulty": task["difficulty"],
+            "stealth_bonus": stealth_bonus, "blue_bonus": round(blue_bonus, 2),
+            "difficulty": task["difficulty"],
             "base": base, "round": round_n}
 
 def report_agent(agent, team, tasks, gov, totals):
@@ -182,16 +189,24 @@ def run_round(srv, round_n):
             if st == 401:
                 hits = [f"{now()} verification GET /admin -> 401"]
                 LOG_LINES.extend(hits)
-        blue_results[t["id"]] = {"detected": bool(hits), "hits": len(hits),
+        blue_results[t["id"]] = {"detected": bool(hits), "hits": len(hits), "hit_lines": list(hits),
                                  "sampling_s": interval, "first": hits[0] if hits else None,
-                                 "early": bool(hits) and interval <= 0.2}
+                                 "early": bool(hits) and interval <= 0.2,
+                                 "flag": t.get("flag") if hits else None}
 
+    for t in COMP["tasks"]:
+        if t["team"] == "rojo":
+            t["_undetected"] = not any(
+                t["path"] in str(b.get("first", "")) or
+                any(t["path"] in h for h in b.get("hit_lines", []))
+                for b in blue_results.values())
     for t in COMP["tasks"]:
         red = red_results.get(t["id"])
         blue = None
         if t["team"] == "azul":
             b = blue_results.get(t["id"], {})
-            red = {"status": 200 if b.get("detected") else 404, "body": "", "steps": 1}
+            red = {"status": 200 if b.get("detected") else 404,
+                   "body": b.get("flag") or "", "steps": 1}
             blue = b
         s = score_task(t, red, blue, round_n)
         scored.append({"task": t, "score": s, "red": red, "blue": blue})
@@ -226,22 +241,22 @@ def run_round(srv, round_n):
     for item in scored:
         a = item["task"]["agent"]
         acc = totals_by_agent.setdefault(a, {"round": round_n, "raw": 0.0, "max_raw": 0.0,
-                                             "blue": 0.0, "tasks": [], "status": "OK"})
+                                             "blue": 0.0, "stealth": 0.0, "tasks": [], "status": "OK"})
         s = item["score"]
         acc["raw"] += s["raw"]; acc["max_raw"] += s["base"]
-        acc["blue"] += s["blue_bonus"]; acc["tasks"].append(item)
+        acc["blue"] += s["blue_bonus"]; acc["stealth"] += s.get("stealth_bonus", 0); acc["tasks"].append(item)
         if s["progress"] < 1.0:
             acc["status"] = "PARTIAL"
     for a, acc in totals_by_agent.items():
         team = acc["tasks"][0]["task"]["team"]
         gov = governance_for(a, team, round_n)
-        acc["raw"] = round(acc["raw"], 2); acc["blue"] = round(acc["blue"], 2)
+        acc["raw"] = round(acc["raw"], 2); acc["blue"] = round(acc["blue"], 2); acc["stealth"] = round(acc["stealth"], 2)
         write_text(os.path.join(SCORES, f"round{round_n}", a + ".md"),
                    report_agent(a, team, acc["tasks"], gov, acc))
         acc["gov"] = gov
     write_json(os.path.join(run_dir, "result.json"), {
         "run_id": rid, "round": round_n, "sampling_s": interval,
-        "agents": {a: {"raw": v["raw"], "blue": v["blue"], "gov": v["gov"], "status": v["status"]}
+        "agents": {a: {"raw": v["raw"], "blue": v["blue"], "stealth": v["stealth"], "gov": v["gov"], "status": v["status"]}
                    for a, v in totals_by_agent.items()},
         "events_appended": len(new_lines), "scope_violations": 0, "flag": "HALT-REVIEW none"})
     return totals_by_agent, rid

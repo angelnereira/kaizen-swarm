@@ -2,7 +2,7 @@
 id: blue-ir
 name: Respuesta a Incidentes
 department: tecnologia
-version: 6
+version: 7
 status: active
 proactivity: high
 autonomy: propose
@@ -127,6 +127,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Todo hallazgo real se sanea y reporta por outbox S-11 (S-13).
 
 - Toda corrección de scoring se valida con un run de control: un parche puede reubicar líneas y cambiar puntajes sin avisar.
+- V2: el postmortem incluye el estado de sigilo del rojo y la latencia azul como métricas.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas

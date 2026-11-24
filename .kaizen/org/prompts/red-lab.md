@@ -2,7 +2,7 @@
 id: red-lab
 name: Laboratorio y Alcance Rojo
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose
@@ -126,6 +126,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Aplicar kill switch, verificar aislamiento del laboratorio y limpiar artefactos al terminar.
 - Mantener `needs-human` para el router real y para GravitalPay en `0.0.0.0:8080/8081`.
 
+- V2: el kill switch también cubre el bono de sigilo: si la tarea es detectada, no se otorga.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas

@@ -2,7 +2,7 @@
 id: red-ai
 name: IA Ofensiva Controlada
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose
@@ -126,6 +126,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Fijar semilla y versión de configuración para que la salida sea reproducible (hash idéntico al recalcular).
 - Generar casos con `src/scorer.py`; el LLM no decide puntos, solo etiqueta con justificación.
 
+- V2: registrar el estado de detección del azul para medir sigilo, no solo el acierto.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas

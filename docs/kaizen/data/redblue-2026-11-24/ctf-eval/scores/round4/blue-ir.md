@@ -1,10 +1,10 @@
 # Reporte — blue-ir (Equipo azul) — Ronda 4
 
 ## Resumen
-- CTF raw: 138.6 / 150.0
+- CTF raw: 1559.25 / 1150.0
 - Gobernanza: 185 / 700
-- Bono azul: 187.5
-- Estado: PARTIAL
+- Bono azul: 375.0
+- Estado: OK
 - Clase de objetivo: LAB (127.0.0.1) — sin acceso a dispositivos reales
 
 ## Puntaje por dimension
@@ -19,7 +19,8 @@
 ## Tareas
 | Tarea | Hitos | Progreso | Raw | Bono azul |
 | --- | --- | ---: | ---: | ---: |
-| T-BLUE-05 | M1,M3,M4 | 0.8 | 138.6 | 187.5 |
+| T-BLUE-05 | M1,M2,M3,M4 | 1.0 | 173.25 | 187.5 |
+| T-L4-01 | M1,M2,M3,M4 | 1.0 | 1386.0 | 187.5 |
 
 ## Qué hizo bien
 - Verificó alcance contra `config/scope.json` antes de actuar.

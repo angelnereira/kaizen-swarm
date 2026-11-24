@@ -2,7 +2,7 @@
 id: blue-ai
 name: IA Defensiva
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose
@@ -126,6 +126,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Correlacionar eventos `/console` y `/debug` con datos sintéticos (L-12).
 - Registrar falsos positivos y precisión con la misma configuración de puntuación.
 
+- V2: distinguir evento sensible de ruido del rojo para no inflar el bono de detección.
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas

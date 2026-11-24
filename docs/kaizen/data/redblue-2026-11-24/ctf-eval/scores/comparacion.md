@@ -3,30 +3,30 @@
 | Métrica | Equipo rojo | Equipo azul |
 | --- | ---: | ---: |
 ## Ronda 1
-- Rojo (CTF + gobernanza): 1605.0
-- Azul (CTF + bono + gobernanza): 2022.3
+- Rojo (CTF + gobernanza): 2325.0
+- Azul (CTF + bono + gobernanza): 3637.5
 
 ## Ronda 2
-- Rojo (CTF + gobernanza): 1701.0
-- Azul (CTF + bono + gobernanza): 2172.3
+- Rojo (CTF + gobernanza): 2493.0
+- Azul (CTF + bono + gobernanza): 3825.0
 
 ## Ronda 3
-- Rojo (CTF + gobernanza): 1753.8
-- Azul (CTF + bono + gobernanza): 2202.16
+- Rojo (CTF + gobernanza): 2585.4
+- Azul (CTF + bono + gobernanza): 3928.12
 
 ## Ronda 4
-- Rojo (CTF + gobernanza): 1753.8
-- Azul (CTF + bono + gobernanza): 2510.94
+- Rojo (CTF + gobernanza): 2585.4
+- Azul (CTF + bono + gobernanza): 4271.55
 
 ## Ronda 5
-- Rojo (CTF + gobernanza): 1773.8
-- Azul (CTF + bono + gobernanza): 2610.94
+- Rojo (CTF + gobernanza): 2605.4
+- Azul (CTF + bono + gobernanza): 4371.55
 
 ## Iteración y automejora
-- CTF rojo+azul ronda 1: 1557.3 → ronda 5: 1857.24 (Δ 299.94)
-- Bono azul: 600.0 → 937.5 (Δ 337.5)
+- CTF rojo+azul ronda 1: 3742.5 → ronda 5: 4261.95 (Δ 519.45)
+- Bono azul: 750.0 → 1125.0 (Δ 375.0)
 - Mejora azul por muestreo más frecuente (1.0s → 0.2s) y orden rojo optimizado.
-- Tras reentrenamiento (definiciones v4, S-LEARNED): rojo 1773.8 vs ronda anterior; azul con bono de aprendizaje +5%.
+- Tras reentrenamiento (definiciones v4, S-LEARNED): rojo 2605.4 vs ronda anterior; azul con bono de aprendizaje +5%.
 - Sin violaciones de alcance; sin `--no-verify`; sin credenciales reales.
 
 ## Desempate

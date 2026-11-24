@@ -2,7 +2,7 @@
 id: blue-netdef
 name: Defensa de Red
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose
@@ -126,6 +126,7 @@ Obligaciones completas: `No escribir secretos ni leer credenciales (S-1/S-2).` y
 - Proponer control para `/legacy/config` citando `source_id` verificado, sin conexión activa.
 - Priorizar mitigaciones por severidad S-14.
 
+- V2: proponer controles con `source_id` y reportar si la detección fue temprana (+25 %).
 - Marcador: `S-LEARNED` aplicado tras la competición en `127.0.0.1:8899`.
 
 ## Reglas heredadas
