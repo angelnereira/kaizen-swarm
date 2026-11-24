@@ -1,0 +1,30 @@
+[
+  {
+    "task": "Disenar contratos de ingress/egress y esquema de archivo local /*/* (metadata.json, location.json)",
+    "owner": "architect",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T03:44:54Z"
+  },
+  {
+    "task": "Disenar controles de seguridad del gateway WAHA (HMAC, allowlist, dedupe, rate limit, path traversal, secretos)",
+    "owner": "security",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T03:44:54Z"
+  },
+  {
+    "task": "Verificar por POC vector HMAC-SHA512 y payload de live location con numero de prueba",
+    "owner": "qa",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T03:44:54Z"
+  },
+  {
+    "task": "Validar cumplimiento/ToS del cliente no oficial y escalar a humano si aplica",
+    "owner": "cumplimiento-panama",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T03:45:00Z"
+  }
+]

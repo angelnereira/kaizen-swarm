@@ -89,7 +89,7 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 45 ] && ok "inventario de 45 agentes" || bad "inventario de 45 agentes ($N)"
+[ "$N" = 47 ] && ok "inventario de 47 agentes" || bad "inventario de 47 agentes ($N)"
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
@@ -112,6 +112,10 @@ for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacida
          scripts/kaizen-voice docs/kaizen/adr/0019-colaboracion-alta-performance-y-memoria-de-fallos.md \
          scripts/grafana-bootstrap scripts/kaizen-feedback \
          docs/kaizen/adr/0020-monitoreo-central-y-usuario-grafana.md docs/kaizen/org/MONITOREO-PROYECTOS.md \
+         .kaizen/finops/tokens.env scripts/kaizen-tokens \
+         docs/kaizen/adr/0021-economia-de-tokens-y-trabajo-continuo.md docs/kaizen/org/TOKENS.md \
+         .kaizen/knowledge/sources.json scripts/kaizen-knowledge \
+         docs/kaizen/adr/0022-corpus-normativo-y-citas-verificadas.md docs/kaizen/org/CORPUS-NORMATIVO.md \
          .kaizen/observability/observability.env scripts/kaizen-exporter.py scripts/kaizen-observability \
          observability/prometheus.yml observability/docker-compose.yml \
          observability/grafana/dashboards/kaizen-swarm.json \
@@ -141,7 +145,7 @@ done
   && ok "expediente de investigacion" || bad "expediente de investigacion"
 ( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
 C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
-[ "$C" = 45 ] && ok "catalogo consistente (45)" || bad "catalogo consistente ($C)"
+[ "$C" = 47 ] && ok "catalogo consistente (47)" || bad "catalogo consistente ($C)"
 grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
   && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)
@@ -166,6 +170,7 @@ DG="$REPO/.kaizen/org/knowledge/digests/marketing-visual.md"
 S=$(sed -n 's/^status: //p' "$REPO/.kaizen/org/prompts/marketing-visual.md" | head -1)
 [ "$S" = paused ] && ok "disable pausa agente" || bad "disable pausa agente"
 
+rm -f "$REPO/.kaizen/loop/PAUSE"  # aislamiento de prueba: stop-the-line no debe bloquear el test
 # equipo: flujo completo con evidencia verificada y bloqueo sin fuentes
 ( cd "$REPO" && scripts/kaizen-team check >/dev/null 2>&1 ) && ok "kaizen-team check" || bad "kaizen-team check"
 ( cd "$REPO" && scripts/kaizen-team init demo --goal "Probar equipo" --kpi "Decisiones verificadas" --members facilitador-equipo,verificador-evidencias,cumplimiento-panama >/dev/null 2>&1 )
@@ -285,6 +290,43 @@ grep -q 'KO_GRAFANA_AGENT_USER=kaizen-agent' "$REPO/.kaizen/observability/observ
 grep -q 'kaizen_sibling_project_stage' "$REPO/scripts/kaizen-exporter.py" \
   && ok "monitoreo de hermanos" || bad "monitoreo de hermanos"
 bash -n "$REPO/scripts/grafana-bootstrap" "$REPO/scripts/kaizen-feedback" && ok "scripts monitoreo sintaxis" || bad "scripts monitoreo sintaxis"
+( cd "$REPO" && scripts/kaizen-tokens check >/dev/null 2>&1 ) && ok "tokens check" || bad "tokens check"
+KT=$(KT_LEDGER=/tmp/kz-test-ledger.jsonl bash -c "cd '$REPO' && scripts/kaizen-tokens record --agent qa --task t --input 10 --output 2 --cost 0.01 >/dev/null && scripts/kaizen-tokens snapshot" 2>/dev/null)
+case "$KT" in *input_total=10*) ok "ledger tokens";; *) bad "ledger tokens";; esac
+jq -e '.["finops-tokens"].model == "opencode/hy4-flash-free"' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 \
+  && ok "equipo finops con Hy4" || bad "equipo finops con Hy4"
+grep -q 'kaizen_tokens_cost_usd' "$REPO/scripts/kaizen-exporter.py" && ok "metricas tokens" || bad "metricas tokens"
+( cd "$REPO" && KR_DRY_RUN=1 scripts/kaizen-runtime work equipo-central >/dev/null 2>&1 ) && ok "work continuo" || bad "work continuo"
+( cd "$REPO" && scripts/kaizen-knowledge check >/dev/null 2>&1 ) && ok "corpus check" || bad "corpus check"
+( cd "$REPO" && scripts/kaizen-knowledge index >/dev/null 2>&1 ) && ok "corpus index" || bad "corpus index"
+jq -e '.["normativa-corpus"].model == "opencode/hy4-flash-free"' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 \
+  && ok "equipo normativa con Hy4" || bad "equipo normativa con Hy4"
+grep -q 'kaizen-knowledge cite-check' "$REPO/.kaizen/org/prompts/monitor-gaceta.md" \
+  && ok 'agentes con deber de cita' || bad 'agentes con deber de cita'
+grep -q 'ADR-0023' "$REPO/.kaizen/RULES.md" && ok 'push autonomo gobernado' || bad 'push autonomo gobernado'
+grep -q 'Puedes hacer commit y push' "$REPO/.opencode/agents/qa.md" 2>/dev/null \
+  && ok 'agente generado sin bloqueo push' || bad 'agente generado sin bloqueo push'
+for s in kaizen-workspace kaizen-peer kaizen-remote; do
+  [ -x "$REPO/scripts/$s" ] && ok "script $s" || bad "script $s"
+done
+bash -n "$REPO/scripts/kaizen-workspace" "$REPO/scripts/kaizen-peer" "$REPO/scripts/kaizen-remote" && ok "scripts pares sintaxis" || bad "scripts pares sintaxis"
+( cd "$REPO" && scripts/kaizen-workspace init "$REPO" >/dev/null 2>&1 && scripts/kaizen-workspace check "$REPO" >/dev/null 2>&1 ) \
+  && ok 'workspace externo' || bad 'workspace externo'
+grep -q 'K-15' "$REPO/.kaizen/RULES.md" && ok 'regla no invasiva' || bad 'regla no invasiva'
+for s in kaizen-whatsapp; do [ -x "$REPO/scripts/$s" ] && ok "script $s" || bad "script $s"; done
+( cd "$REPO" && scripts/kaizen-whatsapp check >/dev/null 2>&1 ) && ok 'whatsapp oficial' || bad 'whatsapp oficial'
+grep -q 'KN_WHATSAPP_ALLOW_UNOFFICIAL=0' "$REPO/.kaizen/team/notify.env" && ok 'sin cliente no oficial' || bad 'sin cliente no oficial'
+grep -q 'ADR-0025' "$REPO/.opencode/agents/qa.md" 2>/dev/null && ok 'agente con política WhatsApp' || bad 'agente con política WhatsApp'
+[ -x "$REPO/scripts/kaizen-welcome" ] && ok 'campaña bienvenida' || bad 'campaña bienvenida'
+jq -e '.["whatsapp-onboarding"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo bienvenida' || bad 'equipo bienvenida'
+for f in Dockerfile docker-compose.yml scripts/kaizen-docker scripts/docker-entrypoint.sh observability/prometheus-container.yml; do [ -f "$REPO/$f" ] && ok "docker $f" || bad "docker $f"; done
+bash -n "$REPO/scripts/kaizen-docker" "$REPO/scripts/docker-entrypoint.sh" && ok 'docker sintaxis' || bad 'docker sintaxis'
+[ -x "$REPO/scripts/kaizen-conflict" ] && ok 'script conflict' || bad 'script conflict'
+grep -A2 'resource: "git push\*"' "$REPO/.opencode/agents/qa.md" 2>/dev/null | grep -q 'effect: "allow"' && ok 'push permitido' || bad 'push permitido'
+[ -x "$REPO/scripts/kaizen-meta" ] && ok 'meta script' || bad 'meta script'
+jq -e '.["meta-auditoria"] and .["direccion-ejecutiva"] and .["incentivos"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipos nuevos' || bad 'equipos nuevos'
+[ -x "$REPO/scripts/kaizen-incentive" ] && ok 'script incentivos' || bad 'script incentivos'
+( cd "$REPO" && scripts/kaizen-incentive check >/dev/null 2>&1 ) && ok 'incentivos check' || bad 'incentivos check'
 jq '.processes.change.stages = {"implement": {"R": ["dev1-core"]}}' "$REPO/.kaizen/gov/governance.json" > "$REPO/.kaizen/gov/tmp.json" \
   && mv "$REPO/.kaizen/gov/tmp.json" "$REPO/.kaizen/gov/governance.json"
 ( cd "$REPO" && python3 scripts/kaizen-gov check >/dev/null 2>&1 ) \

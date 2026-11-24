@@ -90,8 +90,8 @@ cmd_digest() {
       printf '\n## Cómo usarla\nAntes de proponer, revisa estas lecciones. Si aplican, cita el fingerprint y evita repetir el error.\n'
     } > "$out"
     if [ -x "$ROOT/scripts/kaizen-org" ]; then
-      "$ROOT/scripts/kaizen-org" feed "$a" "$out" --title "Experiencia acumulada de $a" >/dev/null 2>&1 || true
-      "$ROOT/scripts/kaizen-org" digest "$a" >/dev/null 2>&1 || true
+      "$ROOT/scripts/kaizen-org" feed "$a" "$out" --title "Experiencia acumulada de $a" >/dev/null 2>&1 || : #28
+      "$ROOT/scripts/kaizen-org" digest "$a" >/dev/null 2>&1 || : #28
     fi
     klog "experiencia actualizada: $out"
   done
@@ -113,10 +113,10 @@ else:
     s=s.replace('## Reglas heredadas', block+'## Reglas heredadas',1)
 open(p,'w',encoding='utf-8').write(s)
 PY
-  [ -x "$ROOT/scripts/kaizen-org" ] && "$ROOT/scripts/kaizen-org" save "$agent" >/dev/null 2>&1 || true
+  [ -x "$ROOT/scripts/kaizen-org" ] && "$ROOT/scripts/kaizen-org" save "$agent" >/dev/null 2>&1 || : #28
   [ -x "$ROOT/scripts/kaizen-eval" ] && python3 "$ROOT/scripts/kaizen-eval" metrics add --agent "$agent" \
-      --decision "LEARN-$(date -u +%Y%m%d)" --cost 0 --minutes 0 --reverted 0 >/dev/null 2>&1 || true
-  find "$L/$agent" -name '*.md' -exec sed -i 's/^applied: false$/applied: true/' {} + 2>/dev/null || true
+      --decision "LEARN-$(date -u +%Y%m%d)" --cost 0 --minutes 0 --reverted 0 >/dev/null 2>&1 || : #28
+  find "$L/$agent" -name '*.md' -exec sed -i 's/^applied: false$/applied: true/' {} + 2>/dev/null || : #28
   klog "lecciones aplicadas a $agent (versión subida)"
 }
 

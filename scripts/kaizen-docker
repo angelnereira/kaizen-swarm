@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# kaizen-docker: empaqueta y despliega la comunidad en contenedores locales.
+set -uo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+klog() { printf '[kaizen-docker] %s\n' "$*"; }
+preflight() {
+  command -v docker >/dev/null 2>&1 || { klog "docker no instalado"; return 2; }
+  if ! docker info >/dev/null 2>&1; then
+    klog "daemon Docker NO disponible: inicia Docker Desktop y reintenta"
+    mkdir -p .kaizen/loop/outbox
+    cat > .kaizen/loop/outbox/docker-daemon-down.md <<'EOF'
+kind: failure
+title: No se pudo desplegar el stack Docker: daemon no disponible
+fingerprint: docker-daemon-down
+---
+## Qué pasó
+`docker info` falló: "Cannot connect to the Docker daemon". El empaquetado (Dockerfile, compose, entrypoint, Prometheus y Grafana) existe pero no se pudo levantar.
+
+## Impacto
+El stack local (exporter, Prometheus, Grafana) no está corriendo en contenedores. El exporter nativo en :9101 sigue disponible.
+
+## Evidencia
+Salida real de `docker info`; sin secretos.
+
+## Propuesta
+Iniciar Docker Desktop en la máquina y ejecutar `scripts/kaizen-docker up`. No se afirma despliegue (K-10).
+EOF
+    return 1
+  fi
+}
+case "${1:-status}" in
+  preflight) preflight;;
+  build) preflight && docker compose build --pull false && klog "imagen kaizen-swarm:local construida";;
+  up) preflight && docker compose up -d && klog "stack arriba: exporter :9101, Prometheus :9090, Grafana :3000";;
+  down) preflight && docker compose down && klog "stack detenido (volúmenes conservados)";;
+  status) docker compose ps 2>/dev/null || klog "sin stack activo";;
+  logs) docker compose logs --tail 40 "${2:-}" 2>/dev/null || klog "sin logs";;
+  check) bash -n scripts/docker-entrypoint.sh scripts/kaizen-docker && docker compose config -q && klog "configuración Docker válida";;
+  *) echo "uso: kaizen-docker preflight|build|up|down|status|logs|check";;
+esac

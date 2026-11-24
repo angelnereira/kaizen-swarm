@@ -18,7 +18,7 @@ tools: [read, write-docs, run-tests, ...]
 triggers: [issue.label:swarm:ready, schedule:weekly, knowledge.updated:*]
 knowledge: [docs/kaizen/org/CONSENSUS.md, ...]
 kpis: [criterio verificable 1, criterio verificable 2]
-rules: [K-1..K-14, L-1..L-17, S-1..S-16]
+rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 channels: [broadcast, direct, review, decision]   # alert solo para seguridad/cumplimiento
 squad_role: facilitator | evidence | monitor | architect | reviewer | builder | specialist
 decision_authority: propose | scoped | decide

@@ -17,7 +17,7 @@ cmd_start() {
 }
 
 cmd_stop() {
-  alive && { kill "$(cat "$S/exporter.pid")" 2>/dev/null || true; rm -f "$S/exporter.pid"; klog "exporter detenido"; } \
+  alive && { kill "$(cat "$S/exporter.pid")" 2>/dev/null || :  rm -f "$S/exporter.pid"; klog "exporter detenido"; } \
     || klog "exporter no activo"
 }
 

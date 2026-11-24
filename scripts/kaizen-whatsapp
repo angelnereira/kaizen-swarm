@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+# kaizen-whatsapp: plantillas, ventana 24h, opt-in y política oficial de WhatsApp (sin credenciales).
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
+[ -f "$ROOT/.kaizen/config.env" ] && . "$ROOT/.kaizen/config.env"
+[ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
+: "${KN_WHATSAPP_WINDOW_HOURS:=24}" "${KN_WHATSAPP_OPTIN_REQUIRED:=1}" "${KN_WHATSAPP_ALLOW_UNOFFICIAL:=0}"
+: "${KN_WHATSAPP_TEMPLATES_DIR:=.kaizen/team/whatsapp/templates}"
+# Número de El Presidente: solo configuración local de la máquina, nunca en el repo.
+OWNER_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/owner.env"
+[ -f "$OWNER_ENV" ] && . "$OWNER_ENV"
+T="$ROOT/$KN_WHATSAPP_TEMPLATES_DIR"
+# Opt-in y ventana son datos personales: SOLO en la máquina local, nunca en el repo.
+W="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/whatsapp"
+mkdir -p "$T" "$W"
+klog() { printf '[kaizen-whatsapp] %s\n' "$*"; }
+
+cmd_template_add() { # --id ID --category MARKETING|UTILITY|AUTHENTICATION --body T [--vars a,b]
+  local id="" cat="" body="" vars=""
+  while [ $# -gt 0 ]; do case "$1" in --id) id="$2"; shift;; --category) cat="$2"; shift;; --body) body="$2"; shift;; --vars) vars="$2"; shift;; esac; shift; done
+  case "$cat" in MARKETING|UTILITY|AUTHENTICATION) ;; *) echo "categoría inválida"; return 2;; esac
+  [ -n "$id" ] && [ -n "$body" ] || { echo "faltan --id/--body"; return 2; }
+  jq -n --arg id "$id" --arg cat "$cat" --arg body "$body" --arg vars "$vars" \
+    '{id:$id,category:$cat,body:$body,variables:$vars,status:"draft",note:"Requiere aprobación de Meta antes de uso proactivo"}' > "$T/$id.json"
+  klog "plantilla $id creada en estado draft"
+}
+
+cmd_templates() {
+  for f in "$T"/*.json; do
+    [ -f "$f" ] || { echo "(sin plantillas)"; return 0; }
+    printf '%s | %s | %s\n' "$(jq -r .id "$f")" "$(jq -r .category "$f")" "$(jq -r .status "$f")"
+  done
+}
+
+cmd_window() { # --phone N
+  local phone=""; while [ $# -gt 0 ]; do case "$1" in --phone) phone="$2"; shift;; esac; shift; done
+  [ -n "$phone" ] || { echo "falta --phone"; return 2; }
+  local f="$W/window-$phone.json"
+  if [ ! -f "$f" ]; then echo "$phone: sin interacción registrada → usa plantilla aprobada"; return 1; fi
+  local last age; last="$(jq -r .last_interaction "$f")"; age=$(( ( $(date +%s) - $(date -d "$last" +%s 2>/dev/null || echo 0) ) / 3600 ))
+  if [ "$age" -lt "$KN_WHATSAPP_WINDOW_HOURS" ]; then
+    echo "$phone: ventana abierta (${age}h < ${KN_WHATSAPP_WINDOW_HOURS}h) → mensaje libre permitido"
+  else
+    echo "$phone: ventana cerrada (${age}h) → solo plantilla aprobada"; return 1
+  fi
+}
+
+cmd_optin() { # add --phone N --source S | check --phone N
+  local action="$1"; shift; local phone="" source=""
+  while [ $# -gt 0 ]; do case "$1" in --phone) phone="$2"; shift;; --source) source="$2"; shift;; esac; shift; done
+  [ -n "$phone" ] || { echo "falta --phone"; return 2; }
+  local f="$W/optin-$phone.json"
+  if [ "$action" = add ]; then
+    jq -n --arg p "$phone" --arg s "$source" --arg ts "$(date -u +%FT%TZ)" '{phone:$p,source:$s,opted_at:$ts}' > "$f"
+    klog "opt-in registrado: $phone ($source)"
+  else
+    [ -f "$f" ] || { echo "$phone: SIN opt-in → no enviar"; return 1; }
+    echo "$phone: opt-in $(jq -r .source "$f") $(jq -r .opted_at "$f")"
+  fi
+}
+
+cmd_check() {
+  [ "$KN_WHATSAPP_ALLOW_UNOFFICIAL" = 0 ] || { klog "RIESGO: cliente no oficial habilitado (viola ToS, ADR-0025)"; return 1; }
+  [ "$KN_WHATSAPP_OPTIN_REQUIRED" = 1 ] || { klog "RIESGO: opt-in no obligatorio"; return 1; }
+  klog "política oficial OK: modo=$KN_WHATSAPP_MODE ventana=${KN_WHATSAPP_WINDOW_HOURS}h plantillas=$(find "$T" -name '*.json' | wc -l | tr -d ' ')"
+}
+
+cmd_owner() {
+  local p="${KAZEN_OWNER_PHONE:-}"
+  if [ -z "$p" ]; then echo "sin número de El Presidente en $OWNER_ENV"; return 1; fi
+  local digits; digits="$(printf '%s' "$p" | tr -cd '0-9')"
+  local masked="${p:0:4}••••${p: -4}"
+  echo "propietario: $masked | E.164: +$digits"
+  [ -f "$W/optin-$digits.json" ] && echo "opt-in: SI ($(jq -r .source "$W/optin-$digits.json"))" || echo "opt-in: NO"
+}
+
+case "${1:-check}" in
+  template) shift; cmd_template_add "$@";; templates) cmd_templates;;
+  owner) cmd_owner;;
+  window) shift; cmd_window "$@";; optin) shift; cmd_optin "$@";; check) cmd_check;;
+  *) echo "uso: kaizen-whatsapp template|templates|window|optin|check";;
+esac

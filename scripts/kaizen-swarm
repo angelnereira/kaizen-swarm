@@ -93,7 +93,7 @@ cmd_run() {
   local i=0
   for r in "${roles[@]}"; do
     i=$((i + 1)); [ $i -gt "${KSW_MAX_PARALLEL:-6}" ] && { know "tope de paralelismo alcanzado; el resto va en otra oleada"; break; }
-    agent="$(role_agent "$r")"; prompt="Ejecuta el rol $r del issue #$issue (ronda $round). Lee .kaizen/swarm/brief? no: .kaizen/swarm/issues/$issue/brief.md, plan.md, contracts/ y mailbox/. Sigue ROLES.md y PROTOCOL.md. Worktree wt-issue-$issue-$r. No hagas push ni abras PR."
+    agent="$(role_agent "$r")"; prompt="Ejecuta el rol $r del issue #$issue (ronda $round). Lee .kaizen/swarm/brief? no: .kaizen/swarm/issues/$issue/brief.md, plan.md, contracts/ y mailbox/. Sigue ROLES.md y PROTOCOL.md. Worktree wt-issue-$issue-$r. Puedes commit y push en ramas kaizen/* y abrir PR con evidencia; no hagas push directo a main (ADR-0023)."
     if is_dry; then
       klog "[dry-run] ronda=$round rol=$r agente=$agent worktree=$WT_ROOT/wt-issue-$issue-$r"
       continue
@@ -229,7 +229,7 @@ cmd_watch() {
   while IFS= read -r n; do
     [ -z "$n" ] && continue
     cmd_init "$n" || know "no se pudo iniciar sala para #$n"
-  done < <(gh issue list --label "$label" --state open --json number --jq '.[].number' 2>/dev/null || true)
+  done < <(gh issue list --label "$label" --state open --json number --jq '.[].number' 2>/dev/null || :)
 }
 
 cmd_check() {

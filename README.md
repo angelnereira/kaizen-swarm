@@ -125,6 +125,45 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
+## Dirección ejecutiva e incentivos
+
+Equipos `direccion-ejecutiva` (criterio normativo, legal, financiero y de negocio con humano como A en decisiones sensibles) e `incentivos` (`kaizen-incentive`: score ponderado Evidencia 25 / Cierre 25 / Proactividad 20 / Mejora 15 / Eficiencia 10 / Seguridad 5; refuerzo ≥70, ajuste 40-69, freno <40). El incentivo no recompensa resultados sin evidencia (ADR-0029).
+
+## Meta-auditoría ejecutora
+
+`scripts/kaizen-meta check|drift|close|guard|recurrence|execute` audita **y corrige**: cierre real (HEAD vs remoto + release), deriva de versión, permisos denegados, supresiones S-10 y recurrencia por clase (3 repeticiones → `stop-the-line`). El equipo `meta-auditoria` ejecuta remediaciones deterministas sin tocar seguridad/dinero/datos (ADR-0028).
+
+## Resolución de conflictos y push
+
+Los agentes pueden hacer push y resolver conflictos en ramas `kaizen/*`, `feature/*` o `fix/*` (nunca `main`) con `scripts/kaizen-conflict status|resolve|commit-push|abort`. La estrategia (`ours`/`theirs`) y cada push quedan auditados en `.kaizen/team/runtime/conflicts.jsonl`. Los 47 agentes generados tienen `git push*` en `allow` (ADR-0027); la negación anterior era la causa de los errores de permisos.
+
+## Despliegue Docker local
+
+```bash
+scripts/kaizen-docker check      # valida compose y sintaxis (sin daemon)
+scripts/kaizen-docker up         # exporter :9101 + Prometheus :9090 + Grafana :3000
+scripts/kaizen-docker status
+scripts/kaizen-docker down       # conserva volúmenes
+```
+
+Imagen base fijada, usuario no root, sin credenciales en la imagen, volúmenes persistentes. Requiere Docker Desktop corriendo; si no está, falla cerrado y documenta en outbox (ADR-0026).
+
+## WhatsApp oficial
+
+El puente usa **solo Cloud API oficial vía BSP/n8n**: ventana de 24 h, plantillas aprobadas, opt-in explícito y webhooks idempotentes con firma HMAC. `kaizen-whatsapp templates|window|optin|check` aplica la política localmente; Baileys/whatsapp-web.js está prohibido (`KN_WHATSAPP_ALLOW_UNOFFICIAL=0`). Credenciales en n8n/Vault, nunca en el repo (ADR-0025).
+
+## Instalación no invasiva y comunidad de pares
+
+La comunidad se instala en la **máquina y sus herramientas** (agentes globales + `~/.local/share/kaizen-swarm/workspaces/`), no dentro del código del proyecto: `kaizen-installer repo <destino>` solo registra un workspace externo; `--embedded` es explícito y opcional. Los agentes se organizan con `kaizen-peer request-review|comment|validate`, investigan en internet y participan en issues/PR remotos con `kaizen-remote` auditado (`--dry-run` por defecto). Ninguna credencial se guarda en el repo (ADR-0024, K-15).
+
+## Corpus normativo y citas verificadas
+
+`scripts/kaizen-knowledge add|ingest|verify|diff|index|stale|cite-check` mantiene `.kaizen/knowledge/sources.json` con niveles **V/S/I/N**, frescura por dominio y anclas por artículo. Solo una fuente **V** (verificada por humano) sustenta decisiones; `cite-check` falla si una cita no existe o no está verificada. Equipo `normativa-corpus` con `opencode/hy4-flash-free` (ADR-0022, `docs/kaizen/org/CORPUS-NORMATIVO.md`).
+
+## Economía de tokens y trabajo continuo
+
+`scripts/kaizen-tokens record|snapshot|report` lleva un ledger local de entrada/salida, coste reportado y ahorro **estimado**; el exporter lo publica como `kaizen_tokens_*` en Grafana. `kaizen-runtime work <equipo>` asigna la siguiente tarea pendiente al terminar una (proactividad sin detenerse), con `KT_MAX_TASKS_PER_AGENT=3`, `KT_MAX_AGENTS=12` y `KT_MAX_PARALLEL=6` para no reventar la máquina. Equipo `finops-tokens` con `opencode/hy4-flash-free` (ADR-0021, `docs/kaizen/org/TOKENS.md`).
+
 ## Supervisión local (Grafana)
 
 Grafana es la **capa de monitoreo**, 100 % en tu máquina: Prometheus `:9090`, Grafana `:3000`, exporter `:9101`. Muestra en tiempo real qué agente trabaja, en qué equipo, cuánto dura su evento y si terminó en verde. La **fuente** es persistente (archivos del repo) y el histórico se conserva en volúmenes locales de Prometheus y Grafana. No hay telemetría externa.

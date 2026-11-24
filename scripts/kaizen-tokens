@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# kaizen-tokens: consumo, ahorro estimado y optimización de tokens del equipo.
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
+[ -f "$ROOT/.kaizen/config.env" ] && . "$ROOT/.kaizen/config.env"
+[ -f "$ROOT/.kaizen/finops/tokens.env" ] && . "$ROOT/.kaizen/finops/tokens.env"
+: "${KT_LEDGER:=.kaizen/finops/token-ledger.jsonl}" "${KT_REPORT:=docs/kaizen/org/TOKENS.md}"
+: "${KT_BASELINE_INPUT:=4000}" "${KT_BASELINE_OUTPUT:=800}"
+case "$KT_LEDGER" in /*) L="$KT_LEDGER";; *) L="$ROOT/$KT_LEDGER";; esac; mkdir -p "$(dirname "$L")"; [ -f "$L" ] || : > "$L"
+klog() { printf '[kaizen-tokens] %s\n' "$*"; }
+kfail() { printf '[kaizen-tokens] FALLA: %s\n' "$*" >&2; }
+
+cmd_record() {
+  local agent="" task="" input=0 output=0 cost=0 saved=0 model=""
+  while [ $# -gt 0 ]; do case "$1" in
+    --agent) agent="$2"; shift;; --task) task="$2"; shift;; --input) input="$2"; shift;;
+    --output) output="$2"; shift;; --cost) cost="$2"; shift;; --saved) saved="$2"; shift;; --model) model="$2"; shift;;
+  esac; shift; done
+  [ -n "$agent" ] || { kfail "--agent obligatorio"; return 2; }
+  jq -cn --arg ts "$(date -u +%FT%TZ)" --arg agent "$agent" --arg task "$task" --arg model "$model" \
+    --argjson input "${input:-0}" --argjson output "${output:-0}" --argjson cost "${cost:-0}" --argjson saved "${saved:-0}" \
+    '{ts:$ts,agent:$agent,task:$task,model:$model,input:$input,output:$output,cost_usd:$cost,saved_estimate:$saved}' >> "$L"
+  klog "registro: $agent input=$input output=$output cost=$cost"
+}
+
+cmd_snapshot() {
+  python3 - "$L" "$KT_BASELINE_INPUT" "$KT_BASELINE_OUTPUT" <<'PY'
+import json,sys
+path,bi,bo=sys.argv[1],int(sys.argv[2]),int(sys.argv[3])
+rows=[json.loads(l) for l in open(path,encoding='utf-8') if l.strip()]
+print(f"registros={len(rows)}")
+if not rows: raise SystemExit
+ag={}
+for r in rows:
+    a=ag.setdefault(r.get('agent','?'),{'in':0,'out':0,'cost':0.0,'saved':0,'n':0})
+    a['in']+=r.get('input',0); a['out']+=r.get('output',0)
+    a['cost']+=r.get('cost_usd',0) or 0; a['saved']+=r.get('saved_estimate',0) or 0; a['n']+=1
+print(f"input_total={sum(a['in'] for a in ag.values())} output_total={sum(a['out'] for a in ag.values())}")
+print(f"coste_total_usd={sum(a['cost'] for a in ag.values()):.4f} ahorro_estimado={sum(a['saved'] for a in ag.values())}")
+for k,v in sorted(ag.items()):
+    base=bi+v['n']+bo+v['n']
+    _used=v['in']+v['out']
+    eff=max(0,min(100,int(100*(1-_used/base)))) if base else 0
+    print(f"{k}: tareas={v['n']} in={v['in']} out={v['out']} cost={v['cost']:.4f} ahorro={v['saved']} eficiencia={eff}%")
+PY
+}
+
+cmd_report() {
+  { printf '# Economía de tokens del equipo\n\n'
+    printf 'Generado: %s | Fuente: `%s`\n\n' "$(date -u +%FT%TZ)" "$KT_LEDGER"
+    printf '## Datos observados\n\n```\n'
+    cmd_snapshot
+    printf '\n```\n\n## Optimización\n\n'
+    printf -- '- Usar `opencode/hy4-flash-free` para tareas de coordinación y revisión.\n'
+    printf -- '- Limitar comprehensión del prompt a brief + contrato + rol.\n'
+    printf -- '- Agrupar preguntas del buzón en un solo ciclo (batch) antes de delegar.\n'
+    printf -- '- Recortar capturas de pantalla a la región relevante (Computer Use).\n'
+    printf -- '- Si un agente repite fallo, consultar `kaizen-learn guard` antes de reintentar.\n'
+    printf '\n## Ahorro estimado\nEl ahorro es una **estimación** contra una línea base configurable (input/output por tarea). No se afirma ahorro real sin medición previa (K-10).\n'
+  } > "$ROOT/$KT_REPORT"
+  klog "reporte: $KT_REPORT"
+}
+
+cmd_check() {
+  command -v jq >/dev/null 2>&1 || { kfail "jq requerido"; return 1; }
+  [ -f "$ROOT/.kaizen/finops/tokens.env" ] || { kfail "falta tokens.env"; return 1; }
+  klog "kaizen-tokens check: todo en verde"
+}
+
+case "${1:-snapshot}" in
+  record) shift; cmd_record "$@";; snapshot) cmd_snapshot;; report) cmd_report;; check) cmd_check;;
+  *) echo "uso: kaizen-tokens record --agent A --task T [--input N --output N --cost USD --saved N --model M] | snapshot | report | check";;
+esac

@@ -1,0 +1,22 @@
+{
+  "PA-LEG-000": {
+    "domain": "PA-LEG",
+    "status": "I",
+    "anchors": []
+  },
+  "PA-FIS-000": {
+    "domain": "PA-FIS",
+    "status": "I",
+    "anchors": []
+  },
+  "PA-AML-000": {
+    "domain": "PA-AML",
+    "status": "I",
+    "anchors": []
+  },
+  "INT-STD-000": {
+    "domain": "INT-STD",
+    "status": "I",
+    "anchors": []
+  }
+}

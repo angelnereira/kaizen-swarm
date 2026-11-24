@@ -89,5 +89,136 @@
     ],
     "kpi": "100% de decisiones con source_ids, retador asignado y memorial; 0 decisiones sensibles sin humano",
     "model": "opencode/hy4-flash-free"
+  },
+  "finops-tokens": {
+    "goal": "Medir y optimizar el consumo de tokens, estimar el ahorro y mantener a los agentes trabajando en tareas pendientes sin reventar la máquina",
+    "members": [
+      "finops",
+      "capacidades-negocio",
+      "verificador-evidencias",
+      "facilitador-equipo",
+      "qa"
+    ],
+    "kpi": "100% de tareas con consumo registrado, tendencia de coste estable y 0 agentes detenidos con tareas pendientes",
+    "model": "opencode/hy4-flash-free"
+  },
+  "normativa-corpus": {
+    "goal": "Construir y mantener el corpus normativo panameño con fuentes oficiales, anclas por artículo, frescura y citas verificadas",
+    "members": [
+      "monitor-gaceta",
+      "cumplimiento-panama",
+      "knowledge-curator",
+      "verificador-evidencias",
+      "architect",
+      "security",
+      "fiscal-integration-specialist",
+      "data-expert",
+      "qa",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de normas citadas con source_id nivel V, 0 fuentes críticas vencidas, 0 citas inválidas en entregables",
+    "model": "opencode/hy4-flash-free"
+  },
+  "whatsapp-onboarding": {
+    "goal": "Lograr que el mensaje de bienvenida llegue al numero de El Presidente y mantener interacciones y reportes hasta que confirme recepcion; no detenerse ante fallos de canal",
+    "members": [
+      "facilitador-equipo",
+      "verificador-evidencias",
+      "qa",
+      "dx",
+      "monitor-gaceta"
+    ],
+    "kpi": "1 mensaje entregado y confirmado por El Presidente; 0 SILENCIOS: cada fallo documentado en outbox",
+    "model": "opencode/hy4-flash-free"
+  },
+  "outsourcing-tech": {
+    "goal": "Contratar y supervisar especialistas externos por tecnologia: REA, reverse-api-engineer, Computer Use, observabilidad Grafana/Prometheus y puente WhatsApp BSP; con contratos, acceptance y evidencia antes de integrar",
+    "members": [
+      "facilitador-equipo",
+      "architect",
+      "security",
+      "finops",
+      "verificador-evidencias",
+      "knowledge-curator",
+      "rea-specialist",
+      "reverse-api-specialist",
+      "platform-engineer",
+      "gcp-cloud-architect",
+      "flutter-m3-design-specialist",
+      "dotnet-banking-integrator"
+    ],
+    "kpi": "100% de contratos con deliverable, acceptance y evidence.md; 0 integraciones sin verificacion",
+    "model": "opencode/hy4-flash-free"
+  },
+  "opencode-local-config": {
+    "goal": "Configurar y validar OpenCode en esta máquina: agentes globales, permisos V2, MCP rea/railway, instrucciones del proyecto y push permitido en ramas kaizen/*",
+    "members": [
+      "facilitador-equipo",
+      "dx",
+      "security",
+      "verificador-evidencias",
+      "qa",
+      "architect",
+      "knowledge-curator"
+    ],
+    "kpi": "47 agentes globales, 0 reglas deny de git push, esquema V2 válido, MCP rea activo",
+    "model": "opencode/hy4-flash-free"
+  },
+  "meta-auditoria": {
+    "goal": "Auditar y EJECUTAR correcciones del propio sistema: cierre verificado, deriva, permisos, recurrencia y sincronizacion de gobernanza",
+    "members": [
+      "verificador-evidencias",
+      "qa",
+      "architect",
+      "security",
+      "facilitador-equipo",
+      "dx",
+      "knowledge-curator"
+    ],
+    "kpi": "0 afirmaciones de 'hecho' sin evidencia de cierre; 0 denies de push; 0 clases de fallo por encima del limite sin stop-the-line",
+    "model": "opencode/hy4-flash-free"
+  },
+  "direccion-ejecutiva": {
+    "goal": "Tomar decisiones de diseño, arquitectura y requerimientos funcionales con criterio ejecutivo, normativo, legal y financiero; mantener las finanzas activas",
+    "members": [
+      "gerente",
+      "director-producto",
+      "analista-negocios",
+      "cumplimiento-panama",
+      "legal-corporativo",
+      "auditor-riesgos",
+      "finanzas-panamas",
+      "fiscal-integration-specialist",
+      "verificador-evidencias",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de decisiones con board, source_ids y humano como A en sensibles; 0 decisiones financieras sin criterio de finanzas/cumplimiento",
+    "model": "opencode/hy4-flash-free"
+  },
+  "incentivos": {
+    "goal": "Medir y reforzar el buen comportamiento de los agentes con un score ponderado: evidencia, cierre, proactividad, mejora, eficiencia de tokens y seguridad",
+    "members": [
+      "qa",
+      "dx",
+      "finops",
+      "knowledge-curator",
+      "verificador-evidencias",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de agentes con score monitorizado; 0 incentivos que recompensen resultados sin evidencia",
+    "model": "opencode/hy4-flash-free"
+  },
+  "portabilidad-windows": {
+    "goal": "Garantizar que agentes y framework funcionen igual en Windows/PowerShell y Linux con autodeteccion de plataforma",
+    "members": [
+      "platform-engineer",
+      "dx",
+      "qa",
+      "architect",
+      "verificador-evidencias",
+      "knowledge-curator"
+    ],
+    "kpi": "deteccion correcta en 100% de entornos; 0 supuestos de Linux",
+    "model": "opencode/hy4-flash-free"
   }
 }

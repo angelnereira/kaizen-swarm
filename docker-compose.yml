@@ -1,0 +1,55 @@
+# Despliegue LOCAL completo: exporter + Prometheus + Grafana.
+# Imágenes fijadas, sin root, sin secretos en el repo, volúmenes persistentes.
+services:
+  kaizen-exporter:
+    build: .
+    image: kaizen-swarm:local
+    container_name: kaizen-exporter
+    restart: unless-stopped
+    environment:
+      KO_EXPORTER_BIND: "0.0.0.0"
+      KO_EXPORTER_PORT: "9101"
+      KO_MONITOR_SIBLINGS: "0"
+    volumes:
+      - ${KAZEN_REPO_PATH:-.}:/app:ro
+      - ${KAZEN_WORKSPACES_PATH:-$HOME/.local/share/kaizen-swarm/workspaces}:/workspaces:ro
+    ports:
+      - "9101:9101"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:9101/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:v3.6.0
+    container_name: kaizen-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./observability/prometheus-container.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - kaizen-exporter
+
+  grafana:
+    image: grafana/grafana:12.3.0
+    container_name: kaizen-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${KAZEN_GRAFANA_ADMIN_USER:-kaizen-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${KAZEN_GRAFANA_ADMIN_PASSWORD:-kaizen-local}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus-data:
+  grafana-data:

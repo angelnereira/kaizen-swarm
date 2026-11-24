@@ -1,0 +1,82 @@
+[
+  {
+    "task": "Verificar 47 agentes globales y permisos allow de git push",
+    "owner": "qa",
+    "status": "ready",
+    "created": "2026-11-22T19:40:00Z",
+    "due": "2026-11-25T18:00:00Z",
+    "correlation_id": "OLC-VER-001",
+    "lease": {
+      "owner": "qa",
+      "expires_at": "2026-11-25T18:00:00Z"
+    },
+    "verified_by": "facilitador-equipo",
+    "verified_at": "2026-11-22T19:46:13Z",
+    "handoff_id": "H-1795376780163988176",
+    "evidence": "docs/kaizen/team/opencode-local-config/facilitador-equipo-verificacion.md",
+    "source_ids": [
+      "ISO-001",
+      "NIST-001",
+      "OWASP-001",
+      "AICPA-001",
+      "TOOL-001",
+      "ADR-0023"
+    ]
+  },
+  {
+    "task": "Validar opencode.json V2 (permissions) y denegaciones de secretos",
+    "owner": "security",
+    "status": "ready",
+    "created": "2026-11-22T19:46:13Z",
+    "due": "2026-11-25T18:00:00Z",
+    "correlation_id": "OLC-SEC-002",
+    "lease": {
+      "owner": "security",
+      "expires_at": "2026-11-25T18:00:00Z"
+    },
+    "verified_by": "facilitador-equipo",
+    "verified_at": "2026-11-22T20:00:37Z",
+    "handoff_id": "H-1795377637441",
+    "evidence": "docs/kaizen/team/opencode-local-config/facilitador-equipo-validacion-v2-secretos.md",
+    "source_ids": [
+      "ISO-001",
+      "NIST-001",
+      "OWASP-001",
+      "AICPA-001",
+      "TOOL-001"
+    ]
+  },
+  {
+    "task": "Verificar MCP rea y railway activos sin credenciales en repo",
+    "owner": "dx",
+    "status": "ready",
+    "due": "2026-11-26T18:00:00Z",
+    "correlation_id": "OLC-MCP-003",
+    "lease": {
+      "owner": "dx",
+      "expires_at": "2026-11-26T18:00:00Z"
+    },
+    "verified_by": "facilitador-equipo",
+    "verified_at": "2026-11-23T03:16:19Z",
+    "handoff_id": "H-1795403779907",
+    "evidence": "docs/kaizen/team/opencode-local-config/facilitador-equipo-mcp-verificacion.md",
+    "source_ids": [
+      "TOOL-001",
+      "ISO-001",
+      "NIST-001",
+      "OWASP-001",
+      "AICPA-001"
+    ],
+    "created": "2026-11-23T03:16:19Z"
+  },
+  {
+    "task": "Confirmar instrucciones del proyecto y catálogo de roles vigente",
+    "owner": "knowledge-curator",
+    "status": "pending"
+  },
+  {
+    "task": "Emitir dictamen final de configuración local",
+    "owner": "verificador-evidencias",
+    "status": "pending"
+  }
+]

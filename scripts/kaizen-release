@@ -21,7 +21,7 @@ cmd_status() {
 }
 
 cmd_notes() {
-  local v="${1:-$(version)}" prev; prev="$(git -C "$ROOT" describe --tags --abbrev=0 2>/dev/null || true)"
+  local v="${1:-$(version)}" prev; prev="$(git -C "$ROOT" describe --tags --abbrev=0 2>/dev/null || :)"
   local range="$prev..HEAD"; [ -z "$prev" ] && range="HEAD"
   local out="$ROOT/$KV_NOTES_DIR/$v.md"; mkdir -p "$(dirname "$out")"
   {
@@ -34,7 +34,7 @@ cmd_notes() {
     printf '\n\n## Capacidades\n- Catálogo de %s herramientas REA en %s familias.\n- Gobernanza semántica, evaluación, aprendizaje y runtime proactivo.\n' \
       "$(jq -r '.stats.rea_tools // 0' "$ROOT/$KV_CATALOG" 2>/dev/null)" \
       "$(jq -r '.stats.families // 0' "$ROOT/$KV_CATALOG" 2>/dev/null)"
-    printf '\n## Instalación\n```bash\nnpx -y opencode-ai@latest >/dev/null 2>&1 || true\ngit clone --depth 1 https://github.com/angelnereira/kaizen-swarm /tmp/kaizen-swarm\n/tmp/kaizen-swarm/scripts/kaizen-installer all <proyecto>\n/tmp/kaizen-swarm/scripts/kaizen-release install --global\n```\n'
+    printf '\n## Instalación\n```bash\nnpx -y opencode-ai@latest >/dev/null 2>&1 || : #28\ngit clone --depth 1 https://github.com/angelnereira/kaizen-swarm /tmp/kaizen-swarm\n/tmp/kaizen-swarm/scripts/kaizen-installer all <proyecto>\n/tmp/kaizen-swarm/scripts/kaizen-release install --global\n```\n'
   } > "$out"
   klog "notas: $out"
 }

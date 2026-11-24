@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+"""kaizen-incentive: score ponderado y reforzamiento de comportamiento proactivo."""
+import datetime, json, os, sys
+ROOT=os.environ.get("KAZEN_ROOT",os.getcwd())
+C={}
+p=os.path.join(ROOT,".kaizen/incentives/incentives.env")
+for line in open(p,encoding="utf-8"):
+    line=line.strip()
+    if line and not line.startswith("#") and "=" in line:
+        k,v=line.split("=",1); C[k]=v.strip().strip('"')
+W={k:float(C.get(k,"0")) for k in ("KI_W_EVIDENCE","KI_W_CLOSURE","KI_W_PROACTIVITY","KI_W_IMPROVEMENT","KI_W_EFFICIENCY","KI_W_SECURITY")}
+LEDGER=os.path.join(ROOT,C.get("KI_LEDGER",".kaizen/incentives/ledger.jsonl")); os.makedirs(os.path.dirname(LEDGER),exist_ok=True)
+if not os.path.exists(LEDGER): open(LEDGER,"w").close()
+
+def rows():
+    return [json.loads(l) for l in open(LEDGER,encoding="utf-8") if l.strip()]
+
+KEYS={"KI_W_EVIDENCE":"evidence","KI_W_CLOSURE":"closure","KI_W_PROACTIVITY":"proactivity",
+      "KI_W_IMPROVEMENT":"improvement","KI_W_EFFICIENCY":"efficiency","KI_W_SECURITY":"security"}
+def score(r):
+    return round(sum(float(r.get(KEYS[k],0))*v for k,v in W.items()),2)
+
+def cmd_record(args):
+    kv={}
+    for i in range(0,len(args)-1,2): kv[args[i].lstrip("-")]=args[i+1]
+    if not kv.get("agent"): print("uso: record --agent A [--evidence 1 ...]"); return 2
+    rec={"ts":datetime.datetime.now(datetime.timezone.utc).isoformat(),"agent":kv["agent"]}
+    for k in ("evidence","closure","proactivity","improvement","efficiency","security"):
+        rec[k]=float(kv.get(k,"0"))
+    rec["score"]=score(rec)
+    with open(LEDGER,"a",encoding="utf-8") as f: f.write(json.dumps(rec,ensure_ascii=False)+"\n")
+    print(f"{rec['agent']}: score={rec['score']}")
+
+def cmd_score(agent=""):
+    data=rows()
+    if agent: data=[r for r in data if r["agent"]==agent]
+    by={}
+    for r in data: by.setdefault(r["agent"],[]).append(r["score"])
+    if not by: print("(sin datos)"); return
+    for a,s in sorted(by.items()): print(f"{a}: {sum(s)/len(s):.2f} (n={len(s)})")
+
+def cmd_reward(agent):
+    data=[r for r in rows() if r["agent"]==agent]
+    if not data: print("sin datos"); return 1
+    s=sum(r["score"] for r in data)/len(data)
+    if s>=70:
+        print(f"REFUERZO: {agent} con score {s:.1f}/100 — evidencia y cierre en verde; continuar con la siguiente tarea pendiente.")
+    elif s>=40:
+        print(f"AJUSTE: {agent} con score {s:.1f}/100 — mejorar cierre y evidencia antes de seguir.")
+    else:
+        print(f"FRENO: {agent} con score {s:.1f}/100 — sin incentivo: revisar outbox y ADR antes de continuar.")
+    return 0
+
+def cmd_dashboard():
+    data=rows(); by={}
+    for r in data: by.setdefault(r["agent"],[]).append(r["score"])
+    out=os.path.join(ROOT,C.get("KI_REPORT","docs/kaizen/org/INCENTIVOS.md"))
+    os.makedirs(os.path.dirname(out),exist_ok=True)
+    lines=["# Incentivos y comportamiento proactivo\n",
+           f"Generado: {datetime.datetime.now(datetime.timezone.utc).isoformat()}\n",
+           "| Dimensión | Peso |", "| --- | ---: |"]
+    labels={"KI_W_EVIDENCE":"Evidencia","KI_W_CLOSURE":"Cierre verificado","KI_W_PROACTIVITY":"Proactividad",
+            "KI_W_IMPROVEMENT":"Mejora continua","KI_W_EFFICIENCY":"Eficiencia tokens","KI_W_SECURITY":"Seguridad"}
+    for k,v in W.items(): lines.append(f"| {labels[k]} | {int(v)} |")
+    lines += ["", "| Agente | Score medio | Muestras | Refuerzo |", "| --- | ---: | ---: | --- |"]
+    for a,s in sorted(by.items()):
+        avg=sum(s)/len(s)
+        lines.append(f"| {a} | {avg:.1f} | {len(s)} | {'REFUERZO' if avg>=70 else ('AJUSTE' if avg>=40 else 'FRENO')} |")
+    lines += ["", "El incentivo **no recompensa resultados sin evidencia**: cada medición exige evidencia y cierre reales (ADR-0029)."]
+    open(out,"w",encoding="utf-8").write("\n".join(lines)+"\n")
+    print("reporte:",os.path.relpath(out,ROOT))
+
+def cmd_check():
+    if abs(sum(W.values())-100)>0.01: print("pesos no suman 100"); return 1
+    print("kaizen-incentive check: todo en verde"); return 0
+
+cmd=sys.argv[1] if len(sys.argv)>1 else "status"
+if cmd=="record": sys.exit(cmd_record(sys.argv[2:]))
+if cmd=="score": cmd_score(sys.argv[2] if len(sys.argv)>2 else "")
+if cmd=="reward": sys.exit(cmd_reward(sys.argv[2]))
+if cmd=="dashboard": sys.exit(cmd_dashboard())
+if cmd=="check": sys.exit(cmd_check())
+print("uso: kaizen-incentive record|score|reward|dashboard|check")

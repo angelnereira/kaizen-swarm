@@ -1,0 +1,24 @@
+{"ts": "2026-11-22T19:58:35.780863+00:00", "level": "ok", "rule": "check-gov", "detail": "kaizen-gov check: todo en verde (45 agentes, 12 procesos)", "evidence": ""}
+{"ts": "2026-11-22T19:58:35.850737+00:00", "level": "ok", "rule": "check-eval", "detail": "agentes=45 promedio=100.0 minimo=70 bajo_minimo=0", "evidence": ""}
+{"ts": "2026-11-22T19:58:47.479530+00:00", "level": "ok", "rule": "check-swarm", "detail": "[kaizen-swarm] kaizen-swarm check: todo en verde", "evidence": ""}
+{"ts": "2026-11-22T19:58:47.574180+00:00", "level": "ok", "rule": "check-security", "detail": "kaizen-security: ok", "evidence": ""}
+{"ts": "2026-11-22T19:58:47.578721+00:00", "level": "ok", "rule": "permisos-push", "detail": "0 agentes con deny de push", "evidence": ""}
+{"ts": "2026-11-22T19:58:47.592130+00:00", "level": "block", "rule": "s10-supresiones", "detail": "32 supresiones sin issue", "evidence": "scripts/kaizen-meta:140, scripts/kaizen-notify:63, scripts/kaizen-security:149, scripts/kaizen-inbox:18, scripts/kaizen-loop:19"}
+{"ts": "2026-11-22T19:59:13.467122+00:00", "level": "ok", "rule": "check-gov", "detail": "kaizen-gov check: todo en verde (45 agentes, 12 procesos)", "evidence": ""}
+{"ts": "2026-11-22T19:59:13.512626+00:00", "level": "ok", "rule": "check-eval", "detail": "agentes=45 promedio=100.0 minimo=70 bajo_minimo=0", "evidence": ""}
+{"ts": "2026-11-22T19:59:13.532643+00:00", "level": "block", "rule": "check-swarm", "detail": "scripts/kaizen-swarm: line 233: `}'", "evidence": ""}
+{"ts": "2026-11-22T19:59:13.548964+00:00", "level": "block", "rule": "check-security", "detail": "scripts/kaizen-security: line 154: `}'", "evidence": ""}
+{"ts": "2026-11-22T19:59:13.553172+00:00", "level": "ok", "rule": "permisos-push", "detail": "0 agentes con deny de push", "evidence": ""}
+{"ts": "2026-11-22T19:59:13.556453+00:00", "level": "ok", "rule": "s10-supresiones", "detail": "0 supresiones sin issue", "evidence": ""}
+{"ts": "2026-11-22T20:00:54.526554+00:00", "level": "ok", "rule": "check-gov", "detail": "kaizen-gov check: todo en verde (45 agentes, 12 procesos)", "evidence": ""}
+{"ts": "2026-11-22T20:00:54.614036+00:00", "level": "ok", "rule": "check-eval", "detail": "agentes=45 promedio=100.0 minimo=70 bajo_minimo=0", "evidence": ""}
+{"ts": "2026-11-22T20:01:06.567455+00:00", "level": "ok", "rule": "check-swarm", "detail": "[kaizen-swarm] kaizen-swarm check: todo en verde", "evidence": ""}
+{"ts": "2026-11-22T20:01:06.677978+00:00", "level": "ok", "rule": "check-security", "detail": "kaizen-security: ok", "evidence": ""}
+{"ts": "2026-11-22T20:01:06.682061+00:00", "level": "ok", "rule": "permisos-push", "detail": "0 agentes con deny de push", "evidence": ""}
+{"ts": "2026-11-22T20:01:06.685400+00:00", "level": "ok", "rule": "s10-supresiones", "detail": "0 supresiones sin issue", "evidence": ""}
+{"ts": "2026-11-22T20:01:31.366538+00:00", "level": "ok", "rule": "ejecucion", "detail": "13 cambios aplicados", "evidence": "supresiones S-10 corregidas en kaizen-meta; supresiones S-10 corregidas en kaizen-notify; supresiones S-10 corregidas en kaizen-loop; supresiones S-10 corregidas en kaizen-learn; supresiones S-10 corregidas en kaizen; supresiones S-10 corregidas en kaizen-runtime; supresiones S-10 corregidas en kaizen-start; supresiones S-10 corregidas en kaizen-release"}
+{"ts": "2026-11-22T20:01:31.450040+00:00", "level": "block", "rule": "recurrencia", "detail": "clases en tope: ['verificacion', 'otros', 'infra']", "evidence": "{\"verificacion\": 5, \"otros\": 12, \"infra\": 4, \"cifras\": 2}"}
+{"ts": "2026-11-23T03:15:50.747853+00:00", "level": "block", "rule": "recurrencia", "detail": "clases en tope: ['verificacion', 'otros', 'infra', 'cifras']", "evidence": "{\"verificacion\": 5, \"otros\": 15, \"infra\": 4, \"drift\": 1, \"cifras\": 3}"}
+{"ts": "2026-11-23T03:16:21.442399+00:00", "level": "block", "rule": "drift-git", "detail": "local=34fdf4de origin=407ed833", "evidence": ""}
+{"ts": "2026-11-23T03:17:41.602329+00:00", "level": "block", "rule": "drift-git", "detail": "local=34fdf4de origin=407ed833", "evidence": ""}
+{"ts": "2026-11-23T03:28:53.821350+00:00", "level": "block", "rule": "drift-git", "detail": "local=57fd48b4 origin=407ed833", "evidence": ""}

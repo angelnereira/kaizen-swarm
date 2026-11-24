@@ -11,7 +11,7 @@ tools: {{TOOLS}}
 triggers: {{TRIGGERS}}
 knowledge: {{KNOWLEDGE}}
 kpis: {{KPIS}}
-rules: [K-1..K-14, L-1..L-17, S-1..S-16]
+rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 channels: [broadcast, direct, review, decision]
 squad_role: {{SQUAD_ROLE}}
 decision_authority: {{AUTONOMY}}

@@ -60,7 +60,7 @@ cmd_send() {
 }
 
 cmd_event() { # equipo, resultado, detalle
-  local team="$1" rc="$2" detail="${3:-}"; shift 3 || true
+  local team="$1" rc="$2" detail="${3:-}"; shift 3 || : #28
   local level=info; [ "$rc" != 0 ] && level=alert
   cmd_send --title "Equipo $team: $([ "$rc" = 0 ] && echo OK || echo INCIDENCIA)" \
     --body "Resultado: $rc

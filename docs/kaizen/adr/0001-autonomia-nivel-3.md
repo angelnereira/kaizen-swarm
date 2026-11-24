@@ -22,7 +22,7 @@ Fijar `KL_AUTONOMY=3` desde la instalación y retirar `.kaizen/loop/PAUSE`. La c
 - Negativas: mayor superficie de auto-merge. Se compensa con rutas protegidas (L-4), CODEOWNERS, protección de rama, presupuesto diario, disyuntor y veto vinculante de Seguridad/Arquitecto/QA.
 
 ## Restricciones que NO se relajan
-Nunca sin humano: rutas protegidas, seguridad y autenticación, pagos, migraciones destructivas, borrado de datos, publicación a producción sin pipeline con gate humano, y modificar el propio loop o sus reglas. El orquestador —no el agente— hace push y abre PRs.
+Nunca sin humano: rutas protegidas, seguridad y autenticación, pagos, migraciones destructivas, borrado de datos, publicación a producción sin pipeline con gate humano, y modificar el propio loop o sus reglas. Los agentes pueden push a ramas kaizen/* y abrir PRs; nunca push directo a main (ADR-0023).
 
 ## Cómo se verificará
 - `scripts/kaizen-swarm check` confirma la existencia de este ADR.

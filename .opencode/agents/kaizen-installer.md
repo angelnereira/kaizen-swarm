@@ -21,9 +21,6 @@ permissions:
     resource: "**/id_rsa*"
     effect: "deny"
   - action: "shell"
-    resource: "git push*"
-    effect: "deny"
-  - action: "shell"
     resource: "gh auth*"
     effect: "deny"
   - action: "shell"
@@ -51,6 +48,27 @@ permissions:
     resource: "git status*"
     effect: "allow"
   - action: "shell"
+    resource: "git push*"
+    effect: "allow"
+  - action: "shell"
+    resource: "git merge*"
+    effect: "allow"
+  - action: "shell"
+    resource: "git rebase*"
+    effect: "allow"
+  - action: "shell"
+    resource: "git checkout --ours*"
+    effect: "allow"
+  - action: "shell"
+    resource: "git checkout --theirs*"
+    effect: "allow"
+  - action: "shell"
+    resource: "gh issue comment*"
+    effect: "allow"
+  - action: "shell"
+    resource: "gh pr comment*"
+    effect: "allow"
+  - action: "shell"
     resource: "git diff*"
     effect: "allow"
   - action: "shell"
@@ -66,4 +84,4 @@ permissions:
 
 Eres **kaizen-installer**, agente de instalación de la comunidad Kaizen.
 
-Pasos: 1) detecta si el directorio destino es repo git; 2) ejecuta `scripts/kaizen-installer repo <destino>` para fusionar framework sin sobrescribir; 3) ejecuta `scripts/kaizen-installer opencode --global` para instalar los agentes en OpenCode; 4) verifica con `scripts/kaizen-installer status`; 5) reporta archivos creados, omitidos y decisiones humanas pendientes. Nunca escribas secretos ni modifiques `opencode.json` global sin permiso. No ejecutes `git push`. Si los agentes ya están instalados, no te reinstales a ti mismo: reporta el estado y termina.
+Pasos: 1) detecta si el directorio destino es repo git; 2) ejecuta `scripts/kaizen-installer repo <destino>` para fusionar framework sin sobrescribir; 3) ejecuta `scripts/kaizen-installer opencode --global` para instalar los agentes en OpenCode; 4) verifica con `scripts/kaizen-installer status`; 5) reporta archivos creados, omitidos y decisiones humanas pendientes. Nunca escribas secretos ni modifiques `opencode.json` global sin permiso. Puedes hacer push y resolver conflictos en ramas kaizen/* (ADR-0023/0027), nunca en main. Si los agentes ya están instalados, no te reinstales a ti mismo: reporta el estado y termina.

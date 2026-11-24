@@ -1,0 +1,230 @@
+#!/usr/bin/env python3
+"""kaizen-knowledge: corpus normativo local con fuentes, anclas, frescura y verificación de citas."""
+import datetime
+import hashlib
+import json
+import os
+import re
+import sys
+import urllib.request
+
+ROOT = os.environ.get("KAZEN_ROOT", os.getcwd())
+SOURCES = os.path.join(ROOT, ".kaizen/knowledge/sources.json")
+CORPUS = os.path.join(ROOT, ".kaizen/knowledge/corpus")
+OUTBOX = os.path.join(ROOT, ".kaizen/loop/outbox")
+
+
+def load():
+    return json.load(open(SOURCES, encoding="utf-8"))
+
+
+def save(d):
+    json.dump(d, open(SOURCES, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+
+
+def find(d, sid):
+    return next((s for s in d["sources"] if s["id"] == sid), None)
+
+
+def outbox(kind, title, detail):
+    os.makedirs(OUTBOX, exist_ok=True)
+    fp = hashlib.sha256((kind + title).encode()).hexdigest()[:12]
+    path = os.path.join(OUTBOX, f"knowledge-{fp}.md")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(f"kind: {kind}\ntitle: {title}\nfingerprint: knowledge-{fp}\n---\n\n## Qué pasó\n{title}\n\n## Detalle\n{detail}\n\n## Evidencia\nSalida real de kaizen-knowledge; sin secretos.\n")
+    print(f"outbox: {path}")
+
+
+def cmd_add(args):
+    kv = {}
+    for i in range(0, len(args) - 1, 2):
+        kv[args[i].lstrip("-")] = args[i + 1]
+    sid = kv.get("id")
+    if not sid or not kv.get("url"):
+        print("uso: add --id PA-LEG-000 --domain PA-LEG --title T --issuer I --url U [--published F] [--freshness 30]")
+        return 2
+    d = load()
+    if find(d, sid):
+        print("la fuente ya existe; usa ingest/verify")
+        return 2
+    d["sources"].append({
+        "id": sid, "domain": kv.get("domain", sid.split("-")[0]), "title": kv.get("title", ""),
+        "issuer": kv.get("issuer", ""), "url": kv["url"], "published": kv.get("published"),
+        "freshness_days": int(kv.get("freshness", "30")), "status": "I",
+        "sha256": None, "retrieved": None, "note": "Registrada; pendiente de ingestión y verificación humana.",
+    })
+    save(d)
+    print(f"fuente añadida: {sid} (nivel I)")
+    return 0
+
+
+def cmd_ingest(sid):
+    d = load()
+    s = find(d, sid)
+    if not s:
+        print("fuente no encontrada")
+        return 2
+    domain_dir = os.path.join(CORPUS, s["domain"])
+    os.makedirs(domain_dir, exist_ok=True)
+    try:
+        req = urllib.request.Request(s["url"], headers={"User-Agent": "kaizen-knowledge/1 (official source verification)"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            data = r.read()
+        digest = hashlib.sha256(data).hexdigest()
+        raw = os.path.join(domain_dir, sid + ".bin")
+        open(raw, "wb").write(data)
+        s["sha256"] = digest
+        s["retrieved"] = datetime.datetime.now(datetime.timezone.utc).date().isoformat()
+        if s["status"] == "I":
+            s["status"] = "S"
+        md = os.path.join(domain_dir, sid + ".md")
+        with open(md, "w", encoding="utf-8") as f:
+            f.write(f"# {s['title']}\n\n- source_id: {sid}\n- issuer: {s['issuer']}\n- url: {s['url']}\n- sha256: {digest}\n- retrieved: {s['retrieved']}\n- nivel: {s['status']}\n\n")
+            f.write("## Estado de extracción\nTexto normalizado y anclas por artículo **pendientes**. El binario oficial se conservó para verificación humana.\n")
+        save(d)
+        print(f"ingesta OK: {sid} sha256={digest[:16]} (nivel {s['status']})")
+        return 0
+    except Exception as e:
+        outbox("failure", f"Ingesta fallida de {sid}", f"{type(e).__name__}: {e}\nURL: {s['url']}")
+        print(f"ingesta fallida: {sid} ({type(e).__name__}) — documentado en outbox; no se supone contenido")
+        return 1
+
+
+def cmd_verify(args):
+    kv = {}
+    for i in range(0, len(args) - 1, 2):
+        kv[args[i].lstrip("-")] = args[i + 1]
+    sid, by = kv.get("id"), kv.get("by")
+    if not sid or not by:
+        print("uso: verify --id <source_id> --by <humano>  (un agente no puede auto-verificar)")
+        return 2
+    d = load()
+    s = find(d, sid)
+    if not s:
+        return 2
+    if not s.get("sha256"):
+        print("sin hash de ingesta: ejecuta ingest primero")
+        return 1
+    s["status"] = "V"
+    s["verified_by"] = by
+    s["verified_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    save(d)
+    print(f"{sid} verificado por {by} (nivel V)")
+    return 0
+
+
+def cmd_diff(sid):
+    d = load()
+    s = find(d, sid)
+    if not s:
+        return 2
+    try:
+        req = urllib.request.Request(s["url"], headers={"User-Agent": "kaizen-knowledge/1"})
+        data = urllib.request.urlopen(req, timeout=20).read()
+        digest = hashlib.sha256(data).hexdigest()
+    except Exception as e:
+        outbox("failure", f"Diff fallido de {sid}", f"{type(e).__name__}: {e}")
+        print("diff no disponible; documentado en outbox")
+        return 1
+    old = s.get("sha256")
+    print(f"{sid}: {'SIN CAMBIOS' if old == digest else 'CAMBIÓ'} (old={str(old)[:12]} new={digest[:12]})")
+    if old != digest:
+        outbox("finding", f"Cambio detectado en {sid}", f"hash anterior {old} != actual {digest}")
+    return 0
+
+
+def cmd_index():
+    d = load()
+    idx = {}
+    for s in d["sources"]:
+        p = os.path.join(CORPUS, s["domain"], s["id"] + ".md")
+        anchors = []
+        if os.path.exists(p):
+            anchors = re.findall(r"^## (.+)$", open(p, encoding="utf-8").read(), re.M)
+        idx[s["id"]] = {"domain": s["domain"], "status": s["status"], "anchors": anchors}
+    out = os.path.join(CORPUS, "index.json")
+    json.dump(idx, open(out, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+    print(f"índice local: {len(idx)} fuentes")
+    return 0
+
+
+def cmd_stale():
+    d = load()
+    today = datetime.date.today()
+    changed = 0
+    for s in d["sources"]:
+        if not s.get("retrieved"):
+            print(f"{s['id']}: sin fecha de recuperación (no se puede calcular frescura)")
+            continue
+        try:
+            age = (today - datetime.date.fromisoformat(s["retrieved"])).days
+        except Exception:
+            continue
+        maxd = s.get("freshness_days", 30)
+        if age > maxd and s["status"] != "N":
+            s["status"] = "N"
+            changed += 1
+            print(f"{s['id']}: VENCIDA ({age}d > {maxd}d) → nivel N")
+        elif maxd - age <= 3:
+            print(f"{s['id']}: vence en {maxd - age}d")
+    if changed:
+        save(d)
+    return 0
+
+
+def cmd_cite_check(path):
+    if not os.path.exists(path):
+        print("archivo no existe")
+        return 2
+    d = load()
+    text = open(path, encoding="utf-8", errors="replace").read()
+    ids = set(re.findall(r"\b(?:PA|INT)-[A-Z]+-\d{3}\b", text))
+    bad = []
+    for sid in sorted(ids):
+        s = find(d, sid)
+        if not s:
+            bad.append(f"{sid}: no existe en sources.json")
+        elif s["status"] != "V":
+            bad.append(f"{sid}: nivel {s['status']} (requiere V)")
+    if bad:
+        print("CITAS INVÁLIDAS:\n  " + "\n  ".join(bad))
+        return 1
+    print(f"citas válidas: {len(ids)} | archivo: {path}")
+    return 0
+
+
+def cmd_check():
+    d = load()
+    ids = [s["id"] for s in d["sources"]]
+    if len(ids) != len(set(ids)):
+        print("IDs duplicados")
+        return 1
+    for s in d["sources"]:
+        for k in ("id", "domain", "title", "url", "freshness_days", "status"):
+            if k not in s:
+                print(f"{s.get('id')}: falta {k}")
+                return 1
+    print(f"kaizen-knowledge check: todo en verde ({len(ids)} fuentes)")
+    return 0
+
+
+cmd = sys.argv[1] if len(sys.argv) > 1 else "check"
+args = sys.argv[2:]
+if cmd == "add":
+    sys.exit(cmd_add(args))
+if cmd == "ingest":
+    sys.exit(cmd_ingest(args[0]))
+if cmd == "verify":
+    sys.exit(cmd_verify(args))
+if cmd == "diff":
+    sys.exit(cmd_diff(args[0]))
+if cmd == "index":
+    sys.exit(cmd_index())
+if cmd == "stale":
+    sys.exit(cmd_stale())
+if cmd == "cite-check":
+    sys.exit(cmd_cite_check(args[0]))
+if cmd == "check":
+    sys.exit(cmd_check())
+print("uso: kaizen-knowledge add|ingest|verify|diff|index|stale|cite-check|check")
+sys.exit(2)

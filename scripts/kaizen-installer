@@ -28,12 +28,19 @@ gen() { # destino
 }
 
 cmd_repo() {
-  local target="${1:?uso: repo <directorio>}"
+  local target="" embedded=0
+  while [ $# -gt 0 ]; do case "$1" in --embedded) embedded=1;; *) target="$1";; esac; shift; done
+  [ -n "$target" ] || { kfail "uso: repo <directorio> [--embedded]"; return 2; }
   [ -d "$target" ] || { kfail "no existe: $target"; return 2; }
   git -C "$target" rev-parse --show-toplevel >/dev/null 2>&1 || { kfail "no es repo git: $target"; return 2; }
-  "$ROOT/scripts/bootstrap" "$target"
-  local n; n="$(gen "$target/.opencode/agents")"
-  klog "agentes del proyecto: $n instalados en $target/.opencode/agents"
+  "$ROOT/scripts/kaizen-workspace" init "$target" || return 1
+  if [ "$embedded" = 1 ]; then
+    "$ROOT/scripts/bootstrap" "$target"
+    local n; n="$(gen "$target/.opencode/agents")"
+    klog "modo EMBEDDING explícito: $n agentes de proyecto en $target/.opencode/agents"
+  else
+    klog "modo no invasivo (ADR-0024): NO se escribió .kaizen/ ni docs/kaizen/ en $target"
+  fi
 }
 
 cmd_opencode() {
@@ -66,15 +73,17 @@ cmd_check() {
 case "${1:-help}" in
   repo) shift; cmd_repo "$@";;
   opencode) shift; cmd_opencode "$@";;
-  all) shift; t="${1:?uso: all <directorio>}"; cmd_repo "$t"; cmd_opencode --project "$t"; cmd_opencode --global;;
+  all) shift; emb=0; [ "${1:-}" = "--embedded" ] && { emb=1; shift; }; t="${1:?uso: all <directorio> [--embedded]}"; \
+       if [ $emb = 1 ]; then cmd_repo "$t" --embedded; cmd_opencode --project "$t"; else cmd_repo "$t"; fi; \
+       cmd_opencode --global;;
   status) cmd_status;;
   check) cmd_check;;
   *) cat <<'EOF'
 kaizen-installer <comando>
-  repo <directorio>          instala el framework en un repo (bootstrap) + agentes locales
+  repo <directorio>          registra workspace externo (NO invasivo); --embedded para framework en el repo
   opencode --global          instala todos los agentes en ~/.config/opencode/agents
   opencode --project <dir>   instala los agentes en <dir>/.opencode/agents
-  all <directorio>           repo + agentes locales + agentes globales
+  all <directorio>           workspace externo + agentes globales; --embedded también escribe en el repo
   status | check             estado y validación
 EOF
   ;;

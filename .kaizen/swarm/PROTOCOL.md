@@ -69,7 +69,7 @@ El reparto respeta `KSW_MAX_PARALLEL=6` y las dependencias de `plan.md`.
 2. Dev5 + Architect integran las ramas parciales en la rama del issue.
 3. Genera `export.md` saneado y el descriptor `docs/kaizen/pr-drafts/<rama-aplanada>.md` con `Closes #N`.
 4. Ejecuta `scripts/kaizen check` y `scripts/kaizen-security check`. Si algo falla, no integra y reporta por outbox.
-5. El orquestador hace push y abre el PR. Los agentes nunca lo hacen (L-3).
+5. Los agentes pueden hacer push a ramas `kaizen/*` y abrir PRs; el orquestador sigue siendo una vía auditada, no la única (ADR-0023). Nunca push directo a `main`.
 
 ## 7. Seguridad del protocolo
 

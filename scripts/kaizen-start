@@ -68,12 +68,12 @@ cmd_start() {
   fi
   "$ROOT/scripts/kaizen-inbox" start
   "$ROOT/scripts/kaizen-notify" send --title "Comunidad activa" \
-    --body "El equipo Kaizen está trabajando de forma proactiva. Objetivo: convertir instrucciones de El Presidente en decisiones verificadas." --level info >/dev/null 2>&1 || true
+    --body "El equipo Kaizen está trabajando de forma proactiva. Objetivo: convertir instrucciones de El Presidente en decisiones verificadas." --level info >/dev/null 2>&1 || : #28
   klog "un solo comando ejecutado: agentes + runtime + buzón activos"
 }
 
 cmd_stop() {
-  command -v systemctl >/dev/null 2>&1 && systemctl --user stop kaizen-runtime.service >/dev/null 2>&1 || true
+  command -v systemctl >/dev/null 2>&1 && systemctl --user stop kaizen-runtime.service >/dev/null 2>&1 || : #28
   "$ROOT/scripts/kaizen-runtime" down
   "$ROOT/scripts/kaizen-inbox" stop
   klog "comunidad detenida"
@@ -81,7 +81,7 @@ cmd_stop() {
 
 cmd_status() {
   echo "agents globales: $(find "${XDG_CONFIG_HOME:-$HOME/.config}/opencode/agents" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
-  command -v systemctl >/dev/null 2>&1 && systemctl --user is-active kaizen-runtime.service 2>/dev/null | sed 's/^/systemd: /' || true
+  command -v systemctl >/dev/null 2>&1 && systemctl --user is-active kaizen-runtime.service 2>/dev/null | sed 's/^/systemd: /' || : #28
   [ -f "$S/runtime.pid" ] && echo "nohup pid: $(cat "$S/runtime.pid")"
   "$ROOT/scripts/kaizen-runtime" status
   "$ROOT/scripts/kaizen-inbox" status

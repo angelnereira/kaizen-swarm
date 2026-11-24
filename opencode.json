@@ -5,32 +5,40 @@
     ".kaizen/security/SECURITY-RULES.md",
     ".kaizen/loop/LOOP.md",
     ".kaizen/swarm/ROLES.md",
-    ".kaizen/swarm/PROTOCOL.md"
+    ".kaizen/swarm/PROTOCOL.md",
+    ".kaizen/team/TEAM.md",
+    ".kaizen/team/COMUNICACION.md",
+    ".kaizen/team/FLUJOS.md",
+    ".kaizen/team/EVIDENCIA.md",
+    ".kaizen/team/DECISIONES.md",
+    ".kaizen/team/OWNER.md"
   ],
-  "permission": {
-    "read": {
-      "*.env": "deny",
-      "**/.env": "deny",
-      "**/.env.*": "deny",
-      "**/*.pem": "deny",
-      "**/*.key": "deny",
-      "**/id_rsa*": "deny"
-    },
-    "bash": {
-      "git push*": "deny",
-      "gh auth*": "deny",
-      "rm -rf*": "deny",
-      "curl*": "deny",
-      "wget*": "deny",
-      "env": "deny",
-      "printenv": "deny",
-      "scripts/kaizen*": "allow",
-      "bash tests/run.sh": "allow",
-      "git add*": "allow",
-      "git commit*": "allow",
-      "git status*": "allow",
-      "git diff*": "allow",
-      "git log*": "allow"
-    }
-  }
+  "permissions": [
+    { "action": "read", "resource": "*.env", "effect": "deny" },
+    { "action": "read", "resource": "**/.env", "effect": "deny" },
+    { "action": "read", "resource": "**/.env.*", "effect": "deny" },
+    { "action": "read", "resource": "**/*.pem", "effect": "deny" },
+    { "action": "read", "resource": "**/*.key", "effect": "deny" },
+    { "action": "read", "resource": "**/id_rsa*", "effect": "deny" },
+    { "action": "shell", "resource": "gh auth*", "effect": "deny" },
+    { "action": "shell", "resource": "rm -rf*", "effect": "deny" },
+    { "action": "shell", "resource": "curl*", "effect": "deny" },
+    { "action": "shell", "resource": "wget*", "effect": "deny" },
+    { "action": "shell", "resource": "env", "effect": "deny" },
+    { "action": "shell", "resource": "printenv*", "effect": "deny" },
+    { "action": "shell", "resource": "scripts/kaizen*", "effect": "allow" },
+    { "action": "shell", "resource": "bash tests/run.sh", "effect": "allow" },
+    { "action": "shell", "resource": "git add*", "effect": "allow" },
+    { "action": "shell", "resource": "git commit*", "effect": "allow" },
+    { "action": "shell", "resource": "git status*", "effect": "allow" },
+    { "action": "shell", "resource": "git diff*", "effect": "allow" },
+    { "action": "shell", "resource": "git log*", "effect": "allow" },
+    { "action": "shell", "resource": "git push*", "effect": "allow" },
+    { "action": "shell", "resource": "git merge*", "effect": "allow" },
+    { "action": "shell", "resource": "git rebase*", "effect": "allow" },
+    { "action": "shell", "resource": "git checkout --ours*", "effect": "allow" },
+    { "action": "shell", "resource": "git checkout --theirs*", "effect": "allow" },
+    { "action": "shell", "resource": "gh issue comment*", "effect": "allow" },
+    { "action": "shell", "resource": "gh pr comment*", "effect": "allow" }
+  ]
 }

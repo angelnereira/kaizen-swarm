@@ -29,6 +29,8 @@ for f in \
   .kaizen/org/knowledge/business/REA-INTEGRACION.md \
   .kaizen/org/knowledge/business/REVERSE-API-ENGINEER.md \
   .kaizen/org/knowledge/business/COMPUTER-USE.md \
+  Dockerfile docker-compose.yml scripts/kaizen-docker scripts/docker-entrypoint.sh \
+  observability/prometheus-container.yml \
   .kaizen/org/knowledge/business/VOZ-Y-DOCUMENTACION.md \
   .kaizen/team/DECISIONES.md \
   .kaizen/org/OUTSOURCING.md \
@@ -45,6 +47,7 @@ for f in \
   .kaizen/org/prompts/flutter-m3-design-specialist.md .kaizen/org/prompts/business-profiles-architect.md \
   .kaizen/org/prompts/identity-access-specialist.md .kaizen/org/prompts/vertical-domain-specialist.md \
   .kaizen/org/prompts/rea-specialist.md .kaizen/org/prompts/reverse-api-specialist.md \
+  .kaizen/org/prompts/legal-corporativo.md .kaizen/org/prompts/auditor-riesgos.md \
   .kaizen/org/prompts/computer-operator.md \
   .kaizen/team/team.env .kaizen/team/TEAM.md .kaizen/team/COMUNICACION.md \
   .kaizen/team/FLUJOS.md .kaizen/team/EVIDENCIA.md .kaizen/team/OWNER.md \
@@ -54,7 +57,9 @@ for f in \
   scripts/kaizen-gov scripts/lib/gov_seed.py .kaizen/gov/governance.json \
   scripts/kaizen-release scripts/lib/catalog_skills.py VERSION \
   .kaizen/release/release.env .kaizen/catalog/rea-capabilities.json .kaizen/catalog/rea-tools.json .kaizen/catalog/catalog.json \
-  .kaizen/observability/observability.env scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback \
+  .kaizen/observability/observability.env .kaizen/finops/tokens.env .kaizen/knowledge/sources.json .kaizen/meta/meta.env .kaizen/incentives/incentives.env \
+  .kaizen/incentives/ledger.jsonl \
+  scripts/kaizen-exporter.py scripts/kaizen-observability scripts/grafana-bootstrap scripts/kaizen-feedback scripts/kaizen-tokens scripts/kaizen-knowledge scripts/kaizen-workspace scripts/kaizen-peer scripts/kaizen-remote scripts/kaizen-whatsapp scripts/kaizen-welcome scripts/kaizen-conflict scripts/kaizen-meta scripts/kaizen-incentive \
   observability/prometheus.yml observability/docker-compose.yml \
   observability/grafana/dashboards/kaizen-swarm.json \
   observability/grafana/provisioning/datasources/prometheus.yml \
@@ -74,6 +79,16 @@ for f in \
   docs/kaizen/adr/0018-computer-use-gobernado.md \
   docs/kaizen/adr/0019-colaboracion-alta-performance-y-memoria-de-fallos.md \
   docs/kaizen/adr/0020-monitoreo-central-y-usuario-grafana.md docs/kaizen/org/MONITOREO-PROYECTOS.md \
+  docs/kaizen/adr/0021-economia-de-tokens-y-trabajo-continuo.md docs/kaizen/org/TOKENS.md \
+  docs/kaizen/adr/0022-corpus-normativo-y-citas-verificadas.md docs/kaizen/org/CORPUS-NORMATIVO.md \
+  docs/kaizen/adr/0023-autonomia-de-push-y-correccion.md \
+  docs/kaizen/adr/0024-instalacion-no-invasiva-y-gobernanza-de-pares.md \
+  docs/kaizen/adr/0025-whatsapp-oficial-via-bsp.md docs/kaizen/org/WHATSAPP-OFICIAL.md \
+  docs/kaizen/adr/0026-empaquetado-docker-local.md \
+  docs/kaizen/adr/0027-resolucion-autonoma-de-conflictos.md \
+  docs/kaizen/adr/0028-meta-auditoria-ejecutora.md docs/kaizen/org/META-AUDITORIA.md \
+  docs/kaizen/adr/0029-direccion-ejecutiva-e-incentivos.md docs/kaizen/org/INCENTIVOS.md \
+  .kaizen/knowledge/cards/README.md .kaizen/knowledge/golden/README.md \
   scripts/kaizen scripts/kaizen-security scripts/kaizen-loop scripts/kaizen-swarm scripts/kaizen-org scripts/kaizen-insights.py \
   scripts/lib/swarm-common.sh scripts/bootstrap \
   docs/kaizen/pr-drafts/_TEMPLATE.md docs/kaizen/adr/_TEMPLATE.md \
@@ -89,7 +104,7 @@ mkdir -p "$TARGET/.kaizen/loop/state" "$TARGET/.kaizen/swarm/issues" \
          "$TARGET/.kaizen/org/research" \
          "$TARGET/.kaizen/team/projects" "$TARGET/.kaizen/team/evidence" "$TARGET/.kaizen/evals" \
          "$TARGET/.kaizen/learning/lessons" "$TARGET/.kaizen/learning/experience" "$TARGET/.kaizen/gov" \
-         "$TARGET/.kaizen/release" "$TARGET/.kaizen/catalog" "$TARGET/.kaizen/observability" \
+         "$TARGET/.kaizen/release" "$TARGET/.kaizen/catalog" "$TARGET/.kaizen/observability" "$TARGET/.kaizen/finops" "$TARGET/.kaizen/knowledge/corpus" "$TARGET/.kaizen/knowledge/cards" "$TARGET/.kaizen/knowledge/golden" \
          "$TARGET/.kaizen/org/knowledge/panama-compliance" "$TARGET/.kaizen/org/knowledge/international" \
          "$TARGET/.kaizen/org/knowledge/business" \
          "$TARGET/docs/kaizen/loop/prompts" "$TARGET/docs/kaizen/swarm/prompts" "$TARGET/docs/kaizen/org" \
@@ -106,7 +121,7 @@ Sigue estrictamente .kaizen/RULES.md en todo el trabajo de este repositorio. Ant
 BLOCK_S='## Seguridad Kaizen
 Sigue .kaizen/security/SECURITY-RULES.md. No leas ni imprimas credenciales, .env, claves ni variables de entorno. No silencies advertencias sin referencia a un issue. Todo hallazgo se escribe en .kaizen/loop/outbox/ (S-11).'
 BLOCK_W='## Comunidad swarm
-Sigue .kaizen/swarm/ROLES.md y .kaizen/swarm/PROTOCOL.md. Trabaja en tu worktree, respeta ownership.json, envía ack y no hagas push ni PR: lo hace el orquestador.'
+Sigue .kaizen/swarm/ROLES.md y .kaizen/swarm/PROTOCOL.md. Trabaja en tu worktree, respeta ownership.json, envía ack y puedes commit y push en ramas kaizen/* y abrir PR con evidencia; no hagas push directo a main (ADR-0023).'
 for a in AGENTS.md CLAUDE.md GEMINI.md; do
   if [ -f "$TARGET/$a" ]; then
     grep -q '^## Kaizen' "$TARGET/$a" || { printf '\n%s\n\n%s\n\n%s\n' "$BLOCK_K" "$BLOCK_S" "$BLOCK_W" >> "$TARGET/$a"; CREATED+=("bloques en $a"); }

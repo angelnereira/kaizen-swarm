@@ -1,0 +1,8 @@
+{
+  "id": "welcome_kaizen_v1",
+  "category": "UTILITY",
+  "body": "Bienvenido a la nueva gente Kaizen, El Presidente. El equipo ya esta operando y reportara avisos, decisiones y hallazgos con evidencia. Responda 1 para confirmar recepcion o 2 para ver opciones.",
+  "variables": "1,2",
+  "status": "draft",
+  "note": "Requiere aprobación de Meta antes de uso proactivo"
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "kaizen-normative-sources/1",
+  "cutoff": "2026-11-22",
+  "levels": {
+    "V": "verificado contra fuente oficial por humano",
+    "S": "secundario: fuente oficial localizada pero texto no verificado",
+    "I": "interpretación interna o borrador",
+    "N": "no vigente / vencido"
+  },
+  "sources": [
+    {
+      "id": "PA-LEG-000",
+      "domain": "PA-LEG",
+      "title": "Ley 81 de 2019 sobre Protección de Datos Personales",
+      "issuer": "Asamblea Nacional / Gaceta Oficial",
+      "url": "https://gacetaoficial.gob.pa/pdfTemp/28743_A/72148.pdf",
+      "published": "2019-03-26",
+      "freshness_days": 90,
+      "status": "I",
+      "sha256": null,
+      "retrieved": null,
+      "note": "Fuente primaria identificada; requiere verify humano para nivel V. Ver SOURCES.md PA-001."
+    },
+    {
+      "id": "PA-FIS-000",
+      "domain": "PA-FIS",
+      "title": "DGI — ITBMS general 7%",
+      "issuer": "Dirección General de Ingresos",
+      "url": "https://dgi.mef.gob.pa/itbms/Itbms",
+      "published": null,
+      "freshness_days": 7,
+      "status": "I",
+      "sha256": null,
+      "retrieved": null,
+      "note": "Tasa general verificada en documentación previa; tasas especiales pendientes. Ver SOURCES.md PA-008/PA-009."
+    },
+    {
+      "id": "PA-AML-000",
+      "domain": "PA-AML",
+      "title": "Ley 23 de 2015 (BC/FT/FPADM)",
+      "issuer": "Gaceta Oficial 27768-B",
+      "url": "https://gacetaoficial.gob.pa/pdfTemp/27768_B/GacetaNo_27768b_20150427.pdf",
+      "published": "2015-04-27",
+      "freshness_days": 30,
+      "status": "I",
+      "sha256": null,
+      "retrieved": null,
+      "note": "Fuente primaria identificada; ver SOURCES.md PA-003."
+    },
+    {
+      "id": "INT-STD-000",
+      "domain": "INT-STD",
+      "title": "ISO/IEC 27001:2022",
+      "issuer": "ISO",
+      "url": "https://www.iso.org",
+      "published": "2022",
+      "freshness_days": 365,
+      "status": "I",
+      "sha256": null,
+      "retrieved": null,
+      "note": "Estándar voluntario; no obligatorio salvo contrato. Ver SOURCES.md ISO-001."
+    }
+  ]
+}

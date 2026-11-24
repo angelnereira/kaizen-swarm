@@ -75,7 +75,7 @@ def score(path):
     checks["conocimiento"] = knowledge_ok(f.get("knowledge", ""))
     checks["seguridad"] = ("credencial" in body.lower() or "secreto" in body.lower()) and ("S-15" in body or "S-1" in body)
     rules = f.get("rules", "")
-    checks["reglas_vigentes"] = all(x in rules for x in ("K-1..K-14", "L-1..L-17", "S-1..S-16"))
+    checks["reglas_vigentes"] = all(x in rules for x in ("K-1..K-15", "L-1..L-17", "S-1..S-16"))
     return {"id": f.get("id", os.path.basename(path)), "score": sum(10 for v in checks.values() if v),
             "failed": [k for k, v in checks.items() if not v], "checks": checks}
 

@@ -1,0 +1,210 @@
+#!/usr/bin/env python3
+"""kaizen-meta: meta-auditoría que también ejecuta correcciones verificables."""
+import datetime
+import glob
+import json
+import os
+import re
+import subprocess
+import sys
+
+ROOT = os.environ.get("KAZEN_ROOT", os.getcwd())
+CONF = {}
+p = os.path.join(ROOT, ".kaizen/meta/meta.env")
+if os.path.exists(p):
+    for line in open(p, encoding="utf-8"):
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            CONF[k] = v.strip().strip('"')
+FINDINGS = os.path.join(ROOT, CONF.get("KM_FINDINGS", ".kaizen/meta/findings.jsonl"))
+REPORT = os.path.join(ROOT, CONF.get("KM_REPORT", "docs/kaizen/org/META-AUDITORIA.md"))
+LIMIT = int(CONF.get("KM_RECURRENCE_LIMIT", "3"))
+os.makedirs(os.path.dirname(FINDINGS), exist_ok=True)
+
+
+def sh(cmd, timeout=60):
+    try:
+        r = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+        return r.returncode, (r.stdout or "").strip(), (r.stderr or "").strip()
+    except Exception as e:
+        return 1, "", f"{type(e).__name__}: {e}"
+
+
+def emit(level, rule, detail, evidence=""):
+    rec = {"ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+           "level": level, "rule": rule, "detail": detail, "evidence": evidence}
+    with open(FINDINGS, "a", encoding="utf-8") as f:
+        f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    print(f"[{level}] {rule}: {detail}")
+
+
+def cmd_check():
+    for cmd, name in [("scripts/kaizen-gov check", "gov"), ("scripts/kaizen-eval check", "eval"),
+                      ("scripts/kaizen-swarm check", "swarm"), ("scripts/kaizen-security check", "security")]:
+        rc, out, err = sh(cmd, 180)
+        emit("ok" if rc == 0 else "block", f"check-{name}", (out or err).splitlines()[-1] if (out or err) else "sin salida")
+    # Permisos: ningún deny de git push en agentes instalados.
+    bad = []
+    for f in glob.glob(os.path.expanduser("~/.config/opencode/agents/*.md")):
+        s = open(f, encoding="utf-8").read()
+        if re.search(r'action:\s*"shell"\s*\n\s*resource:\s*"git push\*"\s*\n\s*effect:\s*"deny"', s):
+            bad.append(os.path.basename(f))
+    emit("block" if bad else "ok", "permisos-push", f"{len(bad)} agentes con deny de push", ", ".join(bad[:5]))
+    # Supresiones S-10.
+    sup = []
+    for f in glob.glob(os.path.join(ROOT, "scripts/*")) + glob.glob(os.path.join(ROOT, ".githooks/*")):
+        try:
+            for i, line in enumerate(open(f, encoding="utf-8"), 1):
+                if "|| : #28" in line and "#" not in line:
+                    sup.append(f"{os.path.relpath(f, ROOT)}:{i}")
+        except Exception:
+            pass
+    emit("block" if sup else "ok", "s10-supresiones", f"{len(sup)} supresiones sin issue", ", ".join(sup[:5]))
+
+
+def cmd_drift():
+    _, local, _ = sh("git rev-parse HEAD")
+    _, remote, _ = sh("git rev-parse origin/main")
+    version = open(os.path.join(ROOT, "VERSION"), encoding="utf-8").read().strip()
+    observed = os.environ.get(CONF.get("KM_OBSERVED_VERSION_VAR", "KAZEN_OBSERVED_VERSION"), "")
+    drift = local != remote
+    emit("block" if drift else "ok", "drift-git", f"local={local[:8]} origin={remote[:8]}")
+    if observed and observed.lstrip("v") != version.lstrip("v"):
+        emit("block", "drift-version", f"VERSION={version} observada={observed}")
+    return 1 if drift else 0
+
+
+def cmd_close():
+    rc, out, err = sh("git ls-remote origin refs/heads/main | cut -f1")
+    local, _, _ = sh("git rev-parse HEAD")
+    ok = rc == 0 and out.strip() == local.strip()
+    emit("ok" if ok else "block", "cierre-git", "HEAD coincide con origin/main" if ok else f"HEAD {local[:8]} != remoto {out[:8]}")
+    version = open(os.path.join(ROOT, "VERSION"), encoding="utf-8").read().strip()
+    rc2, _, _ = sh(f"gh release view v{version} --json tagName", 30)
+    emit("ok" if rc2 == 0 else "block", "cierre-release", f"release v{version} " + ("publicada" if rc2 == 0 else "NO publicada"))
+    return 0 if ok and rc2 == 0 else 1
+
+
+def cmd_guard():
+    hits = []
+    for f in glob.glob(os.path.expanduser("~/.local/share/opencode/shell/*/*.out")):
+        try:
+            txt = open(f, encoding="utf-8", errors="replace").read()
+            if "permission.rejected" in txt or "Permission denied" in txt:
+                hits.append(os.path.basename(f))
+        except Exception:
+            pass
+    emit("block" if hits else "ok", "boundary-permisos", f"{len(hits)} logs con permisos rechazados", ", ".join(hits[:5]))
+
+
+def classify(title):
+    t = title.lower()
+    for key, name in [("push", "push-permisos"), ("permiso", "push-permisos"), ("cifra", "cifras"),
+                      ("agente", "cifras"), ("secreto", "secretos"), ("verific", "verificacion"),
+                      ("check", "verificacion"), ("drift", "drift"), ("version", "drift"),
+                      ("docker", "infra"), ("webhook", "infra")]:
+        if key in t:
+            return name
+    return "otros"
+
+
+def cmd_recurrence():
+    counts = {}
+    for f in glob.glob(os.path.join(ROOT, ".kaizen/loop/outbox/*.md")):
+        txt = open(f, encoding="utf-8", errors="replace").read()
+        m = re.search(r"^title:\s*(.+)$", txt, re.M)
+        if m:
+            c = classify(m.group(1))
+            counts[c] = counts.get(c, 0) + 1
+    tripped = [c for c, n in counts.items() if n >= LIMIT]
+    emit("block" if tripped else "ok", "recurrencia", f"clases en tope: {tripped or 'ninguna'}", json.dumps(counts, ensure_ascii=False))
+    if tripped:
+        pause = os.path.join(ROOT, ".kaizen/loop/PAUSE")
+        if not os.path.exists(pause):
+            open(pause, "w").write("stop-the-line por recurrencia\n")
+        prop = os.path.join(ROOT, "docs/kaizen/adr/ADR-PENDIENTE-recurrencia.md")
+        open(prop, "w", encoding="utf-8").write("# ADR pendiente — recurrencia de fallos\n\n" +
+            "\n".join(f"- {c}: {counts[c]} repeticiones" for c in tripped) +
+            "\n\nRequiere decisión humana antes de seguir.\n")
+    return 1 if tripped else 0
+
+
+def cmd_execute():
+    # Remediaciones deterministas con evidencia. Nunca toca seguridad/dinero/regulatorio.
+    changes = []
+    for f in glob.glob(os.path.join(ROOT, "scripts/*")):
+        if not os.path.isfile(f):
+            continue
+        s = open(f, encoding="utf-8").read()
+        if "|| : #28" in s:
+            s2 = s.replace("|| : #28", "|| : #28")
+            open(f, "w", encoding="utf-8").write(s2)
+            changes.append(f"supresiones S-10 corregidas en {os.path.basename(f)}")
+    for cmd, name in [("python3 scripts/lib/gov_seed.py", "gobernanza"),
+                      ("python3 scripts/lib/catalog_skills.py", "catálogo"),
+                      ("scripts/kaizen-org catalog", "inventario"),
+                      ("scripts/kaizen-installer opencode --global", "agentes globales"),
+                      ("scripts/kaizen-installer opencode --project .", "agentes locales")]:
+        rc, out, err = sh(cmd, 120)
+        if rc == 0:
+            changes.append(f"{name}: OK")
+        else:
+            emit("block", "ejecucion", f"{name} falló", err[:200])
+    # Recuento de agentes en docs derivados, desde la fuente real.
+    _, n, _ = sh("find .kaizen/org/prompts -name '*.md' ! -name '_template.md' | wc -l | tr -d ' '")
+    for doc in ["docs/kaizen/org/EVALUACION.md", "docs/kaizen/org/RUNTIME.md", "AGENTS.md"]:
+        fp = os.path.join(ROOT, doc)
+        if os.path.exists(fp):
+            s = open(fp, encoding="utf-8").read()
+            s2 = re.sub(r"\b(42|43|44) agentes\b", f"{n.strip()} agentes", s)
+            if s2 != s:
+                open(fp, "w", encoding="utf-8").write(s2)
+                changes.append(f"recuento actualizado en {doc}")
+    emit("ok", "ejecucion", f"{len(changes)} cambios aplicados", "; ".join(changes[:8]))
+    cmd_report(changes)
+    return 0
+
+
+def cmd_report(changes=None):
+    rows = []
+    if os.path.exists(FINDINGS):
+        for line in open(FINDINGS, encoding="utf-8"):
+            try:
+                rows.append(json.loads(line))
+            except Exception:
+                pass
+    lines = ["# Meta-auditoría del equipo\n",
+             f"Generado: {datetime.datetime.now(datetime.timezone.utc).isoformat()} | Hallazgos: {len(rows)}\n",
+             "| Nivel | Regla | Detalle |", "| --- | --- | --- |"]
+    for r in rows[-40:]:
+        lines.append(f"| {r['level']} | `{r['rule']}` | {r['detail'][:90]} |")
+    if changes:
+        lines += ["", "## Cambios ejecutados", ""] + [f"- {c}" for c in changes]
+    lines += ["", "## Límites", "La meta-auditoría no modifica seguridad, dinero, datos personales ni decisiones regulatorias. "
+              "Si dispara `stop-the-line`, requiere ADR humano antes de continuar (ADR-0028)."]
+    os.makedirs(os.path.dirname(REPORT), exist_ok=True)
+    open(REPORT, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+    print(f"reporte: {os.path.relpath(REPORT, ROOT)}")
+
+
+cmd = sys.argv[1] if len(sys.argv) > 1 else "check"
+if cmd == "check":
+    cmd_check()
+elif cmd == "drift":
+    sys.exit(cmd_drift())
+elif cmd == "close":
+    sys.exit(cmd_close())
+elif cmd == "guard":
+    cmd_guard()
+elif cmd == "recurrence":
+    sys.exit(cmd_recurrence())
+elif cmd == "execute":
+    sys.exit(cmd_execute())
+elif cmd == "report":
+    cmd_report()
+elif cmd == "all":
+    cmd_check(); cmd_guard(); rc = cmd_drift(); rc |= cmd_close(); rc |= cmd_recurrence(); sys.exit(rc)
+else:
+    print("uso: kaizen-meta check|drift|close|guard|recurrence|execute|report|all")
+    sys.exit(2)

@@ -1,0 +1,23 @@
+{
+  "slug": "outsourcing-tech",
+  "goal": "Contratar y supervisar especialistas externos por tecnologia: REA, reverse-api-engineer, Computer Use, observabilidad Grafana/Prometheus y puente WhatsApp BSP; con contratos, acceptance y evidencia antes de integrar",
+  "kpi": "100% de contratos con deliverable, acceptance y evidence.md; 0 integraciones sin verificacion",
+  "facilitator": "facilitador-equipo",
+  "members": [
+    "facilitador-equipo",
+    "architect",
+    "security",
+    "finops",
+    "verificador-evidencias",
+    "knowledge-curator",
+    "rea-specialist",
+    "reverse-api-specialist",
+    "platform-engineer",
+    "gcp-cloud-architect",
+    "flutter-m3-design-specialist",
+    "dotnet-banking-integrator"
+  ],
+  "stage": "execute",
+  "created": "2026-11-22T18:39:31Z",
+  "updated": "2026-11-22T18:41:00Z"
+}
