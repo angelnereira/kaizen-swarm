@@ -20,7 +20,7 @@
 ## Impacto en calidad (ratchet)
 - Cobertura: <igual / sube / baja con justificacion>
 - Advertencias: <igual / sube / baja>
-- Deuda (TODO/FIXME): <igual / sube / baja>
+- Deuda técnica: <igual / sube / baja>
 
 ## Criterios de salida que avanza
 - <casilla verificable>

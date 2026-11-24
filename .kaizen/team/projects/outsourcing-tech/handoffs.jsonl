@@ -1,86 +1,8 @@
-{
-  "id": "H-17953727975011262431",
-  "correlation_id": "OT-BLOCK-ARCH-001",
-  "from": "facilitador-equipo",
-  "to": "architect",
-  "channel": "direct",
-  "intent": "handoff",
-  "task": "Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético",
-  "expects_ack": true,
-  "deadline": "2026-11-24T18:00:00Z",
-  "source_ids": [
-    "ISO-001",
-    "NIST-001",
-    "OWASP-001",
     "TOOL-001"
-  ],
-  "refs": [
     ".kaizen/loop/outbox/arquitectura-block-adopcion.md"
-  ],
-  "status": "ack",
-  "created": "2026-11-22T18:39:57Z",
-  "acked_at": "2026-11-22T18:42:34Z"
-}
-{
-  "id": "H-17953727975011262432",
-  "correlation_id": "OT-EVID-TRAZA-002",
-  "from": "facilitador-equipo",
-  "to": "verificador-evidencias",
-  "channel": "direct",
-  "intent": "handoff",
-  "task": "Recurrencia — trazabilidad de SOURCES.md rota tras nueva modificación (hash 11e96012)",
-  "expects_ack": true,
-  "deadline": "2026-11-25T18:00:00Z",
-  "source_ids": [
-    "ISO-001",
     "NIST-001"
-  ],
-  "refs": [
     ".kaizen/team/projects/finding-trazabilidad-sources-20261122.md"
-  ],
-  "status": "ack",
-  "created": "2026-11-22T18:39:57Z",
-  "acked_at": "2026-11-22T18:42:34Z"
-}
-{
-  "id": "H-17953727975011262433",
-  "correlation_id": "OT-EVID-DIGEST-003",
-  "from": "facilitador-equipo",
-  "to": "knowledge-curator",
-  "channel": "direct",
-  "intent": "handoff",
-  "task": "Digests desactualizados frente al hash actual de SOURCES.md",
-  "expects_ack": true,
-  "deadline": "2026-11-25T18:00:00Z",
-  "source_ids": [
-    "ISO-001",
     "NIST-001"
-  ],
-  "refs": [
     ".kaizen/team/projects/finding-trazabilidad-sources-20261122.md"
-  ],
-  "status": "ack",
-  "created": "2026-11-22T18:39:57Z",
-  "acked_at": "2026-11-22T18:42:34Z"
-}
-{
-  "id": "H-17953727975011262434",
-  "correlation_id": "OT-BLOCK-ARCH-001",
-  "from": "facilitador-equipo",
-  "to": "all",
-  "channel": "broadcast",
-  "intent": "decision",
-  "task": "Cambio de etapa a execute: 3/3 tareas con dueño, BLOCK de arquitectura requiere ADR-0011..0015 y humano (L-4)",
-  "expects_ack": true,
-  "deadline": "2026-11-24T18:00:00Z",
-  "source_ids": [
-    "ISO-001",
-    "NIST-001",
     "OWASP-001"
-  ],
-  "refs": [
     "scripts/kaizen-team"
-  ],
-  "status": "open",
-  "created": "2026-11-22T18:39:57Z"
-}

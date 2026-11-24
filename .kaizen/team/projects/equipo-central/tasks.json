@@ -1,20 +1,62 @@
 [
   {
     "task": "Arquitectura emite BLOCK: aislamiento, profundidad constante, buzón no atómico y check no hermético",
-    "owner": "?",
-    "status": "pending",
-    "source": "outbox"
+    "owner": "arquitecto",
+    "status": "assigned",
+    "source": "outbox",
+    "due": "2026-11-25T18:00:00Z",
+    "assigned_by": "facilitador-equipo",
+    "assigned_at": "2026-11-24T04:31:45Z",
+    "note": "Veto de arquitectura vigente; dar seguimiento al BLOCK. No se levanta ni se decide el fondo (L-3/L-4). Escalar a El Presidente si persiste 2 turnos."
   },
   {
     "task": "Recurrencia — trazabilidad de SOURCES.md rota tras nueva modificación (hash 11e96012)",
-    "owner": "?",
-    "status": "pending",
-    "source": "outbox"
+    "owner": "verificador-evidencias",
+    "status": "assigned",
+    "source": "outbox",
+    "due": "2026-11-25T18:00:00Z",
+    "assigned_by": "facilitador-equipo",
+    "assigned_at": "2026-11-24T04:31:45Z",
+    "note": "Recurrencia de trazabilidad: validar hash y source_ids contra SOURCES.md; ruta protegida, proponer con evidencia, no parchear."
   },
   {
     "task": "Digests desactualizados frente al hash actual de SOURCES.md",
-    "owner": "?",
-    "status": "pending",
-    "source": "outbox"
+    "owner": "knowledge-curator",
+    "status": "assigned",
+    "source": "outbox",
+    "due": "2026-11-25T18:00:00Z",
+    "assigned_by": "facilitador-equipo",
+    "assigned_at": "2026-11-24T04:31:45Z",
+    "note": "Regenerar digests frente al hash actual de SOURCES.md via kaizen-org feed/digest; requiere ADR si toca rutas protegidas."
+  },
+  {
+    "task": "scripts/kaizen check en rojo por agente concurrente marketing-visual sin gobernanza",
+    "owner": "gerente",
+    "status": "assigned",
+    "source": "outbox",
+    "due": "2026-11-26T18:00:00Z",
+    "assigned_by": "facilitador-equipo",
+    "assigned_at": "2026-11-24T04:42:51Z",
+    "note": "Ciclo 2026-11-24. Dueño de la coordinacion: gerente. Evidencia: kaizen-org check 'catalogo desc.sincronizado (80 vs 81)'; kaizen-gov check ya en verde; marketing-visual ausente en CATALOGO-AGENTES.md. Requiere ADR humano (L-4) para regenerar catalogo via kaizen-org catalog y reportar a El Presidente. No silenciar ni saltar la puerta (S-10/K-10)."
+  },
+  {
+    "task": "kaizen-team handoff no escribe mensajes (jq now vs $now)",
+    "owner": "gerente",
+    "status": "assigned",
+    "source": "outbox",
+    "due": "2026-11-26T18:00:00Z",
+    "assigned_by": "facilitador-equipo",
+    "assigned_at": "2026-11-24T04:42:51Z",
+    "note": "Ciclo 2026-11-24. Requiere ADR humano (ruta protegida scripts/kaizen*, L-4). Interim: handoffs con sobre completo escritos directamente (fingerprint 998952383)."
+  },
+  {
+    "task": "kaizen-meta drift falla por desempaquetado incorrecto de sh()",
+    "owner": "gerente",
+    "status": "assigned",
+    "source": "outbox",
+    "due": "2026-11-26T18:00:00Z",
+    "assigned_by": "facilitador-equipo",
+    "assigned_at": "2026-11-24T04:42:51Z",
+    "note": "Ciclo 2026-11-24. Requiere ADR humano (ruta protegida scripts/kaizen*, L-4). sh() devuelve (rc, stdout, stderr); cmd_drift desempaqueta el rc como hash (fingerprint 387791946)."
   }
 ]

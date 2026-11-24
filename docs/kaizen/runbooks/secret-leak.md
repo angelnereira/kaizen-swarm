@@ -11,3 +11,5 @@ Principio: un secreto que llegó al repositorio, a un log, a un issue o a un PR 
 5. Historial: solo después de rotar, limpiar el historial (git filter-repo o BFG) y forzar la actualización; forks, clones y cachés pueden conservar el valor.
 6. Documentar: issue o aviso privado (sin el valor), postmortem sin culpables y acción preventiva (¿qué capa falló: hook, patrón, permiso del agente?).
 7. Verificar: `scripts/kaizen-security all` limpio y la credencial nueva funcionando.
+
+8. Si el sistema `kaizen-vault` está en uso: un secreto en chat invalida el grant; el humano rota en el proveedor y emite un nuevo `approve`. Re-cifrar la bóveda (`rekey`) NO sustituye la rotación externa (ADR-0037).

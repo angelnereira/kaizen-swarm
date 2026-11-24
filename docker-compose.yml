@@ -39,7 +39,7 @@ services:
     restart: unless-stopped
     environment:
       GF_SECURITY_ADMIN_USER: ${KAZEN_GRAFANA_ADMIN_USER:-kaizen-admin}
-      GF_SECURITY_ADMIN_PASSWORD: ${KAZEN_GRAFANA_ADMIN_PASSWORD:-kaizen-local}
+      GF_SECURITY_ADMIN_PASSWORD: ${KAZEN_GRAFANA_ADMIN_PASSWORD:?Debe definir KAZEN_GRAFANA_ADMIN_PASSWORD}
       GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro

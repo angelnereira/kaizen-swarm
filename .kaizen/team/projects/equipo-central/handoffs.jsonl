@@ -1,0 +1,141 @@
+{
+  "id": "H-20261123-001",
+  "correlation_id": "EQC-2026-11-23-TAREAS-DUENO",
+  "from": "facilitador-equipo",
+  "to": "arquitecto",
+  "channel": "direct",
+  "intent": "handoff",
+  "text": "Asignado BLOCK de arquitectura (aislamiento, profundidad constante, buzón no atómico, check no hermético). Mantener el veto; responder en hilo con evidencia o escalar a El Presidente tras 2 turnos. No se decide el fondo (L-3/L-4).",
+  "source_ids": [
+    "PA-001",
+    "LOCAL-001",
+    "LOCAL-003",
+    "LOCAL-004"
+  ],
+  "expects_ack": true,
+  "deadline": "2026-11-25T18:00:00Z",
+  "status": "open",
+  "created": "2026-11-24T04:32:13Z",
+  "note": "Sobre completo escrito directamente: kaizen-team handoff falla (jq now vs $now), ver outbox S-11."
+}
+{
+  "id": "H-20261123-002",
+  "correlation_id": "EQC-2026-11-23-TAREAS-DUENO",
+  "from": "facilitador-equipo",
+  "to": "verificador-evidencias",
+  "channel": "direct",
+  "intent": "handoff",
+  "text": "Asignada recurrencia de trazabilidad de SOURCES.md (hash 11e96012). Revalidar fuentes y proponer; tocar rutas protegidas requiere ADR.",
+  "source_ids": [
+    "PA-001",
+    "LOCAL-001",
+    "LOCAL-003",
+    "LOCAL-004"
+  ],
+  "expects_ack": true,
+  "deadline": "2026-11-25T18:00:00Z",
+  "status": "open",
+  "created": "2026-11-24T04:32:13Z",
+  "note": "Sobre completo escrito directamente: kaizen-team handoff falla (jq now vs $now), ver outbox S-11."
+}
+{
+  "id": "H-20261123-003",
+  "correlation_id": "EQC-2026-11-23-TAREAS-DUENO",
+  "from": "facilitador-equipo",
+  "to": "knowledge-curator",
+  "channel": "direct",
+  "intent": "handoff",
+  "text": "Asignada actualización de digests frente al hash actual de SOURCES.md vía kaizen-org feed/digest; cambiar definiciones requiere ADR.",
+  "source_ids": [
+    "PA-001",
+    "LOCAL-001",
+    "LOCAL-003",
+    "LOCAL-004"
+  ],
+  "expects_ack": true,
+  "deadline": "2026-11-25T18:00:00Z",
+  "status": "open",
+  "created": "2026-11-24T04:32:13Z",
+  "note": "Sobre completo escrito directamente: kaizen-team handoff falla (jq now vs $now), ver outbox S-11."
+}
+{
+  "correlation_id": "EQC-2026-11-24-CHECK-ROJO-MARKETING-VISUAL",
+  "source_ids": [
+    "PA-001",
+    "LOCAL-001",
+    "LOCAL-003",
+    "LOCAL-004"
+  ],
+  "expects_ack": true,
+  "deadline": "2026-11-26T18:00:00Z",
+  "status": "ack",
+  "created": "2026-11-24T04:42:51Z",
+  "id": "H-20261124-004",
+  "from": "kaizen-equipo",
+  "to": "facilitador-equipo",
+  "channel": "direct",
+  "intent": "handoff",
+  "text": "Escalado convertido en sobre desde outbox S-11 (fingerprint 20261123-check-rojo-marketing-visual). Coordinar dueño, plazo y decision de proceso; no tocar gobernanza ni catalogo (L-4, ADR humano).",
+  "origin": "outbox:check-rojo-marketing-visual-2026-11-23.md",
+  "acked_at": "2026-11-24T04:42:51Z"
+}
+{
+  "correlation_id": "EQC-2026-11-24-CHECK-ROJO-MARKETING-VISUAL",
+  "source_ids": [
+    "PA-001",
+    "LOCAL-001",
+    "LOCAL-003",
+    "LOCAL-004"
+  ],
+  "expects_ack": true,
+  "deadline": "2026-11-26T18:00:00Z",
+  "status": "open",
+  "created": "2026-11-24T04:42:51Z",
+  "id": "H-20261124-005",
+  "from": "facilitador-equipo",
+  "to": "gerente",
+  "channel": "direct",
+  "intent": "handoff",
+  "text": "TAREA DEL CICLO: scripts/kaizen check en rojo por marketing-visual sin gobernanza. Evidencia real: kaizen-org check 'catalogo desc.sincronizado (80 vs 81)'; kaizen-gov check en verde (81 agentes); marketing-visual ausente en CATALOGO-AGENTES.md. Accion requerida: ADR humano para regenerar catalogo via kaizen-org catalog y reportar a El Presidente. No silenciar ni saltar la puerta (S-10/K-10).",
+  "reply_to": "H-20261124-004"
+}
+{
+  "correlation_id": "EQC-2026-11-24-CHECK-ROJO-MARKETING-VISUAL",
+  "source_ids": [
+    "PA-001",
+    "LOCAL-001",
+    "LOCAL-003",
+    "LOCAL-004"
+  ],
+  "expects_ack": true,
+  "deadline": "2026-11-26T18:00:00Z",
+  "status": "open",
+  "created": "2026-11-24T04:42:51Z",
+  "id": "H-20261124-006",
+  "from": "facilitador-equipo",
+  "to": "gerente",
+  "channel": "direct",
+  "intent": "handoff",
+  "text": "Asignado bug kaizen-team handoff no escribe mensajes (jq now vs $now, fingerprint 998952383). Parche en ruta protegida requiere ADR humano; mientras tanto los handoffs se escriben con sobre completo.",
+  "reply_to": "H-20261124-004"
+}
+{
+  "correlation_id": "EQC-2026-11-24-CHECK-ROJO-MARKETING-VISUAL",
+  "source_ids": [
+    "PA-001",
+    "LOCAL-001",
+    "LOCAL-003",
+    "LOCAL-004"
+  ],
+  "expects_ack": true,
+  "deadline": "2026-11-26T18:00:00Z",
+  "status": "open",
+  "created": "2026-11-24T04:42:51Z",
+  "id": "H-20261124-007",
+  "from": "facilitador-equipo",
+  "to": "gerente",
+  "channel": "direct",
+  "intent": "handoff",
+  "text": "Asignado bug kaizen-meta drift TypeError por desempaquetado de sh() (fingerprint 387791946). Requiere ADR humano (scripts/kaizen-meta, L-4).",
+  "reply_to": "H-20261124-004"
+}
