@@ -25,5 +25,8 @@ Ejercicio rojo/azul autorizado sobre activos propios. Propiedad del router confi
 - Opción recomendada: mantener todo el ejercicio en laboratorio sintético; cambios en red real solo con ADR y humano presente. KPI: 100% de hallazgos con evidencia y outbox; 0 accesos a dispositivos reales; 0 secretos.
 - Opción rechazada: puntuar por número de dispositivos accesados o control obtenido. Incentiva intrusión y viola L-3/S-1/S-2.
 
+## Quinto escalado: push bloqueado por gate
+`git push -u origin Debura` falló: el hook de pre-push ejecuta `kaizen check`, que está en rojo por tests (`FALLA ledger tokens`, `FALLA work continuo` y dos fallas más truncadas en la salida). Causa raíz de `ledger tokens`: el test clona desde `HEAD`, donde `scripts/kaizen-tokens` sigue con el bug de ruta absoluta para `KT_LEDGER`; el fix existe sin confirmar en el árbol de trabajo, pero `scripts/kaizen*` es ruta protegida (L-4). No se usó `--no-verify` ni se rodeó el hook (S-10/K-10). Se requiere ADR humano para corregir el script protegido o aceptar la excepción y ejecutar el push.
+
 ## Siguiente paso
 El gerente registra el escalado y asigna. El agente no ejecuta cambios de red ni modifica rutas protegidas (ADR-0002/0003, ADR-0023).
