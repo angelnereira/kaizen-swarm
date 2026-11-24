@@ -1,0 +1,66 @@
+[
+  {
+    "task": "T1 conciliar estado real vs documentado y validar source_ids",
+    "owner": "verificador-evidencias",
+    "due": "2026-11-30",
+    "status": "done",
+    "created": "2026-11-23T16:16:13Z",
+    "completed": "2026-11-23"
+  },
+  {
+    "task": "T2 inventario operativo del toolkit y runbook gobernado (sin capturar)",
+    "owner": "reverse-api-specialist",
+    "due": "2026-11-30",
+    "status": "done",
+    "created": "2026-11-23T16:16:13Z",
+    "completed": "2026-11-23"
+  },
+  {
+    "task": "T3 factibilidad ruta nativa sin repo externo (REA MCP + automatizacion propia)",
+    "owner": "rea-specialist",
+    "due": "2026-11-30",
+    "status": "done",
+    "created": "2026-11-23T16:16:13Z",
+    "completed": "2026-11-23"
+  },
+  {
+    "task": "T4 ADR comparativo externo vs nativo/hibrido con retador y memorial",
+    "owner": "architect",
+    "due": "2026-11-30",
+    "status": "done",
+    "created": "2026-11-23T16:16:13Z",
+    "completed": "2026-11-23"
+  },
+  {
+    "task": "T5 veto seguridad: S-15/S-12, codigo generado, HAR y skills",
+    "owner": "security",
+    "due": "2026-11-30",
+    "status": "done",
+    "created": "2026-11-23T16:16:13Z",
+    "completed": "2026-11-23"
+  },
+  {
+    "task": "T6 criterios de aceptacion verificables y comandos de reproduccion del KPI",
+    "owner": "qa",
+    "due": "2026-11-30",
+    "status": "done",
+    "created": "2026-11-23T16:16:13Z",
+    "completed": "2026-11-23"
+  },
+  {
+    "task": "T7 coste tokens vs ruta nativa, cuota disco y metricas",
+    "owner": "finops",
+    "due": "2026-11-30",
+    "status": "done",
+    "created": "2026-11-23T16:16:13Z",
+    "completed": "2026-11-23"
+  },
+  {
+    "task": "T8 standup, blackboard, acuses y orden de turnos",
+    "owner": "facilitador-equipo",
+    "due": "2026-11-30",
+    "status": "done",
+    "created": "2026-11-23T16:16:13Z",
+    "completed": "2026-11-23"
+  }
+]
