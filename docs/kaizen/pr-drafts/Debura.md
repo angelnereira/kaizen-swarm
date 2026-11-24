@@ -75,4 +75,5 @@ Se adopta el sistema de puntuación por niveles `L1..L4`, hitos `M1..M4`, dificu
 - [x] Sin secretos ni credenciales en el cambio
 - [x] Documentación actualizada
 - [x] Línea base no empeora
-- [ ] `scripts/kaizen check` en verde (resultado real al cierre)
+- [x] `scripts/kaizen check` en verde: 234 pruebas pasadas, 0 fallidas; `kaizen-security: ok`; `git push -u origin Debura` aceptado (PUSH_EXIT=0) el 2026-11-24.
+- [ ] Cobertura SAST/auditoría externa incompleta: `KS_AUDIT_CMD` y `KS_SAST_CMD` vacíos (aviso del pre-push, reportado en outbox S-11).
