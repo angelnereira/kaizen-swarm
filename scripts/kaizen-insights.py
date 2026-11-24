@@ -68,7 +68,7 @@ def main():
                         perf[name].append(e["duration_ms"])
                 elif kind in ("error", "crash"):
                     stack = [clean(x, 120) for x in (e.get("stack_top") or [])[:5]]
-                    fp = str(e.get("fingerprint") or hashlib.sha1((name + "|".join(stack)).encode()).hexdigest()[:12])
+                    fp = str(e.get("fingerprint") or hashlib.sha1((name + "|".join(stack)).encode(), usedforsecurity=False).hexdigest()[:12])
                     fp = re.sub(r"[^A-Za-z0-9]", "", fp)[:16]
                     g = groups.setdefault(fp, {"fingerprint": fp, "type": kind, "name": name, "count": 0,
                                                "users": set(), "versions": set(), "first": "", "last": "",

@@ -76,4 +76,4 @@ Se adopta el sistema de puntuación por niveles `L1..L4`, hitos `M1..M4`, dificu
 - [x] Documentación actualizada
 - [x] Línea base no empeora
 - [x] `scripts/kaizen check` en verde: 234 pruebas pasadas, 0 fallidas; `kaizen-security: ok`; `git push -u origin Debura` aceptado (PUSH_EXIT=0) el 2026-11-24.
-- [ ] Cobertura SAST/auditoría externa incompleta: `KS_AUDIT_CMD` y `KS_SAST_CMD` vacíos (aviso del pre-push, reportado en outbox S-11).
+- [x] Cobertura SAST/auditoría habilitada (ADR-0035): `bandit 1.9.4` y `pip-audit 2.10.1` fijados y verificados; `bandit -q -ll -r scripts/` rc=0, `pip-audit --path` sin vulnerabilidades. Hallazgo `High` B324 corregido con `usedforsecurity=False`, sin supresiones. PR abierto: https://github.com/angelnereira/kaizen-swarm/pull/5
