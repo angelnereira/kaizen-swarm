@@ -120,3 +120,10 @@ Fecha: 2026-11-22 | ADRs: 9 | Agentes: 43 | Pruebas: 191/191 en verde
 - Fix ack writing to the wrong path
 - Fix swarm check paths, dry-run overrides and lease reap output
 
+## v1.3.0 — 2026-11-24
+
+- Copiloto de arquitectura (8 especialistas + router) y orquestacion dinamica.
+- Comunidad de desarrollo proactiva con consenso y automejora.
+- Invocacion multi-cliente (OpenCode/Claude/Codex), investigacion externa y desbloqueo.
+- Instalacion documentada para Linux/WSL y Windows PowerShell.
+- Commit: `ef988053`
