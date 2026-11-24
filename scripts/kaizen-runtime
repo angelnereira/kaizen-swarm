@@ -143,7 +143,7 @@ cmd_work() {
     [ -n "$next" ] || break
     owner="${members[$((idx % ${#members[@]}))]}"
     local prompt="Eres $owner del equipo $team (El Presidente: .kaizen/team/OWNER.md). Objetivo: $goal. KPI: $kpi. Tarea: $next. Lee .kaizen/RULES.md y tu definición .kaizen/org/prompts/$owner.md. Entrega UNA respuesta concreta con evidencia/source_ids y un handoff corto con ack. No hagas commit, push ni PR (orquestador). No leas credenciales. Termina en menos de 5 minutos."
-    if dry; then klog "[dry-run] work $team -> $owner: $next"; else
+    if dry; then klog "[dry-run] work $team -> $owner: $next"; break; else
       local wlog="$S/work-$(date -u +%Y%m%d-%H%M%S)-$owner.log" trc=0
       KAZEN_AGENT_DEPTH="$KR_MAX_DEPTH" timeout "$KR_TIMEOUT_SEC" "$KR_AGENT_CMD" run --agent "$owner" "${model_args[@]}" --format json --archived "$prompt" >> "$wlog" 2>&1 || trc=$?
       local usage; usage="$(grep -o '{.*}' "$wlog" 2>/dev/null | tail -1)"

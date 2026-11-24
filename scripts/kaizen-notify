@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# kaizen-notify: envía reportes a El Presidente por archivo, webhook (n8n->WhatsApp) y correo.
+# kaizen-notify: envía reportes a El Presidente por OpenCode (primario), archivo (auditoría),
+# webhook (n8n->WhatsApp, fallback bajo ADR-0025) y correo.
 set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
 : "${KN_CHANNELS:=file,webhook}" "${KN_WEBHOOK_URL_VAR:=KAZEN_WEBHOOK_URL}" \
-  "${KN_WEBHOOK_SECRET_VAR:=KAZEN_WEBHOOK_SECRET}" "${KN_SMTP_ENABLED:=0}"
+  "${KN_WEBHOOK_SECRET_VAR:=KAZEN_WEBHOOK_SECRET}" "${KN_SMTP_ENABLED:=0}" \
+  "${KN_OPENCODE_ENABLED:=1}"
 S="$ROOT/.kaizen/team/runtime"; mkdir -p "$S"
 FAIL=0
 klog() { printf '[kaizen-notify] %s\n' "$*"; }
@@ -14,6 +16,14 @@ send_file() {
   local line; line="$(jq -cn --arg ts "$(date -u +%FT%TZ)" --arg title "$1" --arg body "$2" --arg level "$3" \
     '{ts:$ts,title:$title,body:$body,level:$level}')"
   printf '%s\n' "$line" >> "$S/notifications.jsonl"
+}
+
+send_opencode() {
+  [ "$KN_OPENCODE_ENABLED" = 1 ] || return 0
+  local adapter="$ROOT/scripts/notify-opencode"
+  [ -x "$adapter" ] || { kfail "adaptador notify-opencode no ejecutable"; return 1; }
+  "$adapter" send --title "$1" --body "$2" --level "$3" >/dev/null \
+    || kfail "OpenCode falló (ver fallback file/webhook)"
 }
 
 send_webhook() {
@@ -52,8 +62,18 @@ cmd_send() {
     --title) title="$2"; shift;; --body) body="$2"; shift;; --level) level="$2"; shift;;
   esac; shift; done
   [ -n "$title" ] || { kfail "falta --title"; return 2; }
-  local ch; for ch in ${KN_CHANNELS//,/ }; do
-    case "$ch" in file) send_file "$title" "$body" "$level";; webhook) send_webhook "$title" "$body" "$level";; email) send_mail "$title" "$body" "$level";; esac
+  local channels="$KN_CHANNELS" ch
+  # OpenCode es el medio primario por ADR-0032; se anade aunque notify.env no lo liste.
+  if [ "$KN_OPENCODE_ENABLED" = 1 ] && [[ ",$channels," != *",opencode,"* ]]; then
+    channels="opencode,$channels"
+  fi
+  for ch in ${channels//,/ }; do
+    case "$ch" in
+      file) send_file "$title" "$body" "$level";;
+      opencode) send_opencode "$title" "$body" "$level";;
+      webhook) send_webhook "$title" "$body" "$level";;
+      email) send_mail "$title" "$body" "$level";;
+    esac
   done
   [ $FAIL = 0 ] && klog "reporte enviado: $title"
   return $FAIL
@@ -72,10 +92,10 @@ $(cat "$ROOT/.kaizen/team/OWNER.md" 2>/dev/null | sed -n '/## Reporte mínimo/,/
 case "${1:-help}" in
   send) shift; cmd_send "$@";;
   event) shift; cmd_event "$@";;
-  status) echo "canales: $KN_CHANNELS | webhook_var: $KN_WEBHOOK_URL_VAR | smtp: $KN_SMTP_ENABLED"; echo "archivo: $S/notifications.jsonl";;
+  status) echo "canales: $KN_CHANNELS | opencode: $KN_OPENCODE_ENABLED (primario) | webhook_var: $KN_WEBHOOK_URL_VAR | smtp: $KN_SMTP_ENABLED"; echo "archivo: $S/notifications.jsonl";;
   *) cat <<'EOF'
 kaizen-notify <comando>
-  send --title T --body B [--level info|alert]   envía reporte a El Presidente
+  send --title T --body B [--level info|alert]   envía reporte (OpenCode primario + auditoría)
   event <equipo> <rc> [detalle]                   reporte de ciclo del runtime
   status                                          canales configurados
 EOF

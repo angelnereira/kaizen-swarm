@@ -69,6 +69,8 @@ La autoridad final es **El Presidente**, dueño del negocio y del proyecto (`.ka
 
 ## Cómo se configura
 
+Guía completa de **instalación, actualización y desinstalación** en Linux, macOS y Windows: [`docs/kaizen/INSTALACION.md`](docs/kaizen/INSTALACION.md).
+
 ### Para una persona
 
 ```bash

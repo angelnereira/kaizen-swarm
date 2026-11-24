@@ -56,6 +56,11 @@ Estado: `verified` = fuente oficial consultada; `pending` = requiere verificaci�
 > - **(a) HMAC-SHA512: VERIFICADO por POC local (2026-11-24).** `hmac.new(b"my-secret-key", b'{"event":"message","session":"default","engine":"WEBJS"}', hashlib.sha512)` reproduce el vector documentado: `208f8a55dde9e055…6153fa89`. Confirma SHA-512 sobre raw body y resuelve la inconsistencia del docs (enlazaba a SHA-256). Clave de ejemplo, sin secretos reales.
 > - **(b) *live location*: PENDIENTE** — sin payload oficial ni frecuencia documentada; requiere POC con número de prueba.
 > - La afirmación de ADR-0025:8 sobre "prohibición de chatbots desde 2026-01-15" no fue confirmada con fuente primaria: contexto histórico del ADR, no obligación verificada.
+| TOOL-002b | Repositorio oficial / PyPI | kalil0321/reverse-api-engineer v0.16.0 (MIT); wheel reverse_api_engineer-0.16.0-py3-none-any.whl; sha256 079cd9585c6a6766a91f0e681fd5b530e08dc5ec12e3aa72e52bf2b263f50ca0 | verified |
+| OC-001 | Documentación oficial | OpenCode V2 docs https://opencode.ai/docs/ (índice llms.txt) | verified |
+| OC-002 | Repositorio oficial | anomalyco/opencode (MIT, https://github.com/anomalyco/opencode) | verified |
+
+> Nota de consolidación (REG-EV-01): se conservan ambas series de identificadores. `TOOL-002b` es la versión con hash del PR #3 y convive con `TOOL-002`. `OC-001/OC-002` y `OC-WEB-001/OC-CLI-001` apuntan a la misma documentación oficial; el mapeo formal entre ambos requiere decisión humana y queda registrado como pendiente en el proyecto `consolidar-prs-main`. Ninguna fuente fue descartada.
 
 ## Panamá — oficiales
 

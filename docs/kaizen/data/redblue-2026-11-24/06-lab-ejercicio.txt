@@ -1,0 +1,24 @@
+# Ejercicio rojo/azul en laboratorio sintetico
+
+Alcance: 127.0.0.1:8899 | sin credenciales reales | sin datos personales
+
+## Equipo ROJO — enumeration
+/ -> 200 | Laboratorio sintetico Kaizen - pagina publica
+/health -> 200 | ok
+/robots.txt -> 404 | no encontrado
+/admin -> 401 | NO AUTORIZADO (control presente)
+/debug -> 200 | DEBUG SINTETICO: modo=lab, semilla=KAZEN-2026, sin datos reales
+
+## Hallazgos con peso
+LAB-001 peso=+3 Endpoint de diagnostico sin autenticacion | GET /debug -> 200 sin X-Lab-Token
+LAB-002 peso=-1 Control de acceso del panel presente | GET /admin -> 401 sin token
+LAB-003 peso=-1 Sin divulgacion por robots.txt | GET /robots.txt -> 404
+
+## Equipo AZUL — deteccion
+eventos_totales: 5
+debug_detectados: 1
+primer_evento: 2026-11-24T05:21:00.816749+00:00 127.0.0.1 GET /debug -> 200
+tiempo_deteccion_s: 1.0
+momento_deteccion: 2026-11-24T05:21:01.817634+00:00
+
+Puntuacion ponderada: 1

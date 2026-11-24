@@ -1,0 +1,50 @@
+## Cabeceras HTTP (solo HEAD, sin credenciales)
+
+--- gateway :80 ---
+status 200
+Content-Type: text/html
+Accept-Ranges: bytes
+ETag: "3371323600"
+Last-Modified: Thu, 11 May 2023 15:15:26 GMT
+X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+Content-Security-Policy: default-src 'self' 'unsafe-inline'; img-src 'self'; child-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval';
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-store, no-cache, must-revalidate
+Content-Length: 14922
+Connection: close
+Date: Tue, 24 Nov 2026 00:17:40 GMT
+
+--- gateway :5000 ---
+HTTP 501 {'Content-Type': 'text/html', 'Connection': 'close', 'Content-Length': '149', 'Server': 'RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9', 'Ext': ''}
+
+--- host :8080 ---
+status 200
+Accept-Ranges: bytes
+Cache-Control: no-cache
+Content-Length: 1736
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' https://www.gstatic.com https://unpkg.com https://cdn.jsdelivr.net blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' http://localhost:8080 https://www.gstatic.com https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; worker-src 'self' blob:; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Content-Type: text/html; charset=utf-8
+Cross-Origin-Opener-Policy: same-origin
+Date: Tue, 24 Nov 2026 05:17:40 GMT
+Last-Modified: Mon, 23 Nov 2026 04:36:20 GMT
+Permissions-Policy: camera=(self), geolocation=(self), microphone=()
+Referrer-Policy: no-referrer
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+
+--- host :8081 ---
+status 200
+Accept-Ranges: bytes
+Cache-Control: no-cache
+Content-Length: 1736
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' https://www.gstatic.com https://unpkg.com https://cdn.jsdelivr.net blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' http://localhost:8080 https://www.gstatic.com https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; worker-src 'self' blob:; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Content-Type: text/html; charset=utf-8
+Cross-Origin-Opener-Policy: same-origin
+Last-Modified: Mon, 23 Nov 2026 04:36:20 GMT
+Permissions-Policy: camera=(self), geolocation=(self), microphone=()
+Referrer-Policy: no-referrer
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+
