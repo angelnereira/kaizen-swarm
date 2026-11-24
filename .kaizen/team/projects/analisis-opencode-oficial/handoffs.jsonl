@@ -1,0 +1,180 @@
+{
+  "id": "H-OC-20261124020855-1",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "verificador-evidencias",
+  "task": "T1 verificar fuentes, abrir expedientes OC-001/OC-002 y actualizar SOURCES",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:54Z",
+  "acked_at": "2026-11-24T02:13:47Z"
+}
+{
+  "id": "H-OC-20261124020855-2",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "deep-researcher",
+  "task": "T2 mapa de capacidades V2 desde documentacion oficial",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:55Z",
+  "acked_at": "2026-11-24T02:10:44Z"
+}
+{
+  "id": "H-OC-20261124020855-3",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "researcher",
+  "task": "T3 analisis del repositorio oficial anomalyco/opencode",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:55Z",
+  "acked_at": "2026-11-24T02:27:24Z"
+}
+{
+  "id": "H-OC-20261124020855-4",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "architect",
+  "task": "T4 oportunidades priorizadas y ADR propuesto con retador",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:55Z",
+  "acked_at": "2026-11-24T02:11:48Z"
+}
+{
+  "id": "H-OC-20261124020855-5",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "dx",
+  "task": "T5 ergonomia y mejoras de flujo con OpenCode",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:55Z",
+  "acked_at": "2026-11-24T02:19:53Z"
+}
+{
+  "id": "H-OC-20261124020855-6",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "dev2-api",
+  "task": "T6 integracion practica con API/SDK/cliente y Code Mode",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:55Z",
+  "acked_at": "2026-11-24T02:11:33Z"
+}
+{
+  "id": "H-OC-20261124020855-7",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "security",
+  "task": "T7 seguridad de permisos, MCP, plugins y secretos",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:55Z",
+  "acked_at": "2026-11-24T02:20:53Z"
+}
+{
+  "id": "H-OC-20261124020855-8",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "innovation",
+  "task": "T8 nuevas capacidades y oportunidades de producto",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:55Z",
+  "acked_at": "2026-11-24T02:13:37Z"
+}
+{
+  "id": "H-OC-20261124020855-9",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "knowledge-curator",
+  "task": "T9 alimentar conocimiento y generar guia de implementacion",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:55Z",
+  "acked_at": "2026-11-24T02:22:40Z"
+}
+{
+  "id": "H-OC-20261124020855-10",
+  "correlation_id": "analisis-opencode-oficial",
+  "channel": "direct",
+  "intent": "handoff",
+  "from": "facilitador-equipo",
+  "to": "facilitador-equipo",
+  "task": "T10 standup, blackboard, acuses y orden de turnos",
+  "expects_ack": true,
+  "deadline": "2026-12-01",
+  "source_ids": [
+    "OC-001",
+    "OC-002"
+  ],
+  "status": "ack",
+  "created": "2026-11-24T02:08:55Z",
+  "acked_at": "2026-11-24T02:13:05Z"
+}

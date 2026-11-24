@@ -86,8 +86,8 @@ Estado: `verified` = fuente oficial consultada; `pending` = requiere verificaci�
 | LOCAL-003 | Documento interno | gravital-experience-ui (plan de diseño Flutter M3E) | verified |
 | LOCAL-004 | Documento interno | PlentyPay: perfiles de negocio, módulos, roles y permisos | verified |
 | TOOL-001 | Repositorio oficial | morluto/rea — Reverse Engineer Anything (MIT) | verified |
-| TOOL-002 | Repositorio oficial | kalil0321/reverse-api-engineer (MIT) | verified |
-
+| TOOL-002 | Repositorio oficial / PyPI | kalil0321/reverse-api-engineer v0.16.0 (MIT); wheel reverse_api_engineer-0.16.0-py3-none-any.whl; sha256 079cd9585c6a6766a91f0e681fd5b530e08dc5ec12e3aa72e52bf2b263f50ca0 | verified |
+| OC-001 | Documentación oficial | OpenCode V2 docs https://opencode.ai/docs/ (índice llms.txt) | verified |
 
 ## OUTSOURCING.md
 # Outsourcing de tecnología específica

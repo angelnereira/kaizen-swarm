@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# notify-opencode: canal de salida de kaizen-swarm usando la API estable de OpenCode.
+# Envia reportes a El Presidente como mensajes synthetic en una sesion dedicada,
+# con idempotencia y resume:false (no inicia modelo, sin coste de inferencia).
+# NO toca scripts/kaizen* ni lee notify.env (S-1/S-2).
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
+S="$ROOT/.kaizen/team/runtime"; mkdir -p "$S"
+SESSION_FILE="${KN_OPENCODE_SESSION_FILE:-$S/opencode-notify-session}"
+TITLE_DEFAULT="${KN_OPENCODE_TITLE:-Kaizen Swarm — reportes para El Presidente}"
+ID_PREFIX="${KN_OPENCODE_ID_PREFIX:-msg_kzn}"
+FAIL=0
+klog() { printf '[notify-opencode] %s\n' "$*"; }
+kfail() { printf '[notify-opencode] FALLA: %s\n' "$*" >&2; FAIL=1; }
+
+get_session() {
+  if [ -s "$SESSION_FILE" ]; then cat "$SESSION_FILE"; return 0; fi
+  local out id
+  out="$(opencode api post /api/session --data "$(jq -cn --arg t "$TITLE_DEFAULT" '{title:$t}')" 2>/dev/null)" \
+    || { kfail "no se pudo crear la sesion de reportes"; return 1; }
+  id="$(printf '%s' "$out" | jq -r '.id // .data.id // empty' | head -1)"
+  [ -n "$id" ] || { kfail "la respuesta de /api/session no trae id"; return 1; }
+  printf '%s' "$id" > "$SESSION_FILE"
+  printf '%s' "$id"
+}
+
+send_opencode() {
+  local title="$1" body="$2" level="${3:-info}" session id payload stamp
+  session="$(get_session)" || return 1
+  id="${ID_PREFIX}$(printf '%s' "$title|$body|$level" | sha256sum | cut -c1-24)"
+  payload="$(jq -cn --arg id "$id" --arg title "$title" --arg body "$body" --arg level "$level" --arg session "$session" \
+    '{id:$id,text:("["+$level+"] "+$title+"\n\n"+$body),description:$title,resume:false,metadata:{source:"kaizen-swarm",level:$level,channel:"opencode",session:$session}}')"
+  if ! opencode api post "/api/session/$session/synthetic" --data "$payload" >/dev/null 2>&1; then
+    kfail "no se pudo publicar en la sesion $session"
+    return 1
+  fi
+  stamp="$(date -u +%FT%TZ)"
+  jq -cn --arg ts "$stamp" --arg title "$title" --arg body "$body" --arg level "$level" \
+    --arg channel "opencode" --arg session "$session" --arg id "$id" \
+    '{ts:$ts,title:$title,body:$body,level:$level,channel:$channel,session:$session,message_id:$id}' \
+    >> "$S/notifications.jsonl"
+  klog "reporte publicado en OpenCode: $title (id $id)"
+}
+
+cmd_send() {
+  local title="" body="" level="info"
+  while [ $# -gt 0 ]; do case "$1" in
+    --title) title="$2"; shift;; --body) body="$2"; shift;; --level) level="$2"; shift;;
+  esac; shift; done
+  [ -n "$title" ] || { kfail "falta --title"; return 2; }
+  send_opencode "$title" "$body" "$level"
+  return $FAIL
+}
+
+cmd_event() {
+  local team="$1" rc="${2:-0}" detail="${3:-}"; shift 3 2>/dev/null || :
+  local level=info; [ "$rc" != 0 ] && level=alert
+  send_opencode "Equipo $team: $([ "$rc" = 0 ] && echo OK || echo INCIDENCIA)" \
+    "Resultado: $rc
+$detail" "$level"
+  return $FAIL
+}
+
+case "${1:-help}" in
+  send) shift; cmd_send "$@";;
+  event) shift; cmd_event "$@";;
+  status) printf 'canal: opencode (API estable, resume:false, sin coste)\n'; printf 'sesion: %s\n' "$([ -s "$SESSION_FILE" ] && cat "$SESSION_FILE" || echo 'aun no creada')"; printf 'auditoria: %s\n' "$S/notifications.jsonl";;
+  session) get_session;;
+  *) cat <<'EOF'
+notify-opencode <comando>
+  send --title T --body B [--level info|alert]   publica el reporte en la sesion de OpenCode
+  event <equipo> <rc> [detalle]                   reporte de ciclo del runtime
+  status                                          canal, sesion y archivo de auditoria
+  session                                         crea o devuelve la sesion dedicada de reportes
+EOF
+  ;;
+esac
+exit $FAIL
