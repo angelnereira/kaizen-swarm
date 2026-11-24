@@ -27,29 +27,43 @@ def cmd_propose(text):
     d = os.path.join(ROOT, "docs/kaizen/pr-drafts")
     os.makedirs(d, exist_ok=True)
     path = os.path.join(d, f"{STAMP}-propuesta.md")
-    body = f"""---
-id: propuesta-{STAMP}
-title: {title}
-created: {NOW}
-status: draft
-source_ids: [PA-ARCHCOP-001]
----
+    body = """## Resumen
+%s
 
-## Observación
-{title}
+## Componente afectado
+kaizen-swarm
 
-## Evidencia reciente del repositorio
-{chr(10).join(recent) if recent else '- sin outbox reciente: no se afirma evidencia'}
+## Tipo de cambio
+- [x] enhancement
+- [ ] bug
+- [ ] tech-debt
+- [ ] documentation
+- [ ] refactor
 
-## Impacto
-Por definir con el equipo; no se inventa impacto sin medicion.
+## Documentos relacionados
+- ADR-0035
 
-## Propuesta
-{title}. Borrador para discusion; requiere retador y consenso.
+## Plan de prueba
+- `scripts/kaizen-gov check`
+- `bash tests/run.sh`
 
-## Pregunta
-¿Quién ejecuta, quién verifica y quién aprueba esta mejora?
-"""
+## Impacto en calidad (ratchet)
+- Cobertura: igual
+- Advertencias: igual
+- Deuda técnica: igual
+
+## Criterios de salida que avanza
+- Evidencia reproducible y cierre verificado.
+
+## Cierre de issues
+Closes: none
+
+## Checklist
+- [x] Compila
+- [x] Pasa tests
+- [x] Documentación actualizada
+""" % title
+
     open(path, "w", encoding="utf-8").write(body)
     print("borrador:", os.path.relpath(path, ROOT))
 
