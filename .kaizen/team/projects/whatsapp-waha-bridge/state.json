@@ -1,0 +1,17 @@
+{
+  "slug": "whatsapp-waha-bridge",
+  "goal": "Canal de entrada para Kaizen Swarm: OpenCode (app móvil Android + opencode serve) como medio activo; WhatsApp/WAHA como canal opcional en espera. Sin nueva arquitectura: se reutilizan runtime y hasta 12 agentes.",
+  "kpi": "Canal activo: instrucción desde la app OpenCode Android llega a kaizen-equipo, se convierte en tarea/proyecto con KPI y source_ids verificados, se acusa recibo y se responde en la misma sesión; 0 tareas duplicadas. WhatsApp: canal opcional, flag=0, sin activar.",
+  "facilitator": "facilitador-equipo",
+  "members": [
+    "facilitador-equipo",
+    "verificador-evidencias",
+    "architect",
+    "security",
+    "qa",
+    "cumplimiento-panama"
+  ],
+  "stage": "execute",
+  "created": "2026-11-24T03:24:53Z",
+  "updated": "2026-11-24T05:07:28Z"
+}
