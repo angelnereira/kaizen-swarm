@@ -1,0 +1,72 @@
+[
+  {
+    "task": "Descubrimiento de superficie propia",
+    "owner": "red-recon",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  },
+  {
+    "task": "Analisis de protocolos y servicios",
+    "owner": "red-net",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  },
+  {
+    "task": "Pruebas de acceso en laboratorio sintetico",
+    "owner": "red-access",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  },
+  {
+    "task": "IA ofensiva con semilla fijada",
+    "owner": "red-ai",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  },
+  {
+    "task": "Alcance, aislamiento y rollback del laboratorio",
+    "owner": "red-lab",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  },
+  {
+    "task": "Deteccion y correlacion de eventos",
+    "owner": "blue-detect",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  },
+  {
+    "task": "Endurecimiento de red propuesto",
+    "owner": "blue-netdef",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  },
+  {
+    "task": "Revision de identidad y accesos remotos",
+    "owner": "blue-iam",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  },
+  {
+    "task": "Deteccion de anomalias con datos sinteticos",
+    "owner": "blue-ai",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  },
+  {
+    "task": "Contencion, postmortem y lecciones",
+    "owner": "blue-ir",
+    "due": "2026-12-01",
+    "status": "assigned",
+    "created": "2026-11-24T05:21:36Z"
+  }
+]

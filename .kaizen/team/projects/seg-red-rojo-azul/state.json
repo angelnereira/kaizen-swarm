@@ -1,0 +1,24 @@
+{
+  "slug": "seg-red-rojo-azul",
+  "goal": "Ejercicio autorizado rojo/azul sobre activos propios: descubrir superficie, probar accesos en laboratorio aislado, defender y aprender con evidencia verificable",
+  "kpi": "100% de hallazgos con comando reproducible y outbox S-11; 0 secretos; 0 dispositivos de terceros; tiempo de deteccion medido en laboratorio; kaizen check en verde",
+  "facilitator": "facilitador-equipo",
+  "members": [
+    "facilitador-equipo",
+    "verificador-evidencias",
+    "red-recon",
+    "red-net",
+    "red-access",
+    "red-ai",
+    "red-lab",
+    "blue-detect",
+    "blue-netdef",
+    "blue-iam",
+    "blue-ai",
+    "blue-ir",
+    "gerente"
+  ],
+  "stage": "execute",
+  "created": "2026-11-24T05:15:20Z",
+  "updated": "2026-11-24T05:21:54Z"
+}
