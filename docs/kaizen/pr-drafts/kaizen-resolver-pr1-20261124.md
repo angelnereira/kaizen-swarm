@@ -33,7 +33,7 @@ PR #1 (`kaizen/equipo-arquitectura-copilot`): copiloto de arquitectura, orquesta
 - `governance.json`: unión de `agents` y `processes` (90 agentes, 12 procesos), conservando `updated` de `main`.
 - `catalog.json` y `CATALOGO-AGENTES.md`: regenerados con `scripts/kaizen-org catalog` desde los 90 prompts reales; no se editaron a mano.
 - `handoffs.jsonl`: se conservó la versión completa de `main`; la del PR era un fragmento del mismo objeto.
-- `tests/run.sh`: base de `main` + pruebas nuevas del PR #1; conteos 57/80 sustituidos por conteo dinámico de prompts; resumen y `[ "$FAILN" = 0 ]` al final (antes estaban en la mitad y enmascaraban fallos).
+- `tests/run.sh`: base de `main` + pruebas nuevas del PR #1; conteos 57/80 sustituidos por conteo dinámico de prompts; resumen y `[ "$FAILN" = 0 ]` al final (antes estaban en la mitad y enmascaraban fallos). La aserción de ADR-0037 buscaba el literal `chat NO es canal`, inexistente en el ADR; se sustituyó por `chat nunca es un canal seguro|NO al chat`, que verifica la misma política con la redacción real del documento (no se relaja: sigue fallando si el ADR no prohíbe el chat).
 - `docker-compose.yml:42`: se eliminó el literal detectado y se exige `KAZEN_GRAFANA_ADMIN_PASSWORD` con `${VAR:?...}` (fallo rápido, S-3). El valor sigue comprometido en el historial: requiere rotación humana.
 
 ## Justificación de avisos S-3

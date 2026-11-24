@@ -358,7 +358,7 @@ jq -e '.["investigacion-capacidades"]' "$REPO/.kaizen/team/teams.json" >/dev/nul
 
 [ -x "$REPO/scripts/kaizen-vault" ] && ok 'CLI custodia secretos' || bad 'CLI custodia secretos'
 ( cd "$REPO" && scripts/kaizen-vault check >/dev/null 2>&1 ) && ok 'vault check' || bad 'vault check'
-grep -q 'chat NO es canal' "$REPO/docs/kaizen/adr/0037-custodia-secretos-broker-humano.md" 2>/dev/null && ok 'ADR-0037' || bad 'ADR-0037'
+grep -qiE 'chat nunca es un canal seguro|NO al chat' "$REPO/docs/kaizen/adr/0037-custodia-secretos-broker-humano.md" 2>/dev/null && ok 'ADR-0037' || bad 'ADR-0037'
 jq -e '.["custodia-secretos"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 && ok 'equipo custodia' || bad 'equipo custodia'
 
 [ -x "$REPO/scripts/kaizen-doctor" ] && ok 'doctor instalacion' || bad 'doctor instalacion'
