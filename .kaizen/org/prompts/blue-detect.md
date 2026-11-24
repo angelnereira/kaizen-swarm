@@ -2,7 +2,7 @@
 id: blue-detect
 name: Deteccion y Monitoreo
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose

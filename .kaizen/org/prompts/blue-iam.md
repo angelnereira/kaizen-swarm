@@ -2,7 +2,7 @@
 id: blue-iam
 name: Identidad y Accesos
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose

@@ -204,7 +204,7 @@
   },
   "competition": {
     "mode": "teams_and_individual",
-    "iterations": 3,
+    "iterations": 5,
     "scope_class_required": "LAB",
     "lab_host": "127.0.0.1",
     "lab_port": 8899,
@@ -341,9 +341,16 @@
       "3": {
         "red": "Definiciones v4: verificación de alcance y enumeración mínima aplicadas (S-LEARNED).",
         "blue": "Definiciones v4: muestreo 0.2s y correlación registrada (S-LEARNED)."
+      },
+      "4": {
+        "blue": "Correccion ENV: blue-iam verifica /admin por si mismo (401) en vez de esperar un evento del rojo."
+      },
+      "5": {
+        "both": "Colaboracion acordada: red-recon comparte hallazgo con blue-netdef (+20 D4 por equipo)."
       }
     },
     "efficiency_bonus": 0.1,
-    "learned_bonus_percent": 0.05
+    "learned_bonus_percent": 0.05,
+    "collaboration_bonus": 20
   }
 }

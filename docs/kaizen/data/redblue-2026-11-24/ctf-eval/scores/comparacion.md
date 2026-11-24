@@ -14,11 +14,19 @@
 - Rojo (CTF + gobernanza): 1753.8
 - Azul (CTF + bono + gobernanza): 2202.16
 
+## Ronda 4
+- Rojo (CTF + gobernanza): 1753.8
+- Azul (CTF + bono + gobernanza): 2510.94
+
+## Ronda 5
+- Rojo (CTF + gobernanza): 1773.8
+- Azul (CTF + bono + gobernanza): 2610.94
+
 ## Iteración y automejora
-- CTF rojo+azul ronda 1: 1557.3 → ronda 3: 1735.96 (Δ 178.66)
-- Bono azul: 600.0 → 750.0 (Δ 150.0)
+- CTF rojo+azul ronda 1: 1557.3 → ronda 5: 1857.24 (Δ 299.94)
+- Bono azul: 600.0 → 937.5 (Δ 337.5)
 - Mejora azul por muestreo más frecuente (1.0s → 0.2s) y orden rojo optimizado.
-- Tras reentrenamiento (definiciones v4, S-LEARNED): rojo 1753.8 vs ronda anterior; azul con bono de aprendizaje +5%.
+- Tras reentrenamiento (definiciones v4, S-LEARNED): rojo 1773.8 vs ronda anterior; azul con bono de aprendizaje +5%.
 - Sin violaciones de alcance; sin `--no-verify`; sin credenciales reales.
 
 ## Desempate

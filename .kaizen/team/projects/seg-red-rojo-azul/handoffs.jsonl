@@ -1,0 +1,1 @@
+{"id":"H-179550074777902","from":"red-recon","to":"blue-detect","channel":"direct","intent":"finding","text":"Prueba tras ADR-0034","source_ids":"NIST-001","expects_ack":true,"status":"open","created":"2026-11-24T06:12:27Z"}

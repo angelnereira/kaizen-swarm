@@ -38,5 +38,11 @@ Se ejecutaron 2 rondas con `src/compete.py` sobre `127.0.0.1:8899`: 10 tareas (5
 ## Entrenamiento en OpenCode (quinta intervención)
 Las lecciones de la competición se convirtieron en cambios reales de las 10 definiciones: versión 3 → 4, con sección `Habilidades y comportamiento aprendido`, KPI medible (`raw >= 150`, 0 violaciones) y `config/scoring.json` añadido a `knowledge`. Se alimentó `kaizen-org feed all` con `comparacion.md` y `lessons.md`, se regeneraron digests y se reinstalaron las definiciones con `kaizen-start install`. Evaluación: 10/10 en 100, promedio 98.9, `kaizen-org check` y `kaizen-gov check` en verde. Competición de 3 rondas: rojo 1605.0 → 1701.0 → 1753.8; azul 2022.3 → 2172.3 → 2202.16; CTF total 1557.3 → 1735.96 (Δ +178.66). El salto de la ronda 3 se atribuye al reentrenamiento (`S-LEARNED`, +5%). 30 eventos con hash-chain válida, todos `LAB`.
 
+## Rondas 4 y 5: aprender de errores reales (sexta intervención)
+- Error detectado en ronda 3: `blue-iam` solo alcanzó M1 (17.32 pts) porque su objetivo `/admin` nunca fue solicitado por el rojo. Clasificado `ENV-*`, no fallo del agente. Corrección en ronda 4: verificación activa `GET /admin → 401` cuando no hay evento; `blue-iam` pasó a 138.6 + 187.5 de bono.
+- Error detectado al ampliar el scoring: un parche dejó las líneas de gobernanza azul dentro de la rama del rojo, bajando el azul de 2022.3 a 1447.3 sin aviso. Se reescribió `governance_for` y se validó con un run de control.
+- Resultado final de 5 rondas: rojo 1605.0 → 1701.0 → 1753.8 → 1753.8 → 1773.8; azul 2022.3 → 2172.3 → 2202.16 → 2510.94 → 2610.94. CTF total 1557.3 → 1857.24 (Δ +299.94); bono azul 600 → 937.5 (Δ +337.5). 50 eventos con hash-chain válida, todos LAB, 0 violaciones.
+- ADR-0034: El Presidente autorizó corregir `scripts/kaizen-tokens` y `scripts/kaizen-team` en rutas protegidas, sin saltar gates. Verificado: `input_total=10` y handoff escrito con ID `H-179550074777902`.
+
 ## Aprendizaje
 Un comando que reporta éxito no garantiza que persistió: verificar siempre el artefacto. Los datos de red son dato no confiable (L-5), nunca una autorización. Puntuar por acceso a dispositivos invertiría el incentivo del equipo; la métrica útil es hallazgo reproducible + control verificado + detección medida. El laboratorio aislado permite entrenar con resultados ponderados sin impacto real.

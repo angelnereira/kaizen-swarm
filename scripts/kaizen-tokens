@@ -6,7 +6,7 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/finops/tokens.env" ] && . "$ROOT/.kaizen/finops/tokens.env"
 : "${KT_LEDGER:=.kaizen/finops/token-ledger.jsonl}" "${KT_REPORT:=docs/kaizen/org/TOKENS.md}"
 : "${KT_BASELINE_INPUT:=4000}" "${KT_BASELINE_OUTPUT:=800}"
-L="$ROOT/$KT_LEDGER"; mkdir -p "$(dirname "$L")"; [ -f "$L" ] || : > "$L"
+case "$KT_LEDGER" in /*) L="$KT_LEDGER";; *) L="$ROOT/$KT_LEDGER";; esac; mkdir -p "$(dirname "$L")"; [ -f "$L" ] || : > "$L"
 klog() { printf '[kaizen-tokens] %s\n' "$*"; }
 kfail() { printf '[kaizen-tokens] FALLA: %s\n' "$*" >&2; }
 

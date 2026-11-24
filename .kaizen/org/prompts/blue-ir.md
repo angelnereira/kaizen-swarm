@@ -2,7 +2,7 @@
 id: blue-ir
 name: Respuesta a Incidentes
 department: tecnologia
-version: 4
+version: 5
 status: active
 proactivity: high
 autonomy: propose
