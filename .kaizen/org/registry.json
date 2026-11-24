@@ -1,5 +1,27 @@
 [
   {
+    "id": "access-auditor",
+    "name": "Auditor de Accesos",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
+    "id": "adr-author",
+    "name": "Autor de ADR",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[decision.proposed, adr.required:*]"
+  },
+  {
     "id": "ai",
     "name": "Experto en IA",
     "department": "tecnologia",
@@ -31,6 +53,39 @@
     "autonomy": "scoped",
     "veto": "scope",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "aprobador-trabajo",
+    "name": "Preparador de Aprobacion",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
+  },
+  {
+    "id": "arch-assessment",
+    "name": "Evaluador de Arquitectura",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "architecture",
+    "triggers": "[architecture.review:*, issue.label:architecture]"
+  },
+  {
+    "id": "arch-copilot",
+    "name": "Copiloto de Arquitectura e Ingenieria",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[request.classify:*, architecture.review:*, *.*]"
   },
   {
     "id": "architect",
@@ -121,6 +176,17 @@
     "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
   },
   {
+    "id": "capability-scout",
+    "name": "Explorador de Capacidades",
+    "department": "conocimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[research.required:*, capability.gap:*, task.blocked:*]"
+  },
+  {
     "id": "capacidades-negocio",
     "name": "Especialista en Capacidades Tecnológicas, Financieras y de Mercadeo",
     "department": "conocimiento",
@@ -132,6 +198,17 @@
     "triggers": "[issue.label:capacidades, research.required:*, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "compliance-secretos",
+    "name": "Especialista en Cumplimiento de Secretos",
+    "department": "cumplimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "compliance",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
     "id": "computer-operator",
     "name": "Operador de Escritorio (Computer Use)",
     "department": "operaciones",
@@ -141,6 +218,28 @@
     "autonomy": "scoped",
     "veto": "none",
     "triggers": "[computer_use.authorized:*, issue.label:desktop]"
+  },
+  {
+    "id": "consensus-facilitator",
+    "name": "Facilitador de Consenso",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
+  },
+  {
+    "id": "crypto-architect",
+    "name": "Arquitecto Criptografico",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
   },
   {
     "id": "cumplimiento-panama",
@@ -163,6 +262,17 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "deep-researcher",
+    "name": "Investigador Profundo",
+    "department": "conocimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[research.required:*, capability.gap:*, task.blocked:*]"
   },
   {
     "id": "dev1-core",
@@ -330,6 +440,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "human-approval-gate",
+    "name": "Puerta de Aprobacion Humana",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
     "id": "identity-access-specialist",
     "name": "Especialista en Identidad y Acceso",
     "department": "tecnologia",
@@ -363,6 +484,39 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "issue-reporter",
+    "name": "Generador de Issues",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
+  },
+  {
+    "id": "jira-planner",
+    "name": "Planificador de Trabajo",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.plan:*, epic.proposed:*]"
+  },
+  {
+    "id": "knowledge-capture",
+    "name": "Capturador de Conocimiento",
+    "department": "conocimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[knowledge.ingest:*, user.remember:*]"
+  },
+  {
     "id": "knowledge-curator",
     "name": "Curador de Conocimiento",
     "department": "conocimiento",
@@ -372,6 +526,17 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "leak-responder",
+    "name": "Respondedor de Fugas",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
   },
   {
     "id": "legal-corporativo",
@@ -396,6 +561,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "maintainer-proactivo",
+    "name": "Mantenedor Proactivo",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
+  },
+  {
     "id": "marketing",
     "name": "Especialista en Marketing y Visualizacion",
     "department": "producto-negocio",
@@ -418,6 +594,28 @@
     "triggers": "[schedule:daily, regulatory.change:*, research.required:*]"
   },
   {
+    "id": "orquestador-equipo",
+    "name": "Orquestador de Equipo",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
+  },
+  {
+    "id": "planificador-trabajo",
+    "name": "Planificador de Trabajo",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
+  },
+  {
     "id": "platform-engineer",
     "name": "Ingeniero de Plataforma y DevOps",
     "department": "tecnologia",
@@ -427,6 +625,39 @@
     "autonomy": "scoped",
     "veto": "none",
     "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
+    "id": "poc-design",
+    "name": "Disenador de POC",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[poc.request:*, experiment.proposed:*]"
+  },
+  {
+    "id": "policy-engineer",
+    "name": "Ingeniero de Politicas",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
+    "id": "pr-builder",
+    "name": "Constructor de PR",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
   },
   {
     "id": "product",
@@ -460,6 +691,17 @@
     "autonomy": "scoped",
     "veto": "qa",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "raci-dinamico",
+    "name": "Arbitro RACI Dinamico",
+    "department": "gerencia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
   },
   {
     "id": "rea-specialist",
@@ -539,6 +781,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "retador-decisiones",
+    "name": "Retador Obligatorio",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
+  },
+  {
     "id": "reverse-api-specialist",
     "name": "Especialista en Ingeniería Inversa de APIs Web",
     "department": "tecnologia",
@@ -572,6 +825,39 @@
     "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
   },
   {
+    "id": "secret-injector",
+    "name": "Inyector Seguro de Secretos",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
+    "id": "secret-lifecycle",
+    "name": "Gestor de Ciclo de Vida",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
+    "id": "secure-review",
+    "name": "Revisor Seguro de Codigo",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[pull_request.opened, diff.review:*]"
+  },
+  {
     "id": "security",
     "name": "Seguridad y Auditoria",
     "department": "tecnologia",
@@ -581,6 +867,17 @@
     "autonomy": "propose",
     "veto": "security",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "self-improvement",
+    "name": "Agente de Automejora",
+    "department": "conocimiento",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.proposed:*, pr.ready:*, consensus.required:*, retrospective:*]"
   },
   {
     "id": "soporte",
@@ -594,6 +891,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "supervisor-ejecucion",
+    "name": "Supervisor de Ejecucion",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[work.assign:*, team.plan:*, task.delegate:*]"
+  },
+  {
     "id": "systems",
     "name": "Ingeniero de Sistemas",
     "department": "tecnologia",
@@ -603,6 +911,50 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
+  },
+  {
+    "id": "task-unblocker",
+    "name": "Desbloqueador de Tareas",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[research.required:*, capability.gap:*, task.blocked:*]"
+  },
+  {
+    "id": "tech-evaluation",
+    "name": "Evaluador Tecnologico",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[technology.evaluate:*, research.required:*]"
+  },
+  {
+    "id": "vault-custodian",
+    "name": "Custodio de Boveda",
+    "department": "operaciones",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "security",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
+  },
+  {
+    "id": "vault-qa",
+    "name": "QA de Custodia",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[secret.requested:*, vault.audit:*, leak.suspected:*]"
   },
   {
     "id": "verificador-evidencias",
@@ -625,5 +977,16 @@
     "autonomy": "propose",
     "veto": "none",
     "triggers": "[research.required:*, knowledge.updated:*, schedule:weekly, issue.label:especialista]"
+  },
+  {
+    "id": "work-intake",
+    "name": "Intake de Trabajo",
+    "department": "producto-negocio",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "scoped",
+    "veto": "scope",
+    "triggers": "[issue.label:swarm:ready, request.classify:*]"
   }
 ]

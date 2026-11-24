@@ -2,13 +2,88 @@
 
 **Una organización de agentes para OpenCode que convierte instrucciones en trabajo verificable: por issue, con gobernanza, evidencia y mejora medible.**
 
-![Definiciones: 45](https://img.shields.io/badge/definiciones-45-blue)
-![Generados: 47](https://img.shields.io/badge/generados-47-blue)
+
+
+
+## Windows sin fricción y doctor
+
+`install.ps1 -Yes` instala los agentes en la **configuración real** de OpenCode (nunca en un directorio temporal), crea la gobernanza global en `~/.local/share/kaizen-swarm/framework` y deja **una sola pregunta**: tu número de WhatsApp. No modifica tus repositorios.
+
+Si algo salió mal, ejecuta desde el repo:
+
+```powershell
+python scripts/kaizen-doctor check
+python scripts/kaizen-doctor fix
+```
+
+El doctor detecta dependencias (`git`, `jq`, `opencode`), cuenta los agentes reales y elimina referencias huérfanas a `/tmp` en `opencode.json` **con backup**. Si `opencode` no está en PATH, instálalo desde https://opencode.ai y vuelve a correr el instalador (ADR-0038).
+
+## Custodia de secretos (broker humano)
+
+**El chat nunca es un canal seguro para secretos.** No pegues tokens ni contraseñas en la conversación: el texto queda en historial, logs y contexto del modelo. `kaizen-vault` invierte el flujo: el usuario deposita el valor fuera de banda (`set`, sin eco), el agente solo `request`, y un **humano aprueba en su terminal** (`approve`) emitiendo un grant HMAC con TTL. El secreto se entrega por **FD 3** al comando aprobado, nunca al chat ni a logs.
+
+- Cifrado AES-256-GCM con nonce de 96 bits y AAD vinculante; Argon2id fijado; passphrase nunca persistida.
+- Auditoría append-only con hash-chain, HMAC y anti-rollback (`audit-verify`).
+- `redact` reemplaza valores conocidos por `[REDACTED]`; `custodian` muestra metadata sin valores.
+- 10 agentes dedicados (`custodia-secretos`): custodio, cripto, políticas, auditor, ciclo de vida, fuga, cumplimiento, inyector, QA y aprobación humana.
+- **Estado PILOT**, no adopción plena: queda verificar Windows (G5) y firmar un humano antes de usar secretos reales (ADR-0037). `rekey` local NO sustituye rotar en el proveedor (S-12).
+
+```bash
+scripts/kaizen-vault init            # humano, passphrase sin eco
+scripts/kaizen-vault enroll <agente> # token opaco, modo 600
+scripts/kaizen-vault allow <agente> <scopes> <comandos> <ttl_min>
+scripts/kaizen-vault set <scope> <nombre>
+scripts/kaizen-vault request <token_file> <scope> <purpose> <nota>  # agente: solo solicita
+scripts/kaizen-vault requests && scripts/kaizen-vault approve <id> "<comando>"  # humano, fuera de banda
+scripts/kaizen-vault exec <id> <token_file>   # broker entrega por FD 3
+scripts/kaizen-vault audit-verify && scripts/kaizen-vault custodian
+```
+
+## Instalación definitiva
+
+Repositorio: **https://github.com/angelnereira/kaizen-swarm**. La instalación es no invasiva: los agentes viven en `~/.config/opencode/agents` y el estado en `~/.local/share/kaizen-swarm`; el repo destino no se toca salvo `--embedded` explícito.
+
+### Opción A — pasar el link a tu herramienta de IA (recomendado)
+
+Copia y pega este prompt en **OpenCode, Claude Code, Codex o tu agente preferido**:
+
+> Instala kaizen-swarm desde https://github.com/angelnereira/kaizen-swarm. Clona el repo, ejecuta `scripts/kaizen-installer opencode --global` (o `python scripts/kaizen-installer opencode --global` en Windows), verifica con `scripts/kaizen-platform check`, `scripts/kaizen-gov check` y `scripts/kaizen-eval check`. No modifiques el proyecto destino, no escribas secretos y reporta la salida real de cada comando.
+
+### Opción B — terminal (Linux / WSL / macOS)
+
+```bash
+git clone --depth 1 https://github.com/angelnereira/kaizen-swarm
+cd kaizen-swarm
+scripts/kaizen-installer opencode --global
+scripts/kaizen-platform check
+scripts/kaizen-gov check
+bash tests/run.sh
+```
+
+Para instalar en un proyecto concreto: `scripts/kaizen-installer repo <ruta-del-proyecto>` (o `scripts/kaizen-runtime install`).
+
+### Opción C — Windows (PowerShell)
+
+```powershell
+git clone --depth 1 https://github.com/angelnereira/kaizen-swarm "$env:LOCALAPPDATA\kaizen-swarm"
+cd "$env:LOCALAPPDATA\kaizen-swarm"
+.\install.ps1 -Yes
+.\scripts\kaizen-platform.ps1 check
+```
+
+`install.ps1` sin `-Yes` solo muestra los comandos (dry-run). En Windows los CLIs Python son multiplataforma; los scripts bash requieren Git Bash o WSL y `kaizen-platform check` lo reporta honestamente (ADR-0032).
+
+### Verificación y paridad
+
+`kaizen-platform check|json` detecta Linux, WSL, Windows y macOS y selecciona runtime `bash` o `powershell`. `kaizen-invoke detect` confirma los clientes disponibles (OpenCode, Claude Code, Codex). El comportamiento es igual o similar: mismos CLIs Python, mismos prompts, mismos checks. Nunca se asume Linux (K-10).
+
+![Definiciones: 80](https://img.shields.io/badge/definiciones-80-blue)
+![Generados: 80](https://img.shields.io/badge/generados-80-blue)
 ![Procesos RACI: 12](https://img.shields.io/badge/procesos_RACI-12-teal)
 ![Herramientas REA: 263](https://img.shields.io/badge/herramientas_REA-263-orange)
 ![Pruebas: 191](https://img.shields.io/badge/pruebas-191-brightgreen)
-![Versión: v1.2.0](https://img.shields.io/badge/version-v1.2.0-grey)
-![Corte: 2026-11-22](https://img.shields.io/badge/corte-2026--11--22-lightgrey)
+![Versión: v1.3.0](https://img.shields.io/badge/version-v1.3.0-grey)
+![Corte: 2026-11-23](https://img.shields.io/badge/corte-2026--11--23-lightgrey)
 
 > Badges estáticos con fecha de corte: se actualizan al cortar release. No representan CI remoto. Las mismas cifras están en la tabla siguiente para leer sin red.
 
@@ -127,29 +202,6 @@ intake → plan → squad → execute → review → decide → deliver → veri
 
 ---
 
-## Dirección ejecutiva e incentivos
-
-Equipos `direccion-ejecutiva` (criterio normativo, legal, financiero y de negocio con humano como A en decisiones sensibles) e `incentivos` (`kaizen-incentive`: score ponderado Evidencia 25 / Cierre 25 / Proactividad 20 / Mejora 15 / Eficiencia 10 / Seguridad 5; refuerzo ≥70, ajuste 40-69, freno <40). El incentivo no recompensa resultados sin evidencia (ADR-0029).
-
-## Meta-auditoría ejecutora
-
-`scripts/kaizen-meta check|drift|close|guard|recurrence|execute` audita **y corrige**: cierre real (HEAD vs remoto + release), deriva de versión, permisos denegados, supresiones S-10 y recurrencia por clase (3 repeticiones → `stop-the-line`). El equipo `meta-auditoria` ejecuta remediaciones deterministas sin tocar seguridad/dinero/datos (ADR-0028).
-
-## Resolución de conflictos y push
-
-Los agentes pueden hacer push y resolver conflictos en ramas `kaizen/*`, `feature/*` o `fix/*` (nunca `main`) con `scripts/kaizen-conflict status|resolve|commit-push|abort`. La estrategia (`ours`/`theirs`) y cada push quedan auditados en `.kaizen/team/runtime/conflicts.jsonl`. Los 47 agentes generados tienen `git push*` en `allow` (ADR-0027); la negación anterior era la causa de los errores de permisos.
-
-## Despliegue Docker local
-
-```bash
-scripts/kaizen-docker check      # valida compose y sintaxis (sin daemon)
-scripts/kaizen-docker up         # exporter :9101 + Prometheus :9090 + Grafana :3000
-scripts/kaizen-docker status
-scripts/kaizen-docker down       # conserva volúmenes
-```
-
-Imagen base fijada, usuario no root, sin credenciales en la imagen, volúmenes persistentes. Requiere Docker Desktop corriendo; si no está, falla cerrado y documenta en outbox (ADR-0026).
-
 ## WhatsApp oficial
 
 El puente usa **solo Cloud API oficial vía BSP/n8n**: ventana de 24 h, plantillas aprobadas, opt-in explícito y webhooks idempotentes con firma HMAC. `kaizen-whatsapp templates|window|optin|check` aplica la política localmente; Baileys/whatsapp-web.js está prohibido (`KN_WHATSAPP_ALLOW_UNOFFICIAL=0`). Credenciales en n8n/Vault, nunca en el repo (ADR-0025).
@@ -218,3 +270,22 @@ Credenciales locales por defecto (sobrescribibles; **no usar fuera de localhost*
 - Release: https://github.com/angelnereira/kaizen-swarm/releases/tag/v1.2.0
 
 > Los borradores que originaron este README están en `docs/kaizen/org/README_DRAFT_*.md` (estética, coherencia y crítica) y sus hallazgos en `.kaizen/loop/outbox/`.
+
+
+
+
+## Invocación multi-cliente, investigación y desbloqueo
+
+`kaizen-invoke detect|invoke|all` usa la sintaxis real de OpenCode (`run --agent`), Claude Code (`-p --agent`) y Codex (`exec`), con dry-run por defecto. `deep-researcher`, `capability-scout` y `task-unblocker` investigan externamente con fuentes verificadas, descubren capacidades con valor y diagnostican tareas colgadas con rollback; `kaizen-scout research|skills|tools|unblock` los delega (ADR-0036).
+
+## Comunidad de desarrollo y automejora
+
+Seis agentes trabajan en el repositorio como comunidad: `maintainer-proactivo` detecta mejoras con evidencia, `issue-reporter` redacta borradores, `pr-builder` prepara PRs en ramas `kaizen/*`, `consensus-facilitator` modera 2 turnos con memorial, `retador-decisiones` exige contraejemplos y `self-improvement` convierte lecciones en mejoras con ratchet. `kaizen-devcommunity propose|issue|comment|pr|consensus|retro|check` es dry-run por defecto; ningún agente aprueba ni hace push a `main` (ADR-0035).
+
+## Orquestación dinámica y jerarquía por tarea
+
+Cinco agentes separan **planificar** (`planificador-trabajo`), **repartir** (`orquestador-equipo`), **definir rangos/RACI** (`raci-dinamico`), **verificar** (`supervisor-ejecucion`) y **preparar la aprobación** (`aprobador-trabajo`). `scripts/kaizen-orquesta hierarchy|plan|raci|asignar|estado|check` produce un plan de 7 pasos y una matriz R/A/C/I/V/H con rangos R0–R5: el humano (R0) siempre es A y firma; ningún agente aprueba. La jerarquía es por tarea, con `correlation_id`, ack y recursión acotada por `KAZEN_AGENT_DEPTH` (ADR-0034).
+
+## Copiloto de arquitectura e ingeniería
+
+Nueve agentes derivados del paquete v0.1: ocho especialistas (`work-intake`, `arch-assessment`, `tech-evaluation`, `poc-design`, `adr-author`, `secure-review`, `knowledge-capture`, `jira-planner`) y el súper agente `arch-copilot`, que clasifica y delega. `scripts/kaizen-arch skills|route|invoke|check` carga solo el skill relevante e invoca con `--dry-run` por defecto (`KZ_DRY_RUN=0` para ejecutar). Los comentarios remotos de arquitectura se enrutan al copiloto (ADR-0033). El ZIP se registra con SHA-256 como PA-ARCHCOP-001; sus políticas internas no están validadas y no se usan como norma.

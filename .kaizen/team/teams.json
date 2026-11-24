@@ -131,8 +131,79 @@
     "kpi": "1 mensaje entregado y confirmado por El Presidente; 0 SILENCIOS: cada fallo documentado en outbox",
     "model": "opencode/hy4-flash-free"
   },
+  "portabilidad-windows": {
+    "goal": "Garantizar que los agentes y el framework funcionen igual en Windows/PowerShell y Linux con autodeteccion de plataforma",
+    "members": [
+      "platform-engineer",
+      "dx",
+      "qa",
+      "architect",
+      "verificador-evidencias",
+      "knowledge-curator"
+    ],
+    "kpi": "deteccion correcta en 100% de entornos; 0 supuestos de Linux; paridad de comandos documentada",
+    "model": "opencode/hy4-flash-free"
+  },
+  "direccion-ejecutiva": {
+    "goal": "Decisiones de diseno, arquitectura y requerimientos con criterio ejecutivo, normativo, legal y financiero",
+    "members": [
+      "gerente",
+      "director-producto",
+      "analista-negocios",
+      "cumplimiento-panama",
+      "legal-corporativo",
+      "auditor-riesgos",
+      "finanzas-panamas",
+      "fiscal-integration-specialist",
+      "verificador-evidencias",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% decisiones con board y humano como A en sensibles",
+    "model": "opencode/hy4-flash-free"
+  },
+  "incentivos": {
+    "goal": "Score ponderado y reforzamiento de conducta proactiva sin premios sin evidencia",
+    "members": [
+      "qa",
+      "dx",
+      "finops",
+      "knowledge-curator",
+      "verificador-evidencias",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% agentes con score; 0 incentivos sin evidencia",
+    "model": "opencode/hy4-flash-free"
+  },
+  "meta-auditoria": {
+    "goal": "Auditar y ejecutar correcciones del propio sistema con cierre verificado",
+    "members": [
+      "verificador-evidencias",
+      "qa",
+      "architect",
+      "security",
+      "facilitador-equipo",
+      "dx",
+      "knowledge-curator"
+    ],
+    "kpi": "0 afirmaciones sin cierre real; stop-the-line por recurrencia",
+    "model": "opencode/hy4-flash-free"
+  },
+  "opencode-local-config": {
+    "goal": "Configurar y validar OpenCode local: agentes, permisos V2, MCP y push en kaizen/*",
+    "members": [
+      "facilitador-equipo",
+      "dx",
+      "security",
+      "verificador-evidencias",
+      "qa",
+      "architect",
+      "knowledge-curator"
+    ],
+    "kpi": "56 agentes globales, 0 denies de push, MCP rea activo",
+    "model": "opencode/hy4-flash-free"
+  },
   "outsourcing-tech": {
-    "goal": "Contratar y supervisar especialistas externos por tecnologia: REA, reverse-api-engineer, Computer Use, observabilidad Grafana/Prometheus y puente WhatsApp BSP; con contratos, acceptance y evidencia antes de integrar",
+    "goal": "Contratar y supervisar especialistas por tecnologia con contratos y evidencia",
     "members": [
       "facilitador-equipo",
       "architect",
@@ -147,65 +218,91 @@
       "flutter-m3-design-specialist",
       "dotnet-banking-integrator"
     ],
-    "kpi": "100% de contratos con deliverable, acceptance y evidence.md; 0 integraciones sin verificacion",
+    "kpi": "100% contratos con deliverable, acceptance y evidence",
     "model": "opencode/hy4-flash-free"
   },
-  "opencode-local-config": {
-    "goal": "Configurar y validar OpenCode en esta máquina: agentes globales, permisos V2, MCP rea/railway, instrucciones del proyecto y push permitido en ramas kaizen/*",
+  "arquitectura-copilot": {
+    "goal": "Apoyar diseno, evaluacion tecnologica, POC, ADR, revision segura y captura de conocimiento con enrutamiento progresivo y humano al mando",
     "members": [
-      "facilitador-equipo",
-      "dx",
-      "security",
-      "verificador-evidencias",
-      "qa",
-      "architect",
-      "knowledge-curator"
-    ],
-    "kpi": "47 agentes globales, 0 reglas deny de git push, esquema V2 válido, MCP rea activo",
-    "model": "opencode/hy4-flash-free"
-  },
-  "meta-auditoria": {
-    "goal": "Auditar y EJECUTAR correcciones del propio sistema: cierre verificado, deriva, permisos, recurrencia y sincronizacion de gobernanza",
-    "members": [
-      "verificador-evidencias",
-      "qa",
-      "architect",
-      "security",
-      "facilitador-equipo",
-      "dx",
-      "knowledge-curator"
-    ],
-    "kpi": "0 afirmaciones de 'hecho' sin evidencia de cierre; 0 denies de push; 0 clases de fallo por encima del limite sin stop-the-line",
-    "model": "opencode/hy4-flash-free"
-  },
-  "direccion-ejecutiva": {
-    "goal": "Tomar decisiones de diseño, arquitectura y requerimientos funcionales con criterio ejecutivo, normativo, legal y financiero; mantener las finanzas activas",
-    "members": [
-      "gerente",
-      "director-producto",
-      "analista-negocios",
-      "cumplimiento-panama",
-      "legal-corporativo",
-      "auditor-riesgos",
-      "finanzas-panamas",
-      "fiscal-integration-specialist",
+      "arch-copilot",
+      "work-intake",
+      "arch-assessment",
+      "tech-evaluation",
+      "poc-design",
+      "adr-author",
+      "secure-review",
+      "knowledge-capture",
+      "jira-planner",
       "verificador-evidencias",
       "facilitador-equipo"
     ],
-    "kpi": "100% de decisiones con board, source_ids y humano como A en sensibles; 0 decisiones financieras sin criterio de finanzas/cumplimiento",
+    "kpi": "100% solicitudes enrutadas con evidencia; 0 acciones externas sin aprobacion",
     "model": "opencode/hy4-flash-free"
   },
-  "incentivos": {
-    "goal": "Medir y reforzar el buen comportamiento de los agentes con un score ponderado: evidencia, cierre, proactividad, mejora, eficiencia de tokens y seguridad",
+  "orquestacion-dinamica": {
+    "goal": "Repartir dinamicamente roles, rangos, pasos y procedimientos; planificar, asignar, supervisar y preparar aprobaciones con humano al mando",
     "members": [
+      "orquestador-equipo",
+      "planificador-trabajo",
+      "raci-dinamico",
+      "supervisor-ejecucion",
+      "aprobador-trabajo",
+      "arch-copilot",
+      "verificador-evidencias",
       "qa",
-      "dx",
-      "finops",
-      "knowledge-curator",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de tareas con plan, RACI, ack y cierre verificado; 0 aprobaciones emitidas por agentes",
+    "model": "opencode/hy4-flash-free"
+  },
+  "comunidad-desarrollo": {
+    "goal": "Trabajar proactivamente en el repositorio: detectar mejoras, reportar issues, comentar, abrir PRs, discutir y consensuar, y convertirlo en automejora",
+    "members": [
+      "maintainer-proactivo",
+      "issue-reporter",
+      "pr-builder",
+      "consensus-facilitator",
+      "retador-decisiones",
+      "self-improvement",
+      "verificador-evidencias",
+      "qa",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de issues/PR con evidencia y consenso; 0 push a main; 0 regresiones de calidad sin ADR",
+    "model": "opencode/hy4-flash-free"
+  },
+  "investigacion-capacidades": {
+    "goal": "Investigar externamente cuando falta informacion, descubrir capacidades con valor y desbloquear tareas con evidencia",
+    "members": [
+      "deep-researcher",
+      "capability-scout",
+      "task-unblocker",
+      "researcher",
+      "rea-specialist",
+      "verificador-evidencias",
+      "qa",
+      "facilitador-equipo"
+    ],
+    "kpi": "100% de brechas de conocimiento investigadas con fuentes; 0 tareas colgadas sin diagnostico",
+    "model": "opencode/hy4-flash-free"
+  },
+  "custodia-secretos": {
+    "goal": "Custodiar secretos con broker humano: el agente solo solicita, el humano aprueba fuera de banda y la entrega nunca entra al chat",
+    "members": [
+      "vault-custodian",
+      "crypto-architect",
+      "policy-engineer",
+      "access-auditor",
+      "secret-lifecycle",
+      "leak-responder",
+      "compliance-secretos",
+      "secret-injector",
+      "vault-qa",
+      "human-approval-gate",
       "verificador-evidencias",
       "facilitador-equipo"
     ],
-    "kpi": "100% de agentes con score monitorizado; 0 incentivos que recompensen resultados sin evidencia",
+    "kpi": "0 secretos en chat/logs/repo; 100% de accesos con grant humano y auditoria verificada",
     "model": "opencode/hy4-flash-free"
   },
   "portabilidad-windows": {

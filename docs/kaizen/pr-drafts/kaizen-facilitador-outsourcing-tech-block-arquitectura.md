@@ -27,7 +27,7 @@ Coordinación de equipo — `.kaizen/team/projects/outsourcing-tech/` (datos del
 ## Impacto en calidad (ratchet)
 - Cobertura: igual (no hay código nuevo).
 - Advertencias: igual.
-- Deuda (TODO/FIXME): igual.
+- Deuda técnica: igual.
 - Sin supresiones S-10; ningún `--no-verify` ni CI desactivado.
 
 ## Criterios de salida que avanza

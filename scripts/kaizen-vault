@@ -1,0 +1,366 @@
+#!/usr/bin/env python3
+"""kaizen-vault v2 — broker de secretos custodiado por humano.
+
+CAMBIO DE DISEÑO tras dictamen de seguridad (BLOCK):
+- El AGENTE NUNCA toca un secreto: solo `request` / `status`.
+- El HUMANO opera `approve` en su TTY (fuera del chat) y emite un GRANT efímero (HMAC, TTL).
+- El broker lanza el comando aprobado desde un MANIFIESTO (allowlist); el LLM no controla el argv.
+- Identidad por TOKEN opaco emitido en `enroll` (nunca autodeclarada).
+- Cifrado por registro: AES-256-GCM, nonce 96-bit, AAD con scope/name/policy_version/key_id.
+- Auditoría append-only con hash-chain + HMAC con clave distinta; purpose enumerado.
+- Entrega preferida por FD 3; variables de entorno SOLO con --env-fallback y RLIMIT_CORE=0.
+- `rekey` (local) != `rotate`/`revoke` (siempre acción humana en el proveedor, S-12).
+- Windows/Linux: Python puro. Sin secretos en el repo. El chat NO es canal de secretos.
+"""
+import base64, datetime, getpass, hashlib, hmac, json, os, resource, secrets, shlex, stat, subprocess, sys
+
+from cryptography.exceptions import InvalidTag
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
+
+ROOT = os.environ.get("KAZEN_ROOT", os.getcwd())
+if os.name == "nt":
+    BASE = os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "kaizen-swarm", "vault")
+else:
+    BASE = os.path.expanduser(os.environ.get("KAZEN_VAULT_HOME", "~/.local/share/kaizen-swarm/vault"))
+VAULT = os.path.join(BASE, "secrets.json.enc")
+POLICY = os.path.join(BASE, "policy.json")
+AUDIT = os.path.join(BASE, "audit.jsonl")
+REQDIR = os.path.join(BASE, "requests")
+GRANTDIR = os.path.join(BASE, "grants")
+AGENTDIR = os.path.join(BASE, "agents")
+PARAMS = {"iterations": 3, "memory_cost": 65536, "lanes": 4, "length": 32}
+POLICY_VERSION = 2
+PURPOSES = ("deploy", "webhook", "query", "rotate", "breakglass", "diagnose")
+LEGEND = "El chat NO es canal de secretos. Un secreto en chat se considera comprometido (S-12): rotarlo en el proveedor."
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+def passphrase():
+    test = os.environ.get("KAZEN_VAULT_TEST_PASS")
+    if test is not None:
+        return test.encode()
+    if not sys.stdin.isatty():
+        print("Se requiere TTY para la passphrase del humano.", file=sys.stderr); sys.exit(2)
+    return getpass.getpass("Passphrase de la bóveda (humano): ").encode()
+
+def ensure():
+    for d in (BASE, REQDIR, GRANTDIR, AGENTDIR):
+        os.makedirs(d, exist_ok=True)
+        try: os.chmod(d, 0o700)
+        except OSError: pass
+    if not os.path.exists(POLICY):
+        json.dump({"default": "deny", "policy_version": POLICY_VERSION, "agents": {}, "commands": {}},
+                  open(POLICY, "w", encoding="utf-8"), indent=2)
+
+def derive(salt, pw, length=32, info=b"data"):
+    kdf = Argon2id(salt=salt, length=length, iterations=PARAMS["iterations"],
+                   memory_cost=PARAMS["memory_cost"], lanes=PARAMS["lanes"], ad=info)
+    return kdf.derive(pw)
+
+def canon(obj):
+    return json.dumps(obj, sort_keys=True, separators=(",", ":")).encode()
+
+def load_meta():
+    return json.load(open(VAULT, encoding="utf-8"))
+
+def keys(pw):
+    m = load_meta()
+    data = derive(base64.b64decode(m["salt"]), pw, 32, b"data")
+    audit = derive(base64.b64decode(m["salt"]), pw, 32, b"audit")
+    return data, audit
+
+def aad(scope, name):
+    return canon({"scope": scope, "name": name, "pv": POLICY_VERSION,
+                  "kid": load_meta().get("key_id", "k0")})
+
+def load_secrets(pw):
+    data_key, _ = keys(pw)
+    m = load_meta()
+    out = {}
+    for k, rec in m.get("records", {}).items():
+        try:
+            raw = AESGCM(data_key).decrypt(base64.b64decode(rec["nonce"]), base64.b64decode(rec["ct"]),
+                                           aad(rec["scope"], rec["name"]))
+            out[k] = json.loads(raw)
+        except InvalidTag:
+            print("Integridad fallida: passphrase incorrecta o registro alterado.", file=sys.stderr); sys.exit(3)
+    return out
+
+def atomic(path, obj):
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f: json.dump(obj, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, path)
+    try: os.chmod(path, 0o600)
+    except OSError: pass
+
+def audit_append(audit_key, action, actor, scope, name, approved, purpose, note=""):
+    if purpose not in PURPOSES and purpose != "admin":
+        print("purpose inválido; use:", ", ".join(PURPOSES), file=sys.stderr); sys.exit(2)
+    lines = open(AUDIT, encoding="utf-8").read().splitlines() if os.path.exists(AUDIT) else []
+    prev = lines[-1] if lines else ""
+    prev_hash = json.loads(prev).get("hash", "") if prev else "0" * 64
+    rec = {"seq": len(lines) + 1, "ts": now(), "action": action, "actor": actor,
+           "scope": scope, "name": name, "approved": bool(approved), "purpose": purpose,
+           "note": str(note)[:120], "prev_hash": prev_hash}
+    base = canon(rec)
+    rec["hash"] = hashlib.sha256(base).hexdigest()
+    rec["hmac"] = hmac.new(audit_key, base, hashlib.sha256).hexdigest()
+    with open(AUDIT, "a", encoding="utf-8") as f: f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+def audit_verify(pw):
+    _, ak = keys(pw)
+    lines = open(AUDIT, encoding="utf-8").read().splitlines() if os.path.exists(AUDIT) else []
+    prev = "0" * 64
+    for i, line in enumerate(lines, 1):
+        r = json.loads(line)
+        h = r.pop("hash", ""); mac = r.pop("hmac", "")
+        if r.get("prev_hash") != prev or h != hashlib.sha256(canon(r)).hexdigest() or \
+           not hmac.compare_digest(mac, hmac.new(ak, canon(r), hashlib.sha256).hexdigest()):
+            print(f"CADENA ROTA en seq={i}"); return 1
+        prev = h
+    m = load_meta() if os.path.exists(VAULT) else {}
+    writes = sum(1 for l in lines if json.loads(l).get("action") in ("set", "rekey", "rotate"))
+    if m.get("rev", 1) != writes + 1:
+        print(f"ANTI-ROLLBACK: rev={m.get('rev')} != escrituras+1={writes + 1}"); return 1
+    print(f"auditoría íntegra: {len(lines)} evento(s), hash-chain + HMAC + anti-rollback verificados")
+    return 0
+
+def cmd_init():
+    ensure()
+    if os.path.exists(VAULT): print("la bóveda ya existe; no se sobrescribe"); return 1
+    pw = passphrase(); salt = os.urandom(16)
+    m = {"v": 2, "salt": base64.b64encode(salt).decode(), "params": PARAMS,
+         "key_id": "k" + hashlib.sha256(salt).hexdigest()[:8], "pv": POLICY_VERSION, "rev": 1, "records": {}}
+    atomic(VAULT, m)
+    _, ak = keys(pw)
+    audit_append(ak, "init", "humano", "*", "*", True, "admin", "bóveda creada")
+    print("bóveda inicializada; key_id =", m["key_id"])
+    print(LEGEND)
+    return 0
+
+def cmd_enroll(agent):
+    ensure()
+    tok = secrets.token_urlsafe(32)
+    p = json.load(open(POLICY, encoding="utf-8"))
+    if agent in p.get("agents", {}): print("agente ya inscrito; use rotate-token"); return 1
+    p.setdefault("agents", {})[agent] = {"token_hash": hashlib.sha256(tok.encode()).hexdigest(),
+                                         "scopes": [], "commands": [], "ttl_min": 30}
+    json.dump(p, open(POLICY, "w", encoding="utf-8"), indent=2)
+    path = os.path.join(AGENTDIR, agent + ".token")
+    with open(path, "w") as f: f.write(tok)
+    os.chmod(path, 0o600)
+    print(f"agente {agent} inscrito; token guardado en modo 600 (NO se imprime)")
+    return 0
+
+def agent_from_token(token_file):
+    if not token_file or not os.path.exists(token_file): return None
+    tok = open(token_file, encoding="utf-8").read().strip()
+    h = hashlib.sha256(tok.encode()).hexdigest()
+    p = json.load(open(POLICY, encoding="utf-8"))
+    for name, cfg in p.get("agents", {}).items():
+        if hmac.compare_digest(h, cfg.get("token_hash", "")): return name, cfg
+    return None
+
+def cmd_allow(agent, scopes, commands, ttl):
+    ensure(); p = json.load(open(POLICY, encoding="utf-8"))
+    if agent not in p.get("agents", {}): print("agente no inscrito"); return 2
+    p["agents"][agent]["scopes"] = scopes.split(",")
+    p["agents"][agent]["commands"] = commands.split(",")
+    p["agents"][agent]["ttl_min"] = int(ttl)
+    json.dump(p, open(POLICY, "w", encoding="utf-8"), indent=2)
+    print(f"{agent}: scopes={scopes} comandos={commands} ttl={ttl}min")
+
+def cmd_set(scope, name):
+    ensure(); pw = passphrase(); data_key, ak = keys(pw)
+    val = getpass.getpass("Valor (sin eco): ").encode() if sys.stdin.isatty() else os.environ.get("KAZEN_VAULT_TEST_VALUE", "").encode()
+    if not val: print("valor vacío: no se guarda"); return 2
+    m = load_meta(); k = f"{scope}/{name}"
+    old = m["records"].get(k, {})
+    nonce = os.urandom(12)
+    ct = AESGCM(data_key).encrypt(nonce, canon({"value": val.decode(), "created": old.get("created", now()),
+                                                "updated": now(), "expires": old.get("expires")}), aad(scope, name))
+    m["records"][k] = {"scope": scope, "name": name, "nonce": base64.b64encode(nonce).decode(),
+                       "ct": base64.b64encode(ct).decode()}
+    m["rev"] = m.get("rev", 1) + 1
+    atomic(VAULT, m)
+    audit_append(ak, "set", "humano", scope, name, True, "admin", "valor cifrado")
+    print(f"{k}: guardado (nonce 96-bit, AAD vinculante; valor NO impreso)")
+
+def cmd_request(agent_token, scope, purpose, note):
+    ensure()
+    ident = agent_from_token(agent_token)
+    if not ident: print("IDENTIDAD NO VERIFICADA: token inválido"); return 2
+    agent, cfg = ident
+    if scope not in cfg.get("scopes", []): print("DENEGADO por política: scope no permitido"); return 2
+    if purpose not in PURPOSES: print("purpose inválido"); return 2
+    rid = secrets.token_hex(8)
+    atomic(os.path.join(REQDIR, rid + ".json"),
+           {"id": rid, "ts": now(), "agent": agent, "scope": scope, "purpose": purpose,
+            "note": str(note)[:120], "status": "pending"})
+    print(f"solicitud {rid}: PENDIENTE de aprobación HUMANA fuera de banda (no se entrega secreto)")
+    return 0
+
+def cmd_requests():
+    ensure()
+    for p in sorted(__import__("glob").glob(os.path.join(REQDIR, "*.json"))):
+        r = json.load(open(p, encoding="utf-8"))
+        print(f"{r['id']} | {r['status']:9} | {r['agent']:14} | {r['scope']:12} | {r['purpose']} | {r['note']}")
+
+def cmd_approve(rid, command):
+    ensure(); pw = passphrase(); _, ak = keys(pw)
+    p = os.path.join(REQDIR, rid + ".json")
+    if not os.path.exists(p): print("solicitud no existe"); return 2
+    r = json.load(open(p, encoding="utf-8"))
+    cfg = json.load(open(POLICY, encoding="utf-8"))["agents"][r["agent"]]
+    if command not in cfg.get("commands", []): print("COMANDO NO AUTORIZADO en la allowlist"); return 2
+    tok = secrets.token_urlsafe(24)
+    grant = {"id": rid, "agent": r["agent"], "scope": r["scope"], "purpose": r["purpose"],
+             "command": command, "expires": (datetime.datetime.now(datetime.timezone.utc) +
+                                             datetime.timedelta(minutes=cfg.get("ttl_min", 30))).isoformat()}
+    grant["mac"] = hmac.new(ak, canon(grant), hashlib.sha256).hexdigest()
+    atomic(os.path.join(GRANTDIR, rid + ".grant"), grant)
+    r["status"] = "approved"; atomic(p, r)
+    audit_append(ak, "approve", "humano", r["scope"], r["agent"], True, r["purpose"], f"grant {rid}")
+    print(f"grant {rid} emitido por HUMANO; ttl={cfg.get('ttl_min',30)}min; comando fijo={command}")
+    return 0
+
+def verify_grant(rid, agent_token):
+    ident = agent_from_token(agent_token)
+    if not ident: return None, "token inválido"
+    agent, _ = ident
+    p = os.path.join(GRANTDIR, rid + ".grant")
+    if not os.path.exists(p): return None, "grant no existe"
+    g = json.load(open(p, encoding="utf-8"))
+    _, ak = keys(passphrase())
+    mac = g.pop("mac", "")
+    if not hmac.compare_digest(mac, hmac.new(ak, canon(g), hashlib.sha256).hexdigest()):
+        return None, "MAC inválido"
+    if g["agent"] != agent: return None, "grant para otro agente"
+    if g["expires"] < now(): return None, "grant expirado"
+    return g, "ok"
+
+def _no_core():
+    try: resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+    except Exception: pass
+
+def cmd_exec(rid, agent_token, env_fallback=False):
+    ensure()
+    g, err = verify_grant(rid, agent_token)
+    if not g: print("DENEGADO:", err); return 2
+    secrets_map = load_secrets(passphrase())
+    env = dict(os.environ)
+    fd_values = []
+    for k, rec in secrets_map.items():
+        if not k.startswith(g["scope"] + "/"): continue
+        if rec.get("expires") and rec["expires"] < now(): continue
+        fd_values.append(rec["value"])
+        if env_fallback:
+            env["KAZEN_SECRET_" + rec["name"].upper().replace("-", "_")] = rec["value"]
+    cmd = shlex.split(g["command"])
+    _, ak = keys(passphrase())
+    audit_append(ak, "exec", g["agent"], g["scope"], "*", True, g["purpose"], f"grant {rid}; comando fijo")
+    print("[broker] secreto entregado por FD 3 al proceso aprobado; NO al chat", file=sys.stderr)
+    r, w = os.pipe()
+    os.write(w, ("\n".join(fd_values)).encode()); os.close(w)
+    def child():
+        os.dup2(r, 3); _no_core()
+    try:
+        rc = subprocess.run(cmd, cwd=ROOT, env=env, pass_fds=(r,), preexec_fn=child,
+                            timeout=int(os.environ.get("KAZEN_VAULT_TIMEOUT", "300"))).returncode
+    finally:
+        os.close(r)
+    return rc
+
+def cmd_redact():
+    vals = []
+    try:
+        sm = load_secrets(passphrase())
+        vals = [v["value"] for v in sm.values()]
+    except Exception: pass
+    text = sys.stdin.read()
+    for v in vals:
+        if v: text = text.replace(v, "[REDACTED]")
+    print(text, end="")
+
+def cmd_rekey():
+    ensure(); old = passphrase(); sm = load_secrets(old)
+    new = getpass.getpass("Nueva passphrase (sin eco): ").encode() if sys.stdin.isatty() else os.environ.get("KAZEN_VAULT_TEST_PASS_NEW", b"").encode()
+    if not new: print("nueva passphrase vacía"); return 2
+    salt = os.urandom(16); data_key = derive(salt, new, 32, b"data")
+    m = load_meta(); m["salt"] = base64.b64encode(salt).decode()
+    m["key_id"] = "k" + hashlib.sha256(salt).hexdigest()[:8]; m["records"] = {}
+    m["rev"] = m.get("rev", 1) + 1
+    for k, v in sm.items():
+        nonce = os.urandom(12)
+        m["records"][k] = {"scope": v.get("scope", k.split("/")[0]), "name": k.split("/")[1],
+                           "nonce": base64.b64encode(nonce).decode(),
+                           "ct": base64.b64encode(AESGCM(data_key).encrypt(nonce, canon(v),
+                                                    canon({"scope": k.split("/")[0], "name": k.split("/")[1],
+                                                           "pv": POLICY_VERSION, "kid": m["key_id"]}))).decode()}
+    atomic(VAULT, m)
+    print("rekey local completado (NO equivale a rotar en el proveedor)")
+
+def cmd_custodian():
+    ensure()
+    print("# Custodia (sin valores)\n")
+    print("- Bóveda:", "existe" if os.path.exists(VAULT) else "NO inicializada")
+    m = load_meta() if os.path.exists(VAULT) else {}
+    print("- key_id:", m.get("key_id", "n/a"), "| policy_version:", m.get("pv", "n/a"))
+    print("- Argon2id:", PARAMS, "| AES-256-GCM nonce 96-bit, AAD vinculante")
+    p = json.load(open(POLICY, encoding="utf-8"))
+    print("- Default:", p.get("default"), "| agentes:", ", ".join(sorted(p.get("agents", {}))) or "ninguno")
+    print("- Regla: el custodio verifica integridad; NUNCA conoce ni imprime valores.")
+    print("-", LEGEND)
+
+def cmd_check():
+    ok = True
+    try:
+        import cryptography
+        print("cryptography:", cryptography.__version__)
+    except Exception: print("cryptography FALTA"); ok = False
+    print("bóveda:", "existe" if os.path.exists(VAULT) else "no inicializada")
+    if os.path.exists(VAULT):
+        m = load_meta(); print("key_id:", m.get("key_id"), "| registros:", len(m.get("records", {})))
+        if os.name == "posix":
+            mode = stat.S_IMODE(os.stat(VAULT).st_mode)
+            print("permisos:", oct(mode))
+            if mode != 0o600: ok = False
+    print("kaizen-vault check:", "todo en verde" if ok else "FALLO")
+    return 0 if ok else 1
+
+cmd = sys.argv[1] if len(sys.argv) > 1 else "check"
+a = sys.argv[2:]
+if cmd == "init": sys.exit(cmd_init())
+elif cmd == "enroll":
+    if not a: print("uso: kaizen-vault enroll <agente>"); sys.exit(2)
+    sys.exit(cmd_enroll(a[0]))
+elif cmd == "allow":
+    if len(a) < 4: print("uso: kaizen-vault allow <agente> <scopes CSV> <comandos CSV> <ttl_min>"); sys.exit(2)
+    cmd_allow(a[0], a[1], a[2], a[3])
+elif cmd == "set":
+    if len(a) < 2: print("uso: kaizen-vault set <scope> <name>"); sys.exit(2)
+    cmd_set(a[0], a[1])
+elif cmd == "request":
+    if len(a) < 4: print("uso: kaizen-vault request <token_file> <scope> <purpose> <nota>"); sys.exit(2)
+    sys.exit(cmd_request(a[0], a[1], a[2], " ".join(a[3:])))
+elif cmd == "requests": cmd_requests()
+elif cmd == "approve":
+    if len(a) < 2: print("uso: kaizen-vault approve <id> <comando aprobado>"); sys.exit(2)
+    sys.exit(cmd_approve(a[0], " ".join(a[1:])))
+elif cmd == "exec":
+    if len(a) < 2: print("uso: kaizen-vault exec <id> <token_file> [--env-fallback]"); sys.exit(2)
+    sys.exit(cmd_exec(a[0], a[1], "--env-fallback" in a))
+elif cmd == "audit-verify": sys.exit(audit_verify(passphrase()))
+elif cmd == "audit":
+    lines = open(AUDIT, encoding="utf-8").read().splitlines() if os.path.exists(AUDIT) else []
+    for l in lines[-int(a[0] if a else 20):]:
+        r = json.loads(l)
+        print(f"{r['seq']:3} | {r['action']:8} | {r['actor']:12} | {r['scope']}/{r['name']:14} | {'OK' if r['approved'] else 'DENY'} | {r['purpose']}")
+elif cmd == "redact": cmd_redact()
+elif cmd == "rekey": cmd_rekey()
+elif cmd == "custodian": cmd_custodian()
+elif cmd == "check": sys.exit(cmd_check())
+else:
+    print("uso: kaizen-vault init|enroll|allow|set|request|requests|approve|exec|audit|audit-verify|redact|rekey|custodian|check"); sys.exit(2)

@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+"""kaizen-doctor: diagnostica y repara instalaciones de kaizen-swarm en Linux/Windows.
+
+check -> estado real (sin suposiciones, sin secretos, sin imprimir numeros).
+fix   -> gobernanza global, limpieza de rutas tmp huerfanas en opencode.json y agentes reales.
+"""
+import datetime, json, os, platform, re, shutil, subprocess, sys
+
+ROOT = os.environ.get("KAZEN_ROOT", os.getcwd())
+HOME = os.path.expanduser("~")
+IS_WIN = os.name == "nt"
+APPDATA = os.environ.get("APPDATA", os.path.join(HOME, "AppData", "Roaming"))
+CANDIDATE_CONFIGS = [os.path.join(HOME, ".config", "opencode"), os.path.join(APPDATA, "opencode")]
+FRAMEWORK = os.path.join(HOME, ".local", "share", "kaizen-swarm", "framework") if not IS_WIN else \
+            os.path.join(os.environ.get("LOCALAPPDATA", os.path.join(HOME, "AppData", "Local")), "kaizen-swarm", "framework")
+TMP_HUERFANO = re.compile(r"(^|[/\\])(tmp\.[A-Za-z0-9]+|/tmp/|\\tmp\\)", re.I)
+
+def which(name): return shutil.which(name)
+
+def config_dirs():
+    out = []
+    for d in CANDIDATE_CONFIGS:
+        if os.path.isdir(d) and d not in out: out.append(d)
+    if not out: out = [CANDIDATE_CONFIGS[0]]
+    return out
+
+def count_agents(d):
+    p = os.path.join(d, "agents")
+    return len([f for f in os.listdir(p) if f.endswith(".md")]) if os.path.isdir(p) else 0
+
+def opencode_configs():
+    out = []
+    for d in config_dirs():
+        for n in ("opencode.json", "opencode.jsonc"):
+            p = os.path.join(d, n)
+            if os.path.exists(p): out.append(p)
+    return out
+
+def scan_orphans():
+    found = []
+    for p in opencode_configs():
+        txt = open(p, encoding="utf-8", errors="replace").read()
+        for m in TMP_HUERFANO.finditer(txt):
+            frag = txt[max(0, m.start()-60):m.end()+60].replace("\n", " ")
+            found.append({"file": p, "fragment": frag[:180]})
+            break
+    return found
+
+def cmd_check():
+    issues = []
+    py = sys.version.split()[0]
+    git, jq, op = which("git"), which("jq"), which("opencode")
+    if not git: issues.append("git no encontrado")
+    if not jq: issues.append("jq no encontrado (los tests fallan sin el)")
+    if not op: issues.append("opencode no encontrado en PATH")
+    dirs = config_dirs()
+    agent_counts = {d: count_agents(d) for d in dirs}
+    if sum(agent_counts.values()) == 0: issues.append("0 agentes instalados en config real")
+    rules = os.path.join(ROOT, ".kaizen/RULES.md")
+    grules = os.path.join(FRAMEWORK, "RULES.md")
+    orphans = scan_orphans()
+    if orphans: issues.append(f"{len(orphans)} referencia(s) a tmp huérfana en config de OpenCode")
+    report = {"system": platform.system(), "release": platform.release(), "python": py,
+              "git": git, "jq": jq, "opencode": op,
+              "config_dirs": dirs, "agentes_por_config": agent_counts,
+              "framework_global": grules if os.path.exists(grules) else "NO creado",
+              "repo_rules": rules if os.path.exists(rules) else "NO existe (no invasivo, correcto)",
+              "referencias_tmp_huerfanas": orphans, "issues": issues, "ok": not issues}
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0 if not issues else 1
+
+def strip_orphans(obj):
+    """Elimina recursivamente strings con rutas tmp que ya no existen."""
+    if isinstance(obj, dict):
+        return {k: strip_orphans(v) for k, v in obj.items() if not (isinstance(v, str) and TMP_HUERFANO.search(v) and not os.path.exists(os.path.expanduser(v)))}
+    if isinstance(obj, list):
+        return [strip_orphans(v) for v in obj if not (isinstance(v, str) and TMP_HUERFANO.search(v) and not os.path.exists(os.path.expanduser(v)))]
+    return obj
+
+def cmd_fix():
+    # 1) Gobernanza global (copia; nunca escribe en el repo destino).
+    os.makedirs(FRAMEWORK, exist_ok=True)
+    for rel in (".kaizen/RULES.md", ".kaizen/loop/LOOP.md", ".kaizen/security/SECURITY-RULES.md"):
+        src, dst = os.path.join(ROOT, rel), os.path.join(FRAMEWORK, os.path.basename(rel))
+        if os.path.exists(src): shutil.copyfile(src, dst)
+    for src in sorted(__import__("glob").glob(os.path.join(ROOT, ".kaizen/org/prompts/*.md"))):
+        shutil.copyfile(src, os.path.join(FRAMEWORK, os.path.basename(src)))
+    print("gobernanza global:", FRAMEWORK)
+    # 2) Limpiar referencias huérfanas con backup.
+    for p in opencode_configs():
+        txt = open(p, encoding="utf-8", errors="replace").read()
+        if not TMP_HUERFANO.search(txt): continue
+        try:
+            data = json.loads(txt)
+        except Exception:
+            print("no se puede parsear (jsonc):", p, "-- revisar manualmente"); continue
+        clean = strip_orphans(data)
+        bak = p + ".kaizen-bak-" + datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d%H%M%S")
+        shutil.copyfile(p, bak)
+        with open(p, "w", encoding="utf-8") as f: json.dump(clean, f, indent=2, ensure_ascii=False)
+        print("config limpiada:", p, "| backup:", bak)
+    # 3) Instalar agentes en la config REAL del usuario.
+    inst = os.path.join(ROOT, "scripts/kaizen-installer")
+    if os.path.exists(inst):
+        r = subprocess.run(["bash", inst, "opencode", "--global"], cwd=ROOT, capture_output=True, text=True, timeout=120)
+        print((r.stdout or "").strip()[-300:])
+    print("fix completado. No se escribió en ningún repo destino.")
+    return 0
+
+cmd = sys.argv[1] if len(sys.argv) > 1 else "check"
+if cmd == "check": sys.exit(cmd_check())
+elif cmd == "fix": sys.exit(cmd_fix())
+else: print("uso: kaizen-doctor check|fix"); sys.exit(2)
