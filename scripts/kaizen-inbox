@@ -5,11 +5,14 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
 : "${KI_PORT:=8787}" "${KI_SHARED_SECRET_VAR:=KAZEN_INBOX_SECRET}" "${KI_INBOX_DIR:=.kaizen/team/inbox}" \
   "${KI_HMAC_SECRET_VAR:=KAZEN_INBOX_HMAC_SECRET}"
+BRIDGE_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/bridge.env"
+[ -f "$BRIDGE_ENV" ] && . "$BRIDGE_ENV"  # configuracion local sensible; nunca versionada (S-1/S-2)
 S="$ROOT/.kaizen/team/runtime"; mkdir -p "$S" "$ROOT/$KI_INBOX_DIR"
 CMD="${1:-status}"
 case "$CMD" in
   start)
     if [ -f "$S/inbox.pid" ] && kill -0 "$(cat "$S/inbox.pid")" 2>/dev/null; then echo "buzón ya corriendo"; exit 0; fi
+    local hname="$KI_HMAC_SECRET_VAR"; export "$hname=${!hname:-}"
     KAZEN_ROOT="$ROOT" KI_PORT="$KI_PORT" KI_SHARED_SECRET_VAR="$KI_SHARED_SECRET_VAR" \
       KI_HMAC_SECRET_VAR="$KI_HMAC_SECRET_VAR" KI_INBOX_DIR="$KI_INBOX_DIR" \
       nohup python3 "$ROOT/scripts/kaizen-inbox.py" >> "$S/inbox.log" 2>&1 &

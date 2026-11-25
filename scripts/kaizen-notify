@@ -9,6 +9,8 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
   "${KN_WEBHOOK_SECRET_VAR:=KAZEN_WEBHOOK_SECRET}" "${KN_SMTP_ENABLED:=0}" \
   "${KN_OPENCODE_ENABLED:=1}"
 S="$ROOT/.kaizen/team/runtime"; mkdir -p "$S"
+BRIDGE_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/bridge.env"
+[ -f "$BRIDGE_ENV" ] && . "$BRIDGE_ENV"  # configuracion local sensible; nunca versionada (S-1/S-2)
 FAIL=0
 klog() { printf '[kaizen-notify] %s\n' "$*"; }
 kfail() { printf '[kaizen-notify] FALLA: %s\n' "$*" >&2; FAIL=1; }

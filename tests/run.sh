@@ -397,6 +397,13 @@ grep -q 'case "$KN_WHATSAPP_MODE"' "$REPO/scripts/kaizen-whatsapp" && ok 'C5 mod
 grep -q 'E.164:' "$REPO/scripts/kaizen-whatsapp" && bad 'C5 número impreso' || ok 'C5 número oculto'
 grep -q 'bsp-cloud-webhook' "$REPO/scripts/kaizen-whatsapp" && ok 'C5 modo cloud' || bad 'C5 modo cloud'
 grep -q 'KI_HMAC_SECRET_VAR' "$REPO/scripts/kaizen-inbox" && ok 'HMAC enlazado' || bad 'HMAC enlazado'
+mkdir -p "$TMP/xdgcfg/kaizen-swarm"
+printf '%s\n' 'KAZEN_INBOX_HMAC_SECRET=secreto-de-prueba' 'KAZEN_WEBHOOK_URL=https://example.invalid/hook' 'KAZEN_WEBHOOK_SECRET=secreto-de-prueba' > "$TMP/xdgcfg/kaizen-swarm/bridge.env"
+chmod 600 "$TMP/xdgcfg/kaizen-swarm/bridge.env"
+export XDG_CONFIG_HOME="$TMP/xdgcfg"
+( cd "$REPO" && scripts/kaizen-whatsapp diagnose ) > "$TMP/bridge.out" 2>&1 && grep -q 'hmac(KAZEN_INBOX_HMAC_SECRET): configurado' "$TMP/bridge.out" && ok 'bridge.env local leído' || bad 'bridge.env local leído'
+unset XDG_CONFIG_HOME
+
 ( cd "$REPO" && scripts/kaizen-whatsapp diagnose ) > "$TMP/diag.out" 2>&1 && grep -q 'presencia' "$TMP/diag.out" && ok 'diagnóstico sin valores' || bad 'diagnóstico sin valores'
 
 # flujo continuo de actualización
