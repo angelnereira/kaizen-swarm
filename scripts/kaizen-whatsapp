@@ -70,7 +70,7 @@ cmd_optin() { # add --phone N --source S | check --phone N
 cmd_check() {
   [ "$KN_WHATSAPP_ALLOW_UNOFFICIAL" = 0 ] || { klog "RIESGO: cliente no oficial habilitado (viola ToS, ADR-0025)"; return 1; }
   [ "$KN_WHATSAPP_OPTIN_REQUIRED" = 1 ] || { klog "RIESGO: opt-in no obligatorio"; return 1; }
-  case "$KN_WHATSAPP_MODE" in bsp|official) ;; *) klog "RIESGO: modo BSP oficial no configurado (KN_WHATSAPP_MODE)"; return 1;; esac
+  case "$KN_WHATSAPP_MODE" in bsp|official|bsp-cloud-webhook|bsp-cloud-api|cloud-api) ;; *) klog "RIESGO: modo BSP oficial no configurado (KN_WHATSAPP_MODE)"; return 1;; esac
   [ -n "${!KI_HMAC_SECRET_VAR:-}" ] || { klog "RIESGO: HMAC del buzón no configurado ($KI_HMAC_SECRET_VAR)"; return 1; }
   klog "política oficial OK: modo=$KN_WHATSAPP_MODE ventana=${KN_WHATSAPP_WINDOW_HOURS}h HMAC=configurado plantillas=$(find "$T" -name '*.json' | wc -l | tr -d ' ')"
 }
@@ -83,9 +83,21 @@ cmd_owner() {
   [ -f "$W/optin-$digits.json" ] && echo "opt-in: SI" || echo "opt-in: NO"
 }
 
+cmd_diagnose() {
+  local n names="KN_WHATSAPP_MODE KN_WEBHOOK_URL_VAR KN_WEBHOOK_SECRET_VAR KI_HMAC_SECRET_VAR KI_SHARED_SECRET_VAR"
+  echo "diagnostico de canal remoto (solo presencia, sin valores):"
+  for n in $names; do echo "  $n: $([ -n "${!n:-}" ] && echo configurado || echo 'NO configurado')"; done
+  local wn="${KN_WEBHOOK_URL_VAR:-}" sn="${KN_WEBHOOK_SECRET_VAR:-}" hn="${KI_HMAC_SECRET_VAR:-}"
+  [ -n "$wn" ] && echo "  url($wn): $([ -n "${!wn:-}" ] && echo configurado || echo 'NO configurado')"
+  [ -n "$sn" ] && echo "  secreto($sn): $([ -n "${!sn:-}" ] && echo configurado || echo 'NO configurado')"
+  [ -n "$hn" ] && echo "  hmac($hn): $([ -n "${!hn:-}" ] && echo configurado || echo 'NO configurado')"
+  echo "buzon: $(scripts/kaizen-inbox status 2>/dev/null | head -1)"
+  echo "politica: $(scripts/kaizen-whatsapp check 2>&1 | tail -1)"
+}
+
 case "${1:-check}" in
   template) shift; cmd_template_add "$@";; templates) cmd_templates;;
   owner) cmd_owner;;
-  window) shift; cmd_window "$@";; optin) shift; cmd_optin "$@";; check) cmd_check;;
-  *) echo "uso: kaizen-whatsapp template|templates|window|optin|check";;
+  window) shift; cmd_window "$@";; optin) shift; cmd_optin "$@";; check) cmd_check;; diagnose) cmd_diagnose;;
+  *) echo "uso: kaizen-whatsapp template|templates|window|optin|check|diagnose";;
 esac
