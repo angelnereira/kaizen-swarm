@@ -53,7 +53,9 @@ cmd_check() {
 sync_governance() {
   mkdir -p "$GOV"
   local f
-  for f in RULES.md LOOP.md SECURITY-RULES.md; do cp "$ROOT/.kaizen/$f" "$GOV/$f"; done
+  cp "$ROOT/.kaizen/RULES.md" "$GOV/RULES.md"
+  cp "$ROOT/.kaizen/loop/LOOP.md" "$GOV/LOOP.md"
+  cp "$ROOT/.kaizen/security/SECURITY-RULES.md" "$GOV/SECURITY-RULES.md"
   cp "$ROOT/.kaizen/org/prompts/_template.md" "$GOV/_template.md"
   for f in "$ROOT"/.kaizen/org/prompts/*.md; do
     [ -f "$f" ] || continue

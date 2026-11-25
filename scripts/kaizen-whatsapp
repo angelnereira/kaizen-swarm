@@ -3,7 +3,12 @@
 set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/config.env" ] && . "$ROOT/.kaizen/config.env"
+KN_WHATSAPP_MODE_ENV="${KN_WHATSAPP_MODE:-}"
+KI_HMAC_SECRET_VAR_ENV="${KI_HMAC_SECRET_VAR:-}"
 [ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
+# El entorno explícito gana sobre notify.env (C5): permite verificar la política sin credenciales.
+[ -n "$KN_WHATSAPP_MODE_ENV" ] && KN_WHATSAPP_MODE="$KN_WHATSAPP_MODE_ENV"
+[ -n "$KI_HMAC_SECRET_VAR_ENV" ] && KI_HMAC_SECRET_VAR="$KI_HMAC_SECRET_VAR_ENV"
 : "${KN_WHATSAPP_WINDOW_HOURS:=24}" "${KN_WHATSAPP_OPTIN_REQUIRED:=1}" "${KN_WHATSAPP_ALLOW_UNOFFICIAL:=0}"
 : "${KN_WHATSAPP_MODE:=}" "${KI_HMAC_SECRET_VAR:=KAZEN_INBOX_HMAC_SECRET}"
 : "${KN_WHATSAPP_TEMPLATES_DIR:=.kaizen/team/whatsapp/templates}"
