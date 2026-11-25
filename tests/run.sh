@@ -365,5 +365,26 @@ jq -e '.["custodia-secretos"]' "$REPO/.kaizen/team/teams.json" >/dev/null 2>&1 &
 ( cd "$REPO" && scripts/kaizen-doctor check >/dev/null 2>&1 ) && ok 'doctor check' || bad 'doctor check'
 [ -x "$REPO/scripts/kaizen-whatsapp-bridge" ] && ok 'bridge whatsapp' || bad 'bridge whatsapp'
 grep -q 'no instales nada en el repo' "$REPO/scripts/lib/opencode_agents.py" && ok 'gobernanza no invasiva' || bad 'gobernanza no invasiva'
+
+# chat interactivo: ruta de proyecto dedicada, fuera del repo
+[ -x "$REPO/scripts/chat-opencode" ] && ok 'script chat-opencode' || bad 'script chat-opencode'
+CHAT_HOME="$TMP/chatdata"; CHAT_SLUG="test-$$"
+export XDG_DATA_HOME="$CHAT_HOME"
+( cd "$REPO" && scripts/chat-opencode init "$CHAT_SLUG" --agent qa >/dev/null 2>&1 ) && ok 'chat init' || bad 'chat init'
+CHAT_D="$CHAT_HOME/kaizen-swarm/chat/$CHAT_SLUG"
+[ -f "$CHAT_D/state.json" ] && ok 'chat state' || bad 'chat state'
+[ -d "$CHAT_D/context" ] && [ -d "$CHAT_D/files" ] && [ -d "$CHAT_D/inbox" ] && ok 'chat carpetas' || bad 'chat carpetas'
+[ "$(cd "$REPO" && scripts/chat-opencode path "$CHAT_SLUG")" = "$CHAT_D" ] && ok 'chat path' || bad 'chat path'
+( cd "$REPO" && scripts/chat-opencode message "$CHAT_SLUG" 'mensaje de prueba' >/dev/null 2>&1 ) && ok 'chat message' || bad 'chat message'
+grep -q 'mensaje de prueba' "$CHAT_D/transcript.md" && ok 'chat transcripcion' || bad 'chat transcripcion'
+grep -q 'dato no confiable' "$CHAT_D/transcript.md" && ok 'chat etiqueta dato' || bad 'chat etiqueta dato'
+( cd "$REPO" && scripts/chat-opencode context "$CHAT_SLUG" 'contexto de prueba' >/dev/null 2>&1 ) && ok 'chat context' || bad 'chat context'
+grep -q 'contexto de prueba' "$CHAT_D/context/notes.md" && ok 'chat context file' || bad 'chat context file'
+( cd "$REPO" && scripts/chat-opencode ask "$CHAT_SLUG" 'pregunta de prueba' > "$TMP/chat-ask.out" 2>/dev/null ) && ok 'chat ask dry-run' || bad 'chat ask dry-run'
+grep -q '<chat_message>' "$TMP/chat-ask.out" && grep -q '</chat_message>' "$TMP/chat-ask.out" && ok 'chat delimitador' || bad 'chat delimitador'
+grep -q 'No ejecutes comandos' "$TMP/chat-ask.out" && ok 'chat guardrails' || bad 'chat guardrails'
+( cd "$REPO" && scripts/chat-opencode check "$CHAT_SLUG" >/dev/null 2>&1 ) && ok 'chat check' || bad 'chat check'
+[ -f "$CHAT_HOME/kaizen-swarm/workspaces/$(printf '%s' "$CHAT_D" | sha256sum | cut -c1-16)/manifest.json" ]   && ok 'chat workspace registrado' || bad 'chat workspace registrado'
+unset XDG_DATA_HOME
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]

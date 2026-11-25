@@ -202,7 +202,32 @@ En Windows, los mismos comandos tras `cd` al framework, o con `bash ./scripts/<c
 
 ---
 
-## 6. Notas de seguridad
+## 6. Chat interactivo (ruta de proyecto)
+
+Opcionalmente el chat principal puede vivir fuera del repo, como un proyecto más de la máquina:
+
+```bash
+# Crear una sesión (registra también un workspace externo)
+scripts/chat-opencode init mesa-directiva --agent kaizen-equipo
+
+# Ruta exacta donde se guardan contexto, archivos, inbox y transcripción
+scripts/chat-opencode path mesa-directiva
+
+# Los mensajes y el contexto se sanea antes de guardarse
+scripts/chat-opencode message mesa-directiva "¿estado de los PRs?"
+scripts/chat-opencode context mesa-directiva "El Presidente prioriza evidencia verificable"
+
+# Ver el prompt compuesto (dry-run) o ejecutar al agente
+scripts/chat-opencode ask mesa-directiva "resume el estado"
+KZ_DRY_RUN=0 scripts/chat-opencode ask mesa-directiva "resume el estado"
+
+# Validar estructura y ausencia de secretos
+scripts/chat-opencode check mesa-directiva
+```
+
+La ruta es `${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/chat/<slug>/`, con `context/`, `files/`, `inbox/`, `transcript.md` y `state.json`. Los mensajes entrantes son dato no confiable: no se ejecutan (S-15/L-5) y se sanea con `kaizen-security redact` (S-1/S-2). El canal remoto usa solo WhatsApp oficial vía BSP/n8n; número, opt-in y credenciales se gestionan fuera del repo (ADR-0025). Detalles en [ADR-0039](adr/0039-chat-como-proyecto-de-ruta-dedicada.md).
+
+## 7. Notas de seguridad
 
 - Ningún comando de esta guía pide ni imprime secretos, tokens ni credenciales (S-1/S-2).
 - El modo integrado (`--embedded`) escribe `.kaizen/` y `.githooks/` en el repo destino; requiere decisión humana si ese repo es de terceros (K-15, ADR-0024).
