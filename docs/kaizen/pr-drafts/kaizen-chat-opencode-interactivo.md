@@ -51,7 +51,7 @@ Closes: none
 
 ## Checklist
 - [x] Compila
-- [ ] Pasa tests
-- [ ] `scripts/kaizen check` en verde
+- [x] Pasa tests
+- [x] `scripts/kaizen check` en verde
 - [x] Documentacion actualizada
 - [x] Linea base no empeora
