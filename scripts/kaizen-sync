@@ -39,9 +39,11 @@ cmd_check() {
   for f in RULES.md LOOP.md SECURITY-RULES.md _template.md; do
     [ -f "$GOV/$f" ] || kfail "falta gobernanza global: $GOV/$f"
   done
-  local f v
+  local f v repo
   for f in "$DATA"/workspaces/*/manifest.json; do
     [ -f "$f" ] || continue
+    repo="$(jq -r .repo "$f")"
+    [ "$repo" = "$ROOT" ] || continue
     v="$(jq -r .version "$f")"
     [ "$v" = "$VERSION" ] || kfail "workspace desactualizado: $(basename "$(dirname "$f")") ($v != $VERSION)"
   done

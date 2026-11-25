@@ -404,6 +404,8 @@ git -C "$REPO" update-ref refs/remotes/origin/main HEAD
 ( cd "$REPO" && scripts/kaizen-sync run ) > "$TMP/sync-dry.out" 2>&1 && grep -q 'dry-run' "$TMP/sync-dry.out" && ok 'sync dry-run' || bad 'sync dry-run'
 ( cd "$REPO" && scripts/kaizen-sync run --apply > "$TMP/sync.out" 2>&1 ) && ok 'sync apply' || bad 'sync apply'
 [ -s "$TMP/xdgdata/kaizen-swarm/sync.jsonl" ] && ok 'sync auditoría' || bad 'sync auditoría'
+mkdir -p "$TMP/xdgdata/kaizen-swarm/workspaces/otro-proyecto"
+jq -n --arg repo /otro/repo --arg v 0.0.1 --arg mode external-non-invasive '{repo:$repo,version:$v,mode:$mode}' > "$TMP/xdgdata/kaizen-swarm/workspaces/otro-proyecto/manifest.json"
 ( cd "$REPO" && scripts/kaizen-sync check > "$TMP/sync-check.out" 2>&1 ) && ok 'sync check' || bad 'sync check'
 ( cd "$REPO" && scripts/kaizen-sync install-hook --apply > "$TMP/sync-hook.out" 2>&1 ) && ok 'sync hook' || bad 'sync hook'
 [ -x "$REPO/.git/hooks/post-merge" ] && ok 'hook post-merge' || bad 'hook post-merge'
