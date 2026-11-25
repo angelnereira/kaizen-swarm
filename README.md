@@ -146,6 +146,20 @@ La autoridad final es **El Presidente**, dueño del negocio y del proyecto (`.ka
 
 Guía completa de **instalación, actualización y desinstalación** en Linux, macOS y Windows: [`docs/kaizen/INSTALACION.md`](docs/kaizen/INSTALACION.md).
 
+### Chat interactivo como proyecto
+
+El chat principal puede vivir en una ruta dedicada de la máquina, con su contexto, archivos y transcripción:
+
+```bash
+scripts/chat-opencode init mesa-directiva --agent kaizen-equipo
+scripts/chat-opencode path mesa-directiva          # ~/.local/share/kaizen-swarm/chat/mesa-directiva
+scripts/chat-opencode message mesa-directiva "¿estado de los PRs?"
+scripts/chat-opencode ask mesa-directiva "resume el estado"   # dry-run; KZ_DRY_RUN=0 ejecuta opencode
+scripts/chat-opencode check mesa-directiva
+```
+
+Contrato y límites: [ADR-0039](docs/kaizen/adr/0039-chat-como-proyecto-de-ruta-dedicada.md). El contenido entrante es dato no confiable y nunca se ejecuta (S-15/L-5); los canales remotos usan solo WhatsApp oficial vía BSP (ADR-0025).
+
 ### Para una persona
 
 ```bash
