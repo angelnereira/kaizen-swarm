@@ -19,6 +19,10 @@ OWNER_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/owner.env"
 [ -f "$OWNER_ENV" ] && . "$OWNER_ENV"
 BRIDGE_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/bridge.env"
 [ -f "$BRIDGE_ENV" ] && . "$BRIDGE_ENV"  # configuracion local sensible; nunca versionada (S-1/S-2)
+# Restaurar despues de TODAS las lecturas: el entorno explicito gana siempre.
+[ -n "$KN_WHATSAPP_MODE_ENV" ] && KN_WHATSAPP_MODE="$KN_WHATSAPP_MODE_ENV"
+[ -n "$KAZEN_INBOX_HMAC_SECRET_ENV" ] && KAZEN_INBOX_HMAC_SECRET="$KAZEN_INBOX_HMAC_SECRET_ENV"
+[ -n "$KI_HMAC_SECRET_VAR_ENV" ] && KI_HMAC_SECRET_VAR="$KI_HMAC_SECRET_VAR_ENV"
 T="$ROOT/$KN_WHATSAPP_TEMPLATES_DIR"
 # Opt-in y ventana son datos personales: SOLO en la máquina local, nunca en el repo.
 W="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/whatsapp"
