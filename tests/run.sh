@@ -316,7 +316,7 @@ bash -n "$REPO/scripts/kaizen-workspace" "$REPO/scripts/kaizen-peer" "$REPO/scri
   && ok 'workspace externo' || bad 'workspace externo'
 grep -q 'K-15' "$REPO/.kaizen/RULES.md" && ok 'regla no invasiva' || bad 'regla no invasiva'
 for s in kaizen-whatsapp; do [ -x "$REPO/scripts/$s" ] && ok "script $s" || bad "script $s"; done
-( cd "$REPO" && scripts/kaizen-whatsapp check >/dev/null 2>&1 ) && ok 'whatsapp oficial' || bad 'whatsapp oficial'
+( cd "$REPO" && KN_WHATSAPP_MODE=bsp KAZEN_INBOX_HMAC_SECRET=secreto-de-prueba scripts/kaizen-whatsapp check >/dev/null 2>&1 ) && ok 'whatsapp oficial' || bad 'whatsapp oficial'
 grep -q 'KN_WHATSAPP_ALLOW_UNOFFICIAL=0' "$REPO/.kaizen/team/notify.env" && ok 'sin cliente no oficial' || bad 'sin cliente no oficial'
 grep -q 'ADR-0025' "$REPO/.opencode/agents/qa.md" 2>/dev/null && ok 'agente con política WhatsApp' || bad 'agente con política WhatsApp'
 [ -x "$REPO/scripts/kaizen-welcome" ] && ok 'campaña bienvenida' || bad 'campaña bienvenida'
@@ -399,7 +399,7 @@ grep -q 'E.164:' "$REPO/scripts/kaizen-whatsapp" && bad 'C5 número impreso' || 
 # flujo continuo de actualización
 [ -x "$REPO/scripts/kaizen-sync" ] && ok 'script kaizen-sync' || bad 'script kaizen-sync'
 export XDG_CONFIG_HOME="$TMP/xdgcfg" XDG_DATA_HOME="$TMP/xdgdata"
-git -C "$REPO" checkout -q -B sync-test origin/main
+git -C "$REPO" update-ref refs/remotes/origin/main HEAD
 ( cd "$REPO" && scripts/kaizen-sync status | grep -q '^version=' ) && ok 'sync status' || bad 'sync status'
 ( cd "$REPO" && scripts/kaizen-sync run | grep -q 'dry-run' ) && ok 'sync dry-run' || bad 'sync dry-run'
 ( cd "$REPO" && scripts/kaizen-sync run --apply > "$TMP/sync.out" 2>&1 ) && ok 'sync apply' || bad 'sync apply'
