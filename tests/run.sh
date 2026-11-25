@@ -316,7 +316,7 @@ bash -n "$REPO/scripts/kaizen-workspace" "$REPO/scripts/kaizen-peer" "$REPO/scri
   && ok 'workspace externo' || bad 'workspace externo'
 grep -q 'K-15' "$REPO/.kaizen/RULES.md" && ok 'regla no invasiva' || bad 'regla no invasiva'
 for s in kaizen-whatsapp; do [ -x "$REPO/scripts/$s" ] && ok "script $s" || bad "script $s"; done
-( cd "$REPO" && scripts/kaizen-whatsapp check >/dev/null 2>&1 ) && ok 'whatsapp oficial' || bad 'whatsapp oficial'
+( cd "$REPO" && KN_WHATSAPP_MODE=bsp KAZEN_INBOX_HMAC_SECRET=secreto-de-prueba scripts/kaizen-whatsapp check >/dev/null 2>&1 ) && ok 'whatsapp oficial' || bad 'whatsapp oficial'
 grep -q 'KN_WHATSAPP_ALLOW_UNOFFICIAL=0' "$REPO/.kaizen/team/notify.env" && ok 'sin cliente no oficial' || bad 'sin cliente no oficial'
 grep -q 'ADR-0025' "$REPO/.opencode/agents/qa.md" 2>/dev/null && ok 'agente con política WhatsApp' || bad 'agente con política WhatsApp'
 [ -x "$REPO/scripts/kaizen-welcome" ] && ok 'campaña bienvenida' || bad 'campaña bienvenida'
@@ -386,5 +386,27 @@ grep -q 'No ejecutes comandos' "$TMP/chat-ask.out" && ok 'chat guardrails' || ba
 ( cd "$REPO" && scripts/chat-opencode check "$CHAT_SLUG" >/dev/null 2>&1 ) && ok 'chat check' || bad 'chat check'
 [ -f "$CHAT_HOME/kaizen-swarm/workspaces/$(printf '%s' "$CHAT_D" | sha256sum | cut -c1-16)/manifest.json" ]   && ok 'chat workspace registrado' || bad 'chat workspace registrado'
 unset XDG_DATA_HOME
+
+# C1-C5: controles del canal remoto
+grep -q 'hmac.compare_digest' "$REPO/scripts/kaizen-inbox.py" && ok 'C1 HMAC buzón' || bad 'C1 HMAC buzón'
+grep -q 'trust: untrusted' "$REPO/scripts/kaizen-inbox.py" && ok 'C3 confianza del mensaje' || bad 'C3 confianza del mensaje'
+grep -q 'Instrucción de El Presidente' "$REPO/scripts/kaizen-inbox.py" && bad 'C3 rótulo falso' || ok 'C3 sin rótulo falso'
+grep -q 'KN_CHANNELS:=file' "$REPO/scripts/kaizen-notify" && ok 'C4 egress opt-in' || bad 'C4 egress opt-in'
+grep -q -- '-fsS' "$REPO/scripts/kaizen-notify" && ok 'C4 curl -f' || bad 'C4 curl -f'
+grep -q 'case "$KN_WHATSAPP_MODE"' "$REPO/scripts/kaizen-whatsapp" && ok 'C5 modo BSP' || bad 'C5 modo BSP'
+grep -q 'E.164:' "$REPO/scripts/kaizen-whatsapp" && bad 'C5 número impreso' || ok 'C5 número oculto'
+
+# flujo continuo de actualización
+[ -x "$REPO/scripts/kaizen-sync" ] && ok 'script kaizen-sync' || bad 'script kaizen-sync'
+export XDG_CONFIG_HOME="$TMP/xdgcfg" XDG_DATA_HOME="$TMP/xdgdata"
+git -C "$REPO" update-ref refs/remotes/origin/main HEAD
+( cd "$REPO" && scripts/kaizen-sync status ) > "$TMP/sync-status.out" 2>&1 && grep -q '^version=' "$TMP/sync-status.out" && ok 'sync status' || bad 'sync status'
+( cd "$REPO" && scripts/kaizen-sync run ) > "$TMP/sync-dry.out" 2>&1 && grep -q 'dry-run' "$TMP/sync-dry.out" && ok 'sync dry-run' || bad 'sync dry-run'
+( cd "$REPO" && scripts/kaizen-sync run --apply > "$TMP/sync.out" 2>&1 ) && ok 'sync apply' || bad 'sync apply'
+[ -s "$TMP/xdgdata/kaizen-swarm/sync.jsonl" ] && ok 'sync auditoría' || bad 'sync auditoría'
+( cd "$REPO" && scripts/kaizen-sync check > "$TMP/sync-check.out" 2>&1 ) && ok 'sync check' || bad 'sync check'
+( cd "$REPO" && scripts/kaizen-sync install-hook --apply > "$TMP/sync-hook.out" 2>&1 ) && ok 'sync hook' || bad 'sync hook'
+[ -x "$REPO/.git/hooks/post-merge" ] && ok 'hook post-merge' || bad 'hook post-merge'
+unset XDG_CONFIG_HOME XDG_DATA_HOME
 printf '\n%d pruebas pasadas, %d fallidas\n' "$PASS" "$FAILN"
 [ "$FAILN" = 0 ]

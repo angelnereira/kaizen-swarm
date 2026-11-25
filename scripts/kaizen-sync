@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# kaizen-sync: flujo continuo de actualización de la comunidad instalada.
+# Cada cambio fusionado en main se refleja en los agentes y la configuración local de OpenCode.
+# Dry-run por defecto; KZ_DRY_RUN=0 o --apply ejecuta. Auditoría local, sin secretos.
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
+DATA="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm"
+AGENTS="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/agents"
+GOV="$DATA/framework"
+AUDIT="$DATA/sync.jsonl"
+HOOK="$ROOT/.git/hooks/post-merge"
+VERSION="$(cat "$ROOT/VERSION" 2>/dev/null || printf '0.0.0')"
+FAIL=0
+APPLY=0
+klog() { printf '[kaizen-sync] %s\n' "$*"; }
+kfail() { printf '[kaizen-sync] FALLA: %s\n' "$*" >&2; FAIL=1; }
+
+head_short() { git -C "$ROOT" rev-parse --short HEAD; }
+behind() { git -C "$ROOT" rev-list --count HEAD..origin/main 2>/dev/null || printf '0'; }
+last_sync() { [ -f "$AUDIT" ] && jq -r '.ts' "$AUDIT" | tail -1 || printf 'nunca'; }
+
+cmd_status() {
+  printf 'version=%s\n' "$VERSION"
+  printf 'commit=%s\n' "$(head_short)"
+  printf 'agentes_instalados=%s\n' "$(find "$AGENTS" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
+  printf 'workspace_versiones=%s\n' "$(for f in "$DATA"/workspaces/*/manifest.json; do [ -f "$f" ] && jq -r .version "$f"; done | sort -u | tr '\n' ' ')"
+  printf 'ultima_sync=%s\n' "$(last_sync)"
+  printf 'commits_detras_de_main=%s\n' "$(behind)"
+}
+
+cmd_check() {
+  local tmp gen installed diffout
+  tmp="$(mktemp -d)"
+  python3 "$ROOT/scripts/lib/opencode_agents.py" "$tmp" || { kfail "generación de agentes falló"; return 1; }
+  gen="$(find "$tmp" -name '*.md' | wc -l | tr -d ' ')"
+  installed="$(find "$AGENTS" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
+  diffout="$(diff -rq "$tmp" "$AGENTS" 2>/dev/null)"
+  if [ -n "$diffout" ]; then kfail "agentes instalados divergen de la definición ($gen generados, $installed instalados)"; fi
+  for f in RULES.md LOOP.md SECURITY-RULES.md _template.md; do
+    [ -f "$GOV/$f" ] || kfail "falta gobernanza global: $GOV/$f"
+  done
+  local f v
+  for f in "$DATA"/workspaces/*/manifest.json; do
+    [ -f "$f" ] || continue
+    v="$(jq -r .version "$f")"
+    [ "$v" = "$VERSION" ] || kfail "workspace desactualizado: $(basename "$(dirname "$f")") ($v != $VERSION)"
+  done
+  rm -rf "$tmp"
+  [ $FAIL = 0 ] || return 1
+  klog "sincronía consistente: $installed agentes, v$VERSION, $(head_short)"
+}
+
+sync_governance() {
+  mkdir -p "$GOV"
+  local f
+  cp "$ROOT/.kaizen/RULES.md" "$GOV/RULES.md"
+  cp "$ROOT/.kaizen/loop/LOOP.md" "$GOV/LOOP.md"
+  cp "$ROOT/.kaizen/security/SECURITY-RULES.md" "$GOV/SECURITY-RULES.md"
+  cp "$ROOT/.kaizen/org/prompts/_template.md" "$GOV/_template.md"
+  for f in "$ROOT"/.kaizen/org/prompts/*.md; do
+    [ -f "$f" ] || continue
+    [ "$(basename "$f")" = "_template.md" ] && continue
+    cp "$f" "$GOV/$(basename "$f")"
+  done
+  klog "gobernanza global actualizada: $GOV"
+}
+
+sync_workspaces() {
+  local f repo
+  for f in "$DATA"/workspaces/*/manifest.json; do
+    [ -f "$f" ] || continue
+    repo="$(jq -r .repo "$f")"
+    [ "$repo" = "$ROOT" ] || continue
+    jq --arg v "$VERSION" --arg now "$(date -u +%FT%TZ)" '.version=$v | .synced_at=$now' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+  done
+  klog "manifiestos de workspace alineados con v$VERSION"
+}
+
+audit() {
+  mkdir -p "$DATA"
+  jq -cn --arg ts "$(date -u +%FT%TZ)" --arg version "$VERSION" --arg commit "$(head_short)" \
+    --arg agents "$(find "$AGENTS" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')" --arg result "$1" \
+    '{ts:$ts,version:$version,commit:$commit,agents:$agents,result:$result}' >> "$AUDIT"
+}
+
+cmd_run() {
+  while [ $# -gt 0 ]; do case "$1" in --apply) APPLY=1;; *) kfail "opción desconocida: $1";; esac; shift; done
+  local n; n="$(behind)"
+  if [ "$n" != 0 ]; then
+    kfail "el framework está $n commits detrás de origin/main; fusiona antes de sincronizar"
+    return 1
+  fi
+  if [ "$APPLY" != 1 ]; then
+    klog "plan: instalar agentes, actualizar gobernanza en $GOV, alinear manifiestos a v$VERSION, verificar y auditar"
+    klog "dry-run: no se modificó nada (usa --apply o KZ_DRY_RUN=0)"
+    return 0
+  fi
+  "$ROOT/scripts/kaizen-installer" opencode --global || { kfail "instalación de agentes falló"; return 1; }
+  sync_governance
+  sync_workspaces
+  cmd_check || { audit "fallo"; return 1; }
+  audit "ok"
+  klog "flujo continuo completado: v$VERSION $(head_short) reflejada en agentes y configuración local"
+}
+
+cmd_hook() {
+  while [ $# -gt 0 ]; do case "$1" in --apply) APPLY=1;; *) kfail "opción desconocida: $1";; esac; shift; done
+  if [ "$APPLY" != 1 ]; then
+    klog "plan: crear $HOOK que ejecuta 'kaizen-sync run --apply' tras cada fusión"
+    return 0
+  fi
+  mkdir -p "$(dirname "$HOOK")"
+  [ -f "$HOOK" ] && cp "$HOOK" "$HOOK.kaizen.bak"
+  cat > "$HOOK" <<'EOF'
+#!/usr/bin/env bash
+# post-merge: refleja cada cambio fusionado en la instalación local de OpenCode.
+ROOT="$(git rev-parse --show-toplevel)"
+[ -x "$ROOT/scripts/kaizen-sync" ] && "$ROOT/scripts/kaizen-sync" run --apply
+EOF
+  chmod +x "$HOOK"
+  klog "hook instalado: $HOOK (backup previo si existía)"
+}
+
+case "${1:-status}" in
+  status) shift; cmd_status;;
+  check) shift; cmd_check;;
+  run) shift; [ "${KZ_DRY_RUN:-1}" = 0 ] && APPLY=1; cmd_run "$@";;
+  install-hook) shift; cmd_hook "$@";;
+  *) echo "uso: kaizen-sync status|check|run [--apply]|install-hook [--apply]"; exit 2;;
+esac
+exit $FAIL

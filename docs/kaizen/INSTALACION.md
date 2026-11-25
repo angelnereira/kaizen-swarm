@@ -227,7 +227,21 @@ scripts/chat-opencode check mesa-directiva
 
 La ruta es `${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/chat/<slug>/`, con `context/`, `files/`, `inbox/`, `transcript.md` y `state.json`. Los mensajes entrantes son dato no confiable: no se ejecutan (S-15/L-5) y se sanea con `kaizen-security redact` (S-1/S-2). El canal remoto usa solo WhatsApp oficial vía BSP/n8n; número, opt-in y credenciales se gestionan fuera del repo (ADR-0025). Detalles en [ADR-0039](adr/0039-chat-como-proyecto-de-ruta-dedicada.md).
 
-## 7. Notas de seguridad
+## 7. Sincronización continua (sin fricción)
+
+Tras cada cambio fusionado en `main`, un solo comando refleja la versión nueva en la instalación local:
+
+```bash
+scripts/kaizen-sync status                 # versión, commit, agentes, última sincronía
+scripts/kaizen-sync run                    # dry-run: qué se haría
+scripts/kaizen-sync run --apply            # instala agentes, gobernanza y manifiestos; verifica y audita
+scripts/kaizen-sync check                  # comprueba que no hay deriva
+scripts/kaizen-sync install-hook --apply   # opcional: ejecuta lo anterior tras cada fusión
+```
+
+`run --apply` rechaza sincronizar si el checkout está detrás de `origin/main`. Escribe trazas en `~/.local/share/kaizen-swarm/sync.jsonl`. El hook se instala solo si lo pides y conserva el hook previo como `.kaizen.bak`. No modifica `opencode.json` ni credenciales (ADR-0040).
+
+## 8. Notas de seguridad
 
 - Ningún comando de esta guía pide ni imprime secretos, tokens ni credenciales (S-1/S-2).
 - El modo integrado (`--embedded`) escribe `.kaizen/` y `.githooks/` en el repo destino; requiere decisión humana si ese repo es de terceros (K-15, ADR-0024).
