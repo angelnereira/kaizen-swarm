@@ -68,6 +68,26 @@ def jload(path, default):
         return default
 
 
+def load_json_objects(path):
+    """Lee JSONL normal o objetos JSON impresos en varias lineas (kaizen-team handoffs)."""
+    text = open(path, encoding="utf-8", errors="replace").read()
+    dec = json.JSONDecoder()
+    out, i = [], 0
+    while i < len(text):
+        while i < len(text) and text[i].isspace():
+            i += 1
+        if i >= len(text):
+            break
+        try:
+            obj, end = dec.raw_decode(text, i)
+        except ValueError:
+            i += 1
+            continue
+        if isinstance(obj, dict):
+            out.append(obj)
+        i = end
+    return out
+
 def collect():
     r = Registry()
     version = open(p("VERSION"), encoding="utf-8").read().strip() if os.path.exists(p("VERSION")) else "0.0.0"
@@ -96,7 +116,7 @@ def collect():
         for (owner, status), n in by.items():
             r.gauge("kaizen_tasks", n, {"project": slug, "owner": owner, "status": status}, "Tareas por agente y estado")
         try:
-            hand = [json.loads(l) for l in open(os.path.join(d, "handoffs.jsonl"), encoding="utf-8") if l.strip()]
+            hand = load_json_objects(os.path.join(d, "handoffs.jsonl"))
         except Exception:
             hand = []
         hb = {}

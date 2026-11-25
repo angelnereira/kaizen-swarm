@@ -396,6 +396,17 @@ grep -q -- '-fsS' "$REPO/scripts/kaizen-notify" && ok 'C4 curl -f' || bad 'C4 cu
 grep -q 'case "$KN_WHATSAPP_MODE"' "$REPO/scripts/kaizen-whatsapp" && ok 'C5 modo BSP' || bad 'C5 modo BSP'
 grep -q 'E.164:' "$REPO/scripts/kaizen-whatsapp" && bad 'C5 número impreso' || ok 'C5 número oculto'
 grep -q 'bsp-cloud-webhook' "$REPO/scripts/kaizen-whatsapp" && ok 'C5 modo cloud' || bad 'C5 modo cloud'
+mkdir -p "$TMP/proj/decisions"
+printf '{\n  "id": "H-1",\n  "status": "ack"\n}\n{\n  "id": "H-2",\n  "status": "open"\n}\n' > "$TMP/proj/handoffs.jsonl"
+python3 - "$REPO" "$TMP/proj/handoffs.jsonl" <<'PYTEST'
+import sys, importlib.util
+spec=importlib.util.spec_from_file_location('exp',sys.argv[1]+'/scripts/kaizen-exporter.py')
+m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+objs=m.load_json_objects(sys.argv[2])
+assert [o['id'] for o in objs]==['H-1','H-2'], objs
+PYTEST
+[ $? = 0 ] && ok 'exporter JSONL multi-linea' || bad 'exporter JSONL multi-linea'
+
 grep -q 'KI_HMAC_SECRET_VAR' "$REPO/scripts/kaizen-inbox" && ok 'HMAC enlazado' || bad 'HMAC enlazado'
 mkdir -p "$TMP/xdgcfg/kaizen-swarm"
 printf '%s\n' 'KAZEN_INBOX_HMAC_SECRET=secreto-de-prueba' 'KAZEN_WEBHOOK_URL=https://example.invalid/hook' 'KAZEN_WEBHOOK_SECRET=secreto-de-prueba' > "$TMP/xdgcfg/kaizen-swarm/bridge.env"
