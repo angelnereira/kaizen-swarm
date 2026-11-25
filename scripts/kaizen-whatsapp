@@ -4,10 +4,12 @@ set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/config.env" ] && . "$ROOT/.kaizen/config.env"
 KN_WHATSAPP_MODE_ENV="${KN_WHATSAPP_MODE:-}"
+KAZEN_INBOX_HMAC_SECRET_ENV="${KAZEN_INBOX_HMAC_SECRET:-}"
 KI_HMAC_SECRET_VAR_ENV="${KI_HMAC_SECRET_VAR:-}"
 [ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
 # El entorno explícito gana sobre notify.env (C5): permite verificar la política sin credenciales.
 [ -n "$KN_WHATSAPP_MODE_ENV" ] && KN_WHATSAPP_MODE="$KN_WHATSAPP_MODE_ENV"
+[ -n "$KAZEN_INBOX_HMAC_SECRET_ENV" ] && KAZEN_INBOX_HMAC_SECRET="$KAZEN_INBOX_HMAC_SECRET_ENV"
 [ -n "$KI_HMAC_SECRET_VAR_ENV" ] && KI_HMAC_SECRET_VAR="$KI_HMAC_SECRET_VAR_ENV"
 : "${KN_WHATSAPP_WINDOW_HOURS:=24}" "${KN_WHATSAPP_OPTIN_REQUIRED:=1}" "${KN_WHATSAPP_ALLOW_UNOFFICIAL:=0}"
 : "${KN_WHATSAPP_MODE:=}" "${KI_HMAC_SECRET_VAR:=KAZEN_INBOX_HMAC_SECRET}"
@@ -17,6 +19,10 @@ OWNER_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/owner.env"
 [ -f "$OWNER_ENV" ] && . "$OWNER_ENV"
 BRIDGE_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/bridge.env"
 [ -f "$BRIDGE_ENV" ] && . "$BRIDGE_ENV"  # configuracion local sensible; nunca versionada (S-1/S-2)
+# Restaurar despues de TODAS las lecturas: el entorno explicito gana siempre.
+[ -n "$KN_WHATSAPP_MODE_ENV" ] && KN_WHATSAPP_MODE="$KN_WHATSAPP_MODE_ENV"
+[ -n "$KAZEN_INBOX_HMAC_SECRET_ENV" ] && KAZEN_INBOX_HMAC_SECRET="$KAZEN_INBOX_HMAC_SECRET_ENV"
+[ -n "$KI_HMAC_SECRET_VAR_ENV" ] && KI_HMAC_SECRET_VAR="$KI_HMAC_SECRET_VAR_ENV"
 T="$ROOT/$KN_WHATSAPP_TEMPLATES_DIR"
 # Opt-in y ventana son datos personales: SOLO en la máquina local, nunca en el repo.
 W="${XDG_DATA_HOME:-$HOME/.local/share}/kaizen-swarm/whatsapp"
