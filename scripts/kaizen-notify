@@ -4,7 +4,8 @@
 set -uo pipefail
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
-: "${KN_CHANNELS:=file,webhook}" "${KN_WEBHOOK_URL_VAR:=KAZEN_WEBHOOK_URL}" \
+: "${KN_CHANNELS:=file}"  # egress es opt-in (C4, outbox chat-remoto-c1-c5)
+: "${KN_WEBHOOK_URL_VAR:=KAZEN_WEBHOOK_URL}" \
   "${KN_WEBHOOK_SECRET_VAR:=KAZEN_WEBHOOK_SECRET}" "${KN_SMTP_ENABLED:=0}" \
   "${KN_OPENCODE_ENABLED:=1}"
 S="$ROOT/.kaizen/team/runtime"; mkdir -p "$S"
@@ -29,11 +30,17 @@ send_opencode() {
 send_webhook() {
   local url="${!KN_WEBHOOK_URL_VAR:-}" secret="${!KN_WEBHOOK_SECRET_VAR:-}"
   [ -n "$url" ] || { klog "webhook no configurado ($KN_WEBHOOK_URL_VAR): se omite"; return 0; }
-  local payload args=(-sS --max-time 20 -H 'Content-Type: application/json')
-  payload="$(jq -cn --arg title "$1" --arg body "$2" --arg level "$3" --arg from "kaizen-swarm@$HOSTNAME" \
+  # C4: sanear antes de enviar; si el redactor falla, no se envía nada (fail closed).
+  local redactor="$ROOT/scripts/kaizen-security" safe_title safe_body
+  [ -x "$redactor" ] || { kfail "redactor no disponible: webhook bloqueado"; return 1; }
+  safe_title="$(printf '%s' "$1" | "$redactor" redact)" || { kfail "saneado falló: webhook bloqueado"; return 1; }
+  safe_body="$(printf '%s' "$2" | "$redactor" redact)" || { kfail "saneado falló: webhook bloqueado"; return 1; }
+  local payload args=(-fsS --max-time 20 -H 'Content-Type: application/json')
+  payload="$(jq -cn --arg title "$safe_title" --arg body "$safe_body" --arg level "$3" --arg from "kaizen-swarm@$HOSTNAME" \
     '{text:("[" + $level + "] " + $title + "\n" + $body), title:$title, level:$level, source:$from, ts:now|tostring}')"
   [ -n "$secret" ] && args+=(-H "X-Kaizen-Secret: $secret")
-  curl "${args[@]}" -d "$payload" "$url" >/dev/null 2>&1 || kfail "webhook falló (revisa URL/secret)"
+  local answer; answer="$(curl "${args[@]}" -d "$payload" "$url")" || kfail "webhook falló (revisa URL/secret)"
+  [ -n "$answer" ] || :
 }
 
 send_mail() {

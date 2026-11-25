@@ -160,6 +160,10 @@ scripts/chat-opencode check mesa-directiva
 
 Contrato y límites: [ADR-0039](docs/kaizen/adr/0039-chat-como-proyecto-de-ruta-dedicada.md). El contenido entrante es dato no confiable y nunca se ejecuta (S-15/L-5); los canales remotos usan solo WhatsApp oficial vía BSP (ADR-0025).
 
+### Sincronización continua
+
+`scripts/kaizen-sync run --apply` refleja cada cambio de `main` en los agentes y la configuración local; `install-hook --apply` lo conecta al `post-merge`. Detalles: [ADR-0040](docs/kaizen/adr/0040-sincronizacion-continua-de-la-instalacion.md) y la sección 7 de la guía de instalación.
+
 ### Para una persona
 
 ```bash

@@ -5,6 +5,7 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "$PWD")"
 [ -f "$ROOT/.kaizen/config.env" ] && . "$ROOT/.kaizen/config.env"
 [ -f "$ROOT/.kaizen/team/notify.env" ] && . "$ROOT/.kaizen/team/notify.env"
 : "${KN_WHATSAPP_WINDOW_HOURS:=24}" "${KN_WHATSAPP_OPTIN_REQUIRED:=1}" "${KN_WHATSAPP_ALLOW_UNOFFICIAL:=0}"
+: "${KN_WHATSAPP_MODE:=}" "${KI_HMAC_SECRET_VAR:=KAZEN_INBOX_HMAC_SECRET}"
 : "${KN_WHATSAPP_TEMPLATES_DIR:=.kaizen/team/whatsapp/templates}"
 # Número de El Presidente: solo configuración local de la máquina, nunca en el repo.
 OWNER_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/kaizen-swarm/owner.env"
@@ -32,16 +33,18 @@ cmd_templates() {
   done
 }
 
+mask_phone() { printf '%s' "numero configurado (digitos ocultos: +***)"; }
+
 cmd_window() { # --phone N
   local phone=""; while [ $# -gt 0 ]; do case "$1" in --phone) phone="$2"; shift;; esac; shift; done
   [ -n "$phone" ] || { echo "falta --phone"; return 2; }
-  local f="$W/window-$phone.json"
-  if [ ! -f "$f" ]; then echo "$phone: sin interacción registrada → usa plantilla aprobada"; return 1; fi
+  local f="$W/window-$phone.json" who; who="$(mask_phone)"
+  if [ ! -f "$f" ]; then echo "$who: sin interacción registrada → usa plantilla aprobada"; return 1; fi
   local last age; last="$(jq -r .last_interaction "$f")"; age=$(( ( $(date +%s) - $(date -d "$last" +%s 2>/dev/null || echo 0) ) / 3600 ))
   if [ "$age" -lt "$KN_WHATSAPP_WINDOW_HOURS" ]; then
-    echo "$phone: ventana abierta (${age}h < ${KN_WHATSAPP_WINDOW_HOURS}h) → mensaje libre permitido"
+    echo "$who: ventana abierta (${age}h < ${KN_WHATSAPP_WINDOW_HOURS}h) → mensaje libre permitido"
   else
-    echo "$phone: ventana cerrada (${age}h) → solo plantilla aprobada"; return 1
+    echo "$who: ventana cerrada (${age}h) → solo plantilla aprobada"; return 1
   fi
 }
 
@@ -49,29 +52,30 @@ cmd_optin() { # add --phone N --source S | check --phone N
   local action="$1"; shift; local phone="" source=""
   while [ $# -gt 0 ]; do case "$1" in --phone) phone="$2"; shift;; --source) source="$2"; shift;; esac; shift; done
   [ -n "$phone" ] || { echo "falta --phone"; return 2; }
-  local f="$W/optin-$phone.json"
+  local f="$W/optin-$phone.json" who; who="$(mask_phone)"
   if [ "$action" = add ]; then
     jq -n --arg p "$phone" --arg s "$source" --arg ts "$(date -u +%FT%TZ)" '{phone:$p,source:$s,opted_at:$ts}' > "$f"
-    klog "opt-in registrado: $phone ($source)"
+    klog "opt-in registrado: $who ($source)"
   else
-    [ -f "$f" ] || { echo "$phone: SIN opt-in → no enviar"; return 1; }
-    echo "$phone: opt-in $(jq -r .source "$f") $(jq -r .opted_at "$f")"
+    [ -f "$f" ] || { echo "$who: SIN opt-in → no enviar"; return 1; }
+    echo "$who: opt-in $(jq -r .source "$f") $(jq -r .opted_at "$f")"
   fi
 }
 
 cmd_check() {
   [ "$KN_WHATSAPP_ALLOW_UNOFFICIAL" = 0 ] || { klog "RIESGO: cliente no oficial habilitado (viola ToS, ADR-0025)"; return 1; }
   [ "$KN_WHATSAPP_OPTIN_REQUIRED" = 1 ] || { klog "RIESGO: opt-in no obligatorio"; return 1; }
-  klog "política oficial OK: modo=$KN_WHATSAPP_MODE ventana=${KN_WHATSAPP_WINDOW_HOURS}h plantillas=$(find "$T" -name '*.json' | wc -l | tr -d ' ')"
+  case "$KN_WHATSAPP_MODE" in bsp|official) ;; *) klog "RIESGO: modo BSP oficial no configurado (KN_WHATSAPP_MODE)"; return 1;; esac
+  [ -n "${!KI_HMAC_SECRET_VAR:-}" ] || { klog "RIESGO: HMAC del buzón no configurado ($KI_HMAC_SECRET_VAR)"; return 1; }
+  klog "política oficial OK: modo=$KN_WHATSAPP_MODE ventana=${KN_WHATSAPP_WINDOW_HOURS}h HMAC=configurado plantillas=$(find "$T" -name '*.json' | wc -l | tr -d ' ')"
 }
 
 cmd_owner() {
   local p="${KAZEN_OWNER_PHONE:-}"
   if [ -z "$p" ]; then echo "sin número de El Presidente en $OWNER_ENV"; return 1; fi
   local digits; digits="$(printf '%s' "$p" | tr -cd '0-9')"
-  local masked="${p:0:4}••••${p: -4}"
-  echo "propietario: $masked | E.164: +$digits"
-  [ -f "$W/optin-$digits.json" ] && echo "opt-in: SI ($(jq -r .source "$W/optin-$digits.json"))" || echo "opt-in: NO"
+  echo "propietario: configurado | numero: +*** (no se imprime)"
+  [ -f "$W/optin-$digits.json" ] && echo "opt-in: SI" || echo "opt-in: NO"
 }
 
 case "${1:-check}" in
