@@ -127,3 +127,11 @@ Fecha: 2026-11-22 | ADRs: 9 | Agentes: 43 | Pruebas: 191/191 en verde
 - Invocacion multi-cliente (OpenCode/Claude/Codex), investigacion externa y desbloqueo.
 - Instalacion documentada para Linux/WSL y Windows PowerShell.
 - Commit: `ef988053`
+
+## v1.3.1 — 2026-11-25
+
+- Copiloto de arquitectura (8 especialistas + router) y orquestacion dinamica.
+- Comunidad de desarrollo proactiva con consenso y automejora.
+- Invocacion multi-cliente (OpenCode/Claude/Codex), investigacion externa y desbloqueo.
+- Instalacion documentada para Linux/WSL y Windows PowerShell.
+- Commit: `2928cda9`
