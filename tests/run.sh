@@ -400,8 +400,8 @@ grep -q 'E.164:' "$REPO/scripts/kaizen-whatsapp" && bad 'C5 número impreso' || 
 [ -x "$REPO/scripts/kaizen-sync" ] && ok 'script kaizen-sync' || bad 'script kaizen-sync'
 export XDG_CONFIG_HOME="$TMP/xdgcfg" XDG_DATA_HOME="$TMP/xdgdata"
 git -C "$REPO" update-ref refs/remotes/origin/main HEAD
-( cd "$REPO" && scripts/kaizen-sync status | grep -q '^version=' ) && ok 'sync status' || bad 'sync status'
-( cd "$REPO" && scripts/kaizen-sync run | grep -q 'dry-run' ) && ok 'sync dry-run' || bad 'sync dry-run'
+( cd "$REPO" && scripts/kaizen-sync status ) > "$TMP/sync-status.out" 2>&1 && grep -q '^version=' "$TMP/sync-status.out" && ok 'sync status' || bad 'sync status'
+( cd "$REPO" && scripts/kaizen-sync run ) > "$TMP/sync-dry.out" 2>&1 && grep -q 'dry-run' "$TMP/sync-dry.out" && ok 'sync dry-run' || bad 'sync dry-run'
 ( cd "$REPO" && scripts/kaizen-sync run --apply > "$TMP/sync.out" 2>&1 ) && ok 'sync apply' || bad 'sync apply'
 [ -s "$TMP/xdgdata/kaizen-swarm/sync.jsonl" ] && ok 'sync auditoría' || bad 'sync auditoría'
 ( cd "$REPO" && scripts/kaizen-sync check > "$TMP/sync-check.out" 2>&1 ) && ok 'sync check' || bad 'sync check'
