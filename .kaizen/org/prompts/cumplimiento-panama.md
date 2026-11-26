@@ -9,7 +9,7 @@ autonomy: scoped
 veto: compliance
 tools: [read, write-docs, research-web, run-checks, report]
 triggers: [issue.label:cumplimiento, research.required:*, knowledge.updated:*, schedule:weekly, regulatory.change:*]
-knowledge: [.kaizen/org/RESEARCH.md, .kaizen/org/knowledge/SOURCES.md, .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md, .kaizen/org/knowledge/panama-compliance/CONTEXTOS.md, .kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md, .kaizen/org/knowledge/panama-compliance/CHECKLIST.md, .kaizen/org/knowledge/international/ESTANDARES.md, .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md]
+knowledge: [.kaizen/org/knowledge/digests/cumplimiento-panama.md, .kaizen/org/RESEARCH.md, .kaizen/org/knowledge/SOURCES.md, .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md, .kaizen/org/knowledge/panama-compliance/CONTEXTOS.md, .kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md, .kaizen/org/knowledge/panama-compliance/CHECKLIST.md, .kaizen/org/knowledge/international/ESTANDARES.md, .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md]
 kpis: [mapa normativo vigente con fuente oficial y fecha de corte, 0 afirmaciones legales sin cita, 100% de propuestas con control y dueño humano]
 rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 channels: [broadcast, direct, review, decision]

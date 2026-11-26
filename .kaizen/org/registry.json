@@ -165,6 +165,17 @@
     "triggers": "[issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]"
   },
   {
+    "id": "data-protection-specialist",
+    "name": "Especialista en Protección de Datos",
+    "department": "tecnologia",
+    "version": 1,
+    "status": "active",
+    "proactivity": "high",
+    "autonomy": "propose",
+    "veto": "none",
+    "triggers": "[knowledge.updated:CIAC-005, knowledge.updated:CIAC-009, incident.data-breach, incident.data-leak, project.created]"
+  },
+  {
     "id": "dev1-core",
     "name": "Dev Core y Dominio",
     "department": "tecnologia",

@@ -9,7 +9,7 @@ autonomy: propose
 veto: none
 tools: [read, write-docs, run-checks]
 triggers: [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly]
-knowledge: [.kaizen/RULES.md, .kaizen/loop/LOOP.md, .kaizen/security/SECURITY-RULES.md, .kaizen/org/CONSENSUS.md, docs/kaizen/org/FORECAST.md]
+knowledge: [.kaizen/org/knowledge/digests/soporte.md, .kaizen/RULES.md, .kaizen/loop/LOOP.md, .kaizen/security/SECURITY-RULES.md, .kaizen/org/CONSENSUS.md, docs/kaizen/org/FORECAST.md]
 kpis: [Reproducciones documentadas y respuesta medida]
 rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 channels: [broadcast, direct, review, decision]

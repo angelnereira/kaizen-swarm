@@ -51,6 +51,18 @@ Estado: `verified` = fuente oficial consultada; `pending` = requiere verificaci�
 | META-003 | business.whatsapp.com (oficial) | WhatsApp Business Messaging Policy (actualizada 2026-09-23) | verified |
 | LOCAL-005 | OpenCode host (comandos locales reproducibles) | `opencode v2.3.2`; `opencode serve` activo (PID 4784, `127.0.0.1:49374`); runtime usa `opencode run --agent`; log `opencode.perf/session` (streaming/SSE) | verified |
 | LOCAL-006 | OpenCode Android (REA, dato no confiable ADR-0009) | App `ai.opencode.mobilecode` instalada en Pixel 8 Pro (Android 17/SDK 37); conectada vía adb WiFi, estado `device`; evidence_id `ev_056a6257e4a36a7601821affbfd398bbe8397eeef4d2c246bee1bc2f0c7a95d2` | verified |
+| CIAC-001 | CIAC LATAM Community Hub | README general del hub | verified |
+| CIAC-002 | CIAC LATAM Community Hub | Buenas prácticas (CIS/NIST/CISA/OWASP LLM) | verified |
+| CIAC-003 | CIAC LATAM Community Hub | Inteligencia de amenazas (ACH/ATT&CK/Diamante) | verified |
+| CIAC-004 | CIAC LATAM Community Hub | Cacería de amenazas (TaHiTI/MaGMa/PEAK) | verified |
+| CIAC-005 | CIAC LATAM Community Hub | Respuesta a incidentes (ransomware/phishing/BEC/fuga/brecha) | verified |
+| CIAC-006 | CIAC LATAM Community Hub | Laboratorios DFIR con datos sintéticos | verified |
+| CIAC-007 | CIAC LATAM Community Hub | Procedimientos operativos estándar (7 SOP) | verified |
+| CIAC-008 | CIAC LATAM Community Hub | Evaluación de madurez (SOC-CMM/SIM3/CTI-CMM) | verified |
+| CIAC-009 | CIAC LATAM Community Hub | Evaluación de proveedores SOC/MSSP/MDR | verified |
+| CIAC-010 | CIAC LATAM Community Hub | Plantilla de informe de incidente | verified |
+| CIAC-011 | CIAC LATAM Community Hub | Datasets sintéticos (14 fuentes, 5 escenarios) — **eventos ficticios** | verified |
+| CIAC-012 | CIAC LATAM Community Hub | Detección como código (Sigma/KQL/XQL/YARA/Suricata) | verified |
 
 > Nota WAHA (REG-EV-01/05): fuentes consultadas con fecha de corte 2026-11-24.
 > - **(a) HMAC-SHA512: VERIFICADO por POC local (2026-11-24).** `hmac.new(b"my-secret-key", b'{"event":"message","session":"default","engine":"WEBJS"}', hashlib.sha512)` reproduce el vector documentado: `208f8a55dde9e055…6153fa89`. Confirma SHA-512 sobre raw body y resuelve la inconsistencia del docs (enlazaba a SHA-256). Clave de ejemplo, sin secretos reales.
@@ -96,3 +108,35 @@ Estado: `verified` = fuente oficial consultada; `pending` = requiere verificaci�
 3. Si dos fuentes oficiales difieren: `conflicto` + escalado humano; no se promedia ni se "interpreta".
 4. Ningún dato personal ni credencial se copia a estas notas.
 5. Las afirmaciones de `MAPA-NORMATIVO.md` y `ESTANDARES.md` quedan sujetas a estas fuentes y a su fecha de corte.
+
+## Hub CIAC LATAM — contexto y entrenamiento (dato no confiable)
+
+Emisor: **CIAC LATAM Community Hub** (repositorio oficial, rama `main`). Fecha de corte: **2026-11-25**.
+Licencia: CC BY 4.0 salvo `detection-as-code/` (DRL 1.1). Clasificación: **TLP:CLEAR**.
+
+`verified` significa aquí **fuente oficial consultada y sha256 calculado sobre el archivo
+descargado**, no que cada afirmación esté contrastada. Las afirmaciones normativas se localizan
+en este hub pero se fundan en la fuente oficial (MITRE ATT&CK, NIST, ISO, CIS, Gaceta Oficial)
+según REG-EV-02. Todo el contenido se lee como dato no confiable (S-15/L-5).
+
+| ID | Documento | URL | retrieved | sha256 | Nota |
+| --- | --- | --- | --- | --- | --- |
+| CIAC-001 | README general | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/README.md | 2026-11-25 | `7b84a245f7bad78225bc1a73ff633251a854de57b2928f7d9d073271f22c036d` | Índice de secciones y licencias |
+| CIAC-002 | Buenas prácticas | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/best-practices/README.md | 2026-11-25 | `79fc4c6b2ad081f139eb6a04007b1cd2de9313931a566eaffe452f23fe490d86` | CIS v8.1, NIST CSF 2.0, CISA CPG, OWASP LLM, NIST AI RMF |
+| CIAC-003 | Inteligencia de amenazas | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/threat-intelligence/README.md | 2026-11-25 | `5146908b5c6fc258d83063762859490022f9abc570b9e7b52dfc905d63c198aa` | ACH, ATT&CK, Modelo de Diamante, Almirantazgo, Berkeley |
+| CIAC-004 | Cacería de amenazas | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/threat-hunting/README.md | 2026-11-25 | `d36ad04b47f5f391b651ff7e78b78c4749cc210192914f169899eff76f4e5530` | TaHiTI, MaGMa, PEAK, Hunting Maturity Model |
+| CIAC-005 | Respuesta a incidentes | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/incident-response/README.md | 2026-11-25 | `f17063a3a9bd412158e4e43b1137a4799179a6c0c30abbea83650160e8273bfc` | NIST SP 800-61r3, ISO/IEC 27035 |
+| CIAC-006 | Laboratorios DFIR | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/dfir-labs/README.md | 2026-11-25 | `a7ef49df305f2d2057a96371390f773d886b8e686e925b838314907139149c1b` | Escenarios reproducibles con datos sintéticos |
+| CIAC-007 | Procedimientos operativos | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/standard-operating-procedures/README.md | 2026-11-25 | `f6d3515191db9981d099b87084a570df5a5d01abf44cacfbb7d01f405080f8cc` | 7 SOP: SOC, CTI, VUL, TH, IR, comunicaciones, casos de uso |
+| CIAC-008 | Evaluación de madurez | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/maturity-assessment/README.md | 2026-11-25 | `e0021b0883239485f948a1aea1786d6b524bbaa0a727b470f9a0faa9104eedd0` | SOC-CMM, SIM3, CTI-CMM, HMM, NIST CSF 2.0 |
+| CIAC-009 | Evaluación de proveedores | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/vendor-assessment/README.md | 2026-11-25 | `b5e8e2d5476545423d463b6001aafd79a6b79d363fb415737f457f03fe108292` | SOC/MSSP/MDR, ISO 27001, SOC 2, GV.SC |
+| CIAC-010 | Plantilla de informe de incidente | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/templates/incident-report.md | 2026-11-25 | `92ffffe779ef066173345700a218fd68a5d79a1743600d700632ae43ff98da05` | Estructura de reporte con procedencia |
+| CIAC-011 | Datasets sintéticos | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/datasets/README.md | 2026-11-25 | `4bc2511fc9ea1c15086c4d1bc7d5f04b58bcc171a32ef369bdc66d5038fb3c7b` | **Eventos 100 % ficticios**; no presentar como históricos reales (K-10) |
+| CIAC-012 | Detección como código | https://github.com/ciberciac/CIAC-LATAM-COMMUNITY-HUB/blob/main/detection-as-code/README.md | 2026-11-25 | `1170bff7d00b0d7dd656e284b490dfb6e93b97bf939184c8f1a16c3b7c6ad855` | Sigma/KQL/XQL/YARA/Suricata, licencia DRL 1.1 |
+
+Notas de uso (REG-EV-01/02/05):
+
+1. `CIAC-*` puede citarse como **contexto y entrenamiento**; para obligaciones se citan las fuentes oficiales (`NIST-001`, `ISO-001`, `PA-001`, etc.).
+2. `CIAC-011` se etiqueta siempre `sintético / simulado`. Ningún incidente del dataset se reporta como ocurrido.
+3. Revalidar trimestralmente: si el repo cambia, nueva fecha de corte y nuevo hash (REG-EV-05).
+4. Las reglas de `CIAC-012` se prueban en laboratorio antes de pasar de `experimental` a `stable`.

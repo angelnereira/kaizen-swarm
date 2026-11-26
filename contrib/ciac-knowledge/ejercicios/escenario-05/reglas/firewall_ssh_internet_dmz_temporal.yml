@@ -1,0 +1,29 @@
+title: SSH entrante desde INTERNET hacia DMZ por regla temporal
+id: 7a2e6b14-9c05-4d73-8f61-b3e8a0d5c927
+status: experimental
+description: |
+  Detecta conexiones SSH permitidas desde INTERNET hacia la DMZ en el puerto 22.
+  En CIAC-011 corresponden a una regla de firewall temporal creada para el ataque
+  (95 eventos, todos maliciosos, T1110.001).
+references:
+  - https://attack.mitre.org/techniques/T1110/001/
+author: CIAC LATAM Community (ejercicio Kaizen)
+date: 2026-11-26
+tags:
+  - attack.credential-access
+  - attack.t1110.001
+logsource:
+  product: firewall
+  service: ngfw
+detection:
+  selection:
+    accion: allow
+    aplicacion: ssh
+    zona_origen: INTERNET
+    zona_destino: DMZ
+    puerto_destino: 22
+  condition: selection
+falsepositives:
+  - Acceso SSH administrativo autorizado desde una IP corporativa conocida
+  - Reglas temporales creadas por cambio aprobado (verificar ticket y ventana)
+level: high

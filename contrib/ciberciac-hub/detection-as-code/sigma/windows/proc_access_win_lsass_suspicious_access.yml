@@ -1,0 +1,29 @@
+title: Acceso con privilegios elevados al proceso lsass.exe
+id: 1c8d6e35-0a92-4b67-9f41-7d2e5a8b0c13
+status: experimental
+description: |
+  Detecta accesos con derechos elevados al proceso lsass.exe registrados por Sysmon
+  (EventID 10), típicos de la lectura de memoria para extraer credenciales (T1003.001).
+  Se complementa con la regla de comsvcs.dll: una detecta la herramienta, otra el acceso.
+references:
+  - https://attack.mitre.org/techniques/T1003/001/
+author: CIAC LATAM Community (contribución Kaizen)
+date: 2026-11-25
+tags:
+  - attack.credential-access
+  - attack.t1003.001
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 10
+    TargetImage|endswith: '\lsass.exe'
+    GrantedAccess:
+      - '0x1fffff'
+      - '0x1010'
+  condition: selection
+falsepositives:
+  - Agentes EDR y herramientas de diagnóstico que leen memoria de lsass.exe
+  - Software de gestión de identidades que consulta el proceso
+level: high

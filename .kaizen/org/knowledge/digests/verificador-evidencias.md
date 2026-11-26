@@ -4,6 +4,7 @@
 - **Registro de fuentes** — `.kaizen/org/knowledge/SOURCES.md` (sha256 8b11e0a8b083)
 - **Modelo de outsourcing** — `.kaizen/org/OUTSOURCING.md` (sha256 c41618064ea7)
 - **Experiencia acumulada de verificador-evidencias** — `/home/angel-nereira/Github-local-angelnereira/kaizen-swarm/.kaizen/learning/experience/verificador-evidencias.md` (sha256 c21358ebf4e2)
+- **CIAC-001 Hub general** — `contrib/ciac-knowledge/cache/01-hub.md` (sha256 7b84a245f7ba)
 
 ## EVIDENCIA.md
 # Ledger de evidencia verificada (fuente de verdad para decisiones)
@@ -146,10 +147,50 @@ Generado: 2026-11-22T12:44:44Z | Lecciones: 12
 - No se pudo instalar reverse-api-engineer por cuota de disco agotada (x1, failure): Liberar cuota (por ejemplo `~/.npm` ocupa 921 MB), repetir `pip install --user reverse-api-engineer` o instalar en un venv con `python3-venv`, y ejecutar `npx s
 - QA emite BLOCK: KPI no verificable, verify vacuo y artefactos no trackeados (x1, failure): Definir "check en verde" con timeout y fail-closed; añadir gate `n_decisiones >= 1` en `verify`; persistir y trackear artefactos en CI; política de datos sint
 - Recuento de agentes inconsistente entre documentos (42/43/44) (x1, bug): Generar el recuento desde `registry.json` en un solo lugar y actualizar documentos derivados vía PR con ADR. Requiere decisión humana (rutas protegidas).
-- Security emite BLOCK en adopcion-kaizen-opencode por evidencia no verificable y dos hallazgos medios (x1, security): Corregir el truncamiento y la redacción del ADR vía PR con ADR (rutas protegidas L-4); que `verificador-evidencias` y `qa` aporten la evidencia que seguridad 
+- Security emite BLOCK en adopcion-kaizen-opencode por evidencia no verificable y dos hallazgos medios (x1, security): Corregir el truncamiento y la redacción del ADR vía PR con ADR (rutas protegidas L-4); que `verificador-evidencias` y `qa` aporten la evidencia que seguridad
 - Verificador emite BLOCK: kaizen check en verde queda NO VERIFICADO (exit 143) (x1, failure): Obtener una ejecución aislada y hermética de `kaizen check` (sin checks concurrentes) antes de cualquier verificación. Requiere ADR (check hermético, ADR-00
 - kaizen-team assign/handoff no escriben handoffs por uso de now en jq (x1, bug): Sustituir `now` por `$now` en ambas expresiones. NO parcheado: `scripts/kaizen*` es ruta protegida (L-4); requiere ADR y aprobación humana. Mientras tanto, los
 
 ## Cómo usarla
 Antes de proponer, revisa estas lecciones. Si aplican, cita el fingerprint y evita repetir el error.
 
+## 01-hub.md
+<div align="center">
+
+# CIAC LATAM Community Hub
+
+**Conocimiento abierto de ciberseguridad hecho por y para Latinoamérica**
+
+[Web](https://landing.ciac.lat) · [Telegram](https://t.me/ciberciac) · [WhatsApp](https://whatsapp.com/channel/0029Va6OjVKA89Mj7w8xde06) · [Cómo contribuir](CONTRIBUTING.md)
+
+![TLP:CLEAR](https://img.shields.io/badge/TLP-CLEAR-white?style=flat-square)
+![Licencia contenido](https://img.shields.io/badge/contenido-CC%20BY%204.0-blue?style=flat-square)
+![Licencia reglas](https://img.shields.io/badge/reglas-DRL%201.1-green?style=flat-square)
+
+</div>
+
+Buenas prácticas, inteligencia de amenazas, cacería de amenazas, detecciones, playbooks de respuesta a incidentes y laboratorios DFIR, adaptados a la realidad de las organizaciones de la región.
+
+## Contenido
+
+| Sección | Qué encontrarás | Marcos de referencia |
+|---|---|---|
+| [best-practices](best-practices/) | Guías de bastionado, configuración segura, desarrollo seguro con IA y buenas prácticas de NIST y CISA por proceso | CIS Benchmarks, CIS Controls v8.1, NIST CSF 2.0, CISA CPG 2.0, OWASP Top 10 for LLM, NIST AI RMF |
+| [threat-intelligence](threat-intelligence/) | Análisis de hipótesis, mapeo ATT&CK, análisis de IOCs, perfiles de amenazas y metodologías OSINT | ACH, MITRE ATT&CK, Modelo de Diamante, escala Almirantazgo, Protocolo de Berkeley |
+| [threat-hunting](threat-hunting/) | Frameworks y cacerías documentadas para encontrar lo que evadió las defensas | TaHiTI, MaGMa, PEAK, Hunting Maturity Model |
+| [detection-as-code](detection-as-code/) | Reglas y consultas listas para usar y adaptar | Sigma, KQL, XQL, YARA, Suricata |
+| [incident-response](incident-response/) | Playbooks para ransomware, phishing, BEC, fuga y brecha de datos | NIST SP 800-61r3, ISO/IEC 27035, leyes de protección de datos de la región |
+| [dfir-labs](dfir-labs/) | Laboratorios prácticos de análisis forense y respuesta | Escenarios reproducibles con datos sintéticos |
+| [standard-operating-procedures](standard-operating-procedures/) | Procedimientos operativos estándar: monitoreo y triage, casos de uso, inteligencia, vulnerabilidades, cacería, respuesta a incidentes y comunicaciones | NIST SP 800-61r3, NIST SP 800-40r4, NIST SP 800-150, TaHiTI, MaGMa, ISO 22361 |
+| [maturity-assessment](maturity-assessment/) | Autoevaluación de madurez de SOC, inteligencia, vulnerabilidades, cacería, respuesta a incidentes y comunicaciones | SOC-CMM, SIM3, CTI-CMM, Hunting Maturity Model, NIST CSF 2.0 |
+| [vendor-assessment](vendor-assessment/) | Selección, contratación y supervisión de proveedores de SOC, MSSP y MDR | SOC-CMM, SIM3, ISO/IEC 27001, SOC 2, MITRE ATT&CK Evaluations, NIST CSF 2.0 GV.SC |
+| [templates](templates/) | Plantillas de informes y evaluaciones | ISO/IEC 27005, NIST SP 800-30 |
+
+## ¿Por qué un hub para LATAM?
+
+La mayoría del material de referencia está en inglés y pensado para organizaciones con presupuestos y equipos grandes. Este repositorio busca:
+
+- Contenido **en español**, con terminología consistente.
+- Ejemplos basados en **amenazas que sí se ven en la región**: troyanos bancarios, phishing que suplanta entidades locales, ransomware contra gobierno, salud y manufactura, fraude BEC en comercio exterior.
+- Recomendaciones **aplicables por equipos pequeños**, indicando qué es imprescindible y qué es deseable.
+- Referencias a **marcos internacionales**, para que todo sea comparable y auditable.

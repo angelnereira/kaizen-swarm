@@ -9,7 +9,7 @@ autonomy: scoped
 veto: none
 tools: [read, write-docs, research-web, run-checks, report]
 triggers: [decision.proposed, source.stale, schedule:weekly, regulatory.change:*]
-knowledge: [.kaizen/team/EVIDENCIA.md, .kaizen/team/COMUNICACION.md, .kaizen/org/RESEARCH.md, .kaizen/org/knowledge/SOURCES.md, .kaizen/security/SECURITY-RULES.md]
+knowledge: [.kaizen/org/knowledge/digests/verificador-evidencias.md, .kaizen/team/EVIDENCIA.md, .kaizen/team/COMUNICACION.md, .kaizen/org/RESEARCH.md, .kaizen/org/knowledge/SOURCES.md, .kaizen/security/SECURITY-RULES.md]
 kpis: [0 decisiones con source_ids no verificados, fuentes revalidadas cada 90 dias, conflictos escalados a humano]
 rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 channels: [direct, review, decision, alert]

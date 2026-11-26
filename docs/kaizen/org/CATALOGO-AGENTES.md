@@ -2,7 +2,7 @@
 
 Fuente única: `.kaizen/org/prompts/<id>.md`. Generado por `scripts/kaizen-org catalog`; no editar a mano.
 
-Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-24 | Total: 57 agentes
+Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-26 | Total: 58 agentes
 
 ## Resumen por departamento
 
@@ -13,7 +13,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-24 | Total: 57 agentes
 | gerencia | 3 | 3 | none, resource |
 | operaciones | 3 | 2 | none |
 | producto-negocio | 8 | 8 | none, scope, security |
-| tecnologia | 36 | 36 | architecture, none, qa, security |
+| tecnologia | 37 | 37 | architecture, none, qa, security |
 
 ## Inventario
 
@@ -34,6 +34,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-24 | Total: 57 agentes
 | `computer-operator` | Operador de Escritorio (Computer Use) | operaciones | paused | medium | scoped | none | 1 | [read, write-docs, report, desktop-control] | [computer_use.authorized:*, issue.label:desktop] | 3 | [0 acciones sin captura previa, 100% de acciones confirmadas por recaptura, 0 secretos en pantalla] |
 | `cumplimiento-panama` | Especialista en Cumplimiento y Normativa (Panamá + Estándares Internacionales) | cumplimiento | active | high | scoped | compliance | 1 | [read, write-docs, research-web, run-checks, report] | [issue.label:cumplimiento, research.required:*, knowledge.updated:*, schedule:weekly, regulatory.change:*] | 8 | [mapa normativo vigente con fuente oficial y fecha de corte, 0 afirmaciones legales sin cita, 100% de propuestas con control y dueño humano] |
 | `data-expert` | Experto en Datos | tecnologia | active | medium | propose | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Telemetria saneada y conforme a L-12] |
+| `data-protection-specialist` | Especialista en Protección de Datos | tecnologia | active | high | propose | none | 1 | [read, write-docs, report] | [knowledge.updated:CIAC-005, knowledge.updated:CIAC-009, incident.data-breach, incident.data-leak, project.created] | 6 | [100% de hallazgos con clasificación de dato y base legal citada; 0 datos personales en logs/issues/diffs; 0 dictámenes legales sin humano] |
 | `dev1-core` | Dev Core y Dominio | tecnologia | active | medium | scoped | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Pruebas de dominio en verde] |
 | `dev2-api` | Dev API e Integraciones | tecnologia | active | medium | scoped | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Contratos publicados antes de codificar] |
 | `dev3-ui` | Dev Frontend y Cliente | tecnologia | active | medium | scoped | none | 1 | [read, write-docs, run-checks] | [issue.label:swarm:ready, knowledge.updated:*, schedule:weekly] | 5 | [Flujos verificables con pruebas] |
@@ -126,6 +127,7 @@ Registro: `.kaizen/org/registry.json` | Fecha: 2026-11-24 | Total: 57 agentes
 - **`blue-ir`** — Respuesta a Incidentes. Propósito: Contener, documentar y aprender de los incidentes del ejercicio rojo/azul.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`blue-netdef`** — Defensa de Red. Propósito: Endurecer protocolos y comunicaciones: segmentacion, firewall, DNS y Wi-Fi.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`data-expert`** — Experto en Datos. Propósito: Define schemas, calidad de datos y privacidad.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
+- **`data-protection-specialist`** — Especialista en Protección de Datos. Propósito: . Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`dev1-core`** — Dev Core y Dominio. Propósito: Implementa invariantes y modelos de negocio.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`dev2-api`** — Dev API e Integraciones. Propósito: Expone contratos, eventos y conectores.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].
 - **`dev3-ui`** — Dev Frontend y Cliente. Propósito: Construye vistas, estados y accesibilidad.. Reglas: [K-1..K-15, L-1..L-17, S-1..S-16].

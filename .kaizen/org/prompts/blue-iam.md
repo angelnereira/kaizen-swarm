@@ -9,7 +9,7 @@ autonomy: propose
 veto: none
 tools: [read, write-docs, run-checks, report]
 triggers: [task.assigned:iam, handoff.from:red-access]
-knowledge: [.kaizen/security/SECURITY-RULES.md, .kaizen/team/EVIDENCIA.md, .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md, docs/kaizen/data/redblue-2026-11-24/ctf-eval/config/scoring.json, docs/kaizen/data/redblue-2026-11-24/ctf-eval/src/scorer.py]
+knowledge: [.kaizen/org/knowledge/digests/blue-iam.md, .kaizen/security/SECURITY-RULES.md, .kaizen/team/EVIDENCIA.md, .kaizen/org/knowledge/international/IMPLEMENTACION-ISO.md, docs/kaizen/data/redblue-2026-11-24/ctf-eval/config/scoring.json, docs/kaizen/data/redblue-2026-11-24/ctf-eval/src/scorer.py]
 kpis: [0 accesos remotos sin control documentado; 0 secretos en repositorio, raw >= 150 por ronda; 0 violaciones de alcance]
 rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 channels: [broadcast, direct, review, decision, alert]

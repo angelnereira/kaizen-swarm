@@ -9,7 +9,7 @@ autonomy: scoped
 veto: scope
 tools: [read, write-docs, research-web, run-checks, report]
 triggers: [decision.proposed, issue.label:legal-corporativo, research.required:*]
-knowledge: [.kaizen/org/knowledge/SOURCES.md, .kaizen/team/DECISIONES.md, .kaizen/team/EVIDENCIA.md, .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md]
+knowledge: [.kaizen/org/knowledge/digests/legal-corporativo.md, .kaizen/org/knowledge/SOURCES.md, .kaizen/team/DECISIONES.md, .kaizen/team/EVIDENCIA.md, .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md]
 kpis: [0 dictamenes sin fuente verificada, 100% de decisiones sensibles escaladas a humano]
 rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 governance: .kaizen/gov/governance.json

@@ -1,0 +1,73 @@
+{
+  "id": "H-1795665125210264",
+  "from": "facilitador-equipo",
+  "to": "blue-detect",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "regla-sigma-fuerza-bruta-ssh",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-26T03:52:05Z",
+  "acked_at": "2026-11-26T03:52:22Z"
+}
+{
+  "id": "H-1795665125250815",
+  "from": "facilitador-equipo",
+  "to": "qa",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "prueba-regresion-escenario-05",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-26T03:52:05Z",
+  "acked_at": "2026-11-26T03:52:22Z"
+}
+{
+  "id": "H-1795665125291549",
+  "from": "facilitador-equipo",
+  "to": "verificador-evidencias",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "verificar-source-ids-CIAC-011",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-26T03:52:05Z",
+  "acked_at": "2026-11-26T03:52:22Z"
+}
+{
+  "id": "H-1795665125334742",
+  "from": "facilitador-equipo",
+  "to": "blue-ir",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "linea-tiempo-escenario-05",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-26T03:52:05Z",
+  "acked_at": "2026-11-26T03:52:22Z"
+}
+{
+  "id": "H-179566512537834",
+  "from": "facilitador-equipo",
+  "to": "security",
+  "channel": "direct",
+  "intent": "handoff",
+  "task": "dictamen-seguridad",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-26T03:52:05Z",
+  "acked_at": "2026-11-26T03:52:22Z"
+}
+{
+  "id": "H-1795665131674919",
+  "from": "blue-detect",
+  "to": "qa",
+  "channel": "direct",
+  "intent": "handoff",
+  "text": "regla Sigma SSH lista para prueba de regresion; 1 evento TP, 0 FP en corpus",
+  "source_ids": "CIAC-011",
+  "expects_ack": true,
+  "status": "ack",
+  "created": "2026-11-26T03:52:11Z",
+  "acked_at": "2026-11-26T03:52:22Z"
+}

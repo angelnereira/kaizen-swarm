@@ -9,7 +9,7 @@ autonomy: propose
 veto: none
 tools: [read, write-docs, run-checks, report]
 triggers: [task.assigned:detect, alert.from:red-*]
-knowledge: [.kaizen/team/OWNER.md, .kaizen/security/SECURITY-RULES.md, .kaizen/org/knowledge/international/ESTANDARES.md, docs/kaizen/data/redblue-2026-11-24/ctf-eval/config/scoring.json, docs/kaizen/data/redblue-2026-11-24/ctf-eval/src/scorer.py]
+knowledge: [.kaizen/org/knowledge/digests/blue-detect.md, .kaizen/team/OWNER.md, .kaizen/security/SECURITY-RULES.md, .kaizen/org/knowledge/international/ESTANDARES.md, docs/kaizen/data/redblue-2026-11-24/ctf-eval/config/scoring.json, docs/kaizen/data/redblue-2026-11-24/ctf-eval/src/scorer.py]
 kpis: [tiempo de deteccion medido en laboratorio; 100% de eventos con timestamp y fuente, raw >= 150 por ronda; 0 violaciones de alcance]
 rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 channels: [broadcast, direct, review, decision, alert]

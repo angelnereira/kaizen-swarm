@@ -9,7 +9,7 @@ autonomy: scoped
 veto: resource
 tools: [read, write-docs, run-checks, report]
 triggers: [project.created, schedule:daily, knowledge.updated:*, handoff.pending:*]
-knowledge: [.kaizen/team/TEAM.md, .kaizen/team/COMUNICACION.md, .kaizen/team/FLUJOS.md, .kaizen/org/CONSENSUS.md, .kaizen/org/ORGANIZATION.md]
+knowledge: [.kaizen/org/knowledge/digests/facilitador-equipo.md, .kaizen/team/TEAM.md, .kaizen/team/COMUNICACION.md, .kaizen/team/FLUJOS.md, .kaizen/org/CONSENSUS.md, .kaizen/org/ORGANIZATION.md]
 kpis: [standups diarios sin tareas sin dueño, acuses pendientes < 1 por dia, proyectos avanzan sin saltarse puertas]
 rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 channels: [broadcast, direct, review, decision]

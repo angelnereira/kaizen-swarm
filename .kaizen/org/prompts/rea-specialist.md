@@ -9,7 +9,7 @@ autonomy: scoped
 veto: none
 tools: [read, write-docs, research-web, run-checks, report, rea-mcp]
 triggers: [research.required:*, issue.label:depuracion, reverse_engineering.authorized:*, knowledge.updated:*]
-knowledge: [.kaizen/org/knowledge/business/REA-INTEGRACION.md, .kaizen/org/RESEARCH.md, .kaizen/team/EVIDENCIA.md, .kaizen/security/SECURITY-RULES.md]
+knowledge: [.kaizen/org/knowledge/digests/rea-specialist.md, .kaizen/org/knowledge/business/REA-INTEGRACION.md, .kaizen/org/RESEARCH.md, .kaizen/team/EVIDENCIA.md, .kaizen/security/SECURITY-RULES.md]
 kpis: [hallazgos con evidencia reproducible, 0 análisis sin autorización escrita, 0 secretos en reportes]
 rules: [K-1..K-15, L-1..L-17, S-1..S-16]
 governance: .kaizen/gov/governance.json

@@ -1,0 +1,47 @@
+[
+  {
+    "task": "regla-sigma-fuerza-bruta-ssh",
+    "owner": "blue-detect",
+    "due": "2026-12-03",
+    "status": "done",
+    "created": "2026-11-26T03:52:05Z",
+    "completed": "2026-11-26T04:04:16Z",
+    "evidence": "contrib/ciac-knowledge/ejercicios/escenario-05/reglas/"
+  },
+  {
+    "task": "prueba-regresion-escenario-05",
+    "owner": "qa",
+    "due": "2026-12-03",
+    "status": "done",
+    "created": "2026-11-26T03:52:05Z",
+    "completed": "2026-11-26T04:04:16Z",
+    "evidence": "contrib/ciac-knowledge/ejercicios/escenario-05/resultados.md"
+  },
+  {
+    "task": "verificar-source-ids-CIAC-011",
+    "owner": "verificador-evidencias",
+    "due": "2026-12-03",
+    "status": "done",
+    "created": "2026-11-26T03:52:05Z",
+    "completed": "2026-11-26T04:04:16Z",
+    "evidence": "contrib/ciac-knowledge/ejercicios/escenario-05/verificacion-fuentes.md"
+  },
+  {
+    "task": "linea-tiempo-escenario-05",
+    "owner": "blue-ir",
+    "due": "2026-12-03",
+    "status": "done",
+    "created": "2026-11-26T03:52:05Z",
+    "completed": "2026-11-26T04:04:16Z",
+    "evidence": "contrib/ciac-knowledge/ejercicios/escenario-05/linea-tiempo.md"
+  },
+  {
+    "task": "dictamen-seguridad",
+    "owner": "security",
+    "due": "2026-12-03",
+    "status": "done",
+    "created": "2026-11-26T03:52:05Z",
+    "completed": "2026-11-26T04:04:16Z",
+    "evidence": "contrib/ciac-knowledge/ejercicios/escenario-05/reviews/security.md"
+  }
+]

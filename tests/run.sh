@@ -89,7 +89,7 @@ mv "$REPO/.kaizen/security/patterns.bak" "$REPO/.kaizen/security/patterns.txt"
 # organización: inventario, copia/especialización, guardado con versión y conocimiento
 ( cd "$REPO" && scripts/kaizen-org check >/dev/null 2>&1 ) && ok "kaizen-org check" || bad "kaizen-org check"
 N=$(cd "$REPO" && scripts/kaizen-org list 2>/dev/null | awk 'NR>1' | wc -l | tr -d ' ')
-[ "$N" = 57 ] && ok "inventario de 57 agentes" || bad "inventario de 57 agentes ($N)"
+[ "$N" = 58 ] && ok "inventario de 58 agentes" || bad "inventario de 58 agentes ($N)"
 for f in .kaizen/org/prompts/cumplimiento-panama.md .kaizen/org/prompts/capacidades-negocio.md \
          .kaizen/org/RESEARCH.md .kaizen/org/knowledge/SOURCES.md \
          .kaizen/org/knowledge/panama-compliance/MAPA-NORMATIVO.md \
@@ -145,7 +145,7 @@ done
   && ok "expediente de investigacion" || bad "expediente de investigacion"
 ( cd "$REPO" && scripts/kaizen-org catalog >/dev/null 2>&1 )
 C=$(jq -r '.count' "$REPO/.kaizen/org/catalog.json" 2>/dev/null || echo 0)
-[ "$C" = 57 ] && ok "catalogo consistente (57)" || bad "catalogo consistente ($C)"
+[ "$C" = 58 ] && ok "catalogo consistente (58)" || bad "catalogo consistente ($C)"
 grep -q 'REG-15' "$REPO/.kaizen/org/knowledge/panama-compliance/REGLAS-CUMPLIMIENTO.md" \
   && ok "reglas de cumplimiento" || bad "reglas de cumplimiento"
 ORIG=$(md5sum "$REPO/.kaizen/org/prompts/marketing.md" | cut -d' ' -f1)

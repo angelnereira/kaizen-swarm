@@ -4,6 +4,7 @@
 - **Protocolo de comunicación** — `.kaizen/team/COMUNICACION.md` (sha256 9e9a9f9f6318)
 - **Modelo de flujos** — `.kaizen/team/FLUJOS.md` (sha256 cf12229bf9b2)
 - **Modelo de outsourcing** — `.kaizen/org/OUTSOURCING.md` (sha256 c41618064ea7)
+- **CIAC-007 Procedimientos operativos** — `contrib/ciac-knowledge/cache/standard-operating-procedures/README.md` (sha256 f6d3515191db)
 
 ## TEAM.md
 # TEAM.md — contrato del equipo de agentes
@@ -164,3 +165,44 @@ Ubicación: `.kaizen/org/outsourcing/<slug>/contract.md`
 5. **Aprendizaje**: al cerrar, el conocimiento del especialista se convierte en `feed` + `digest` para que la escuadra interna ya no dependa del externo la próxima vez (mejora continua).
 
 
+## README.md
+# Procedimientos operativos estándar (SOP)
+
+Plantillas de **procedimientos operativos estándar** para los procesos principales de ciberseguridad. Cada SOP describe **quién hace qué, cuándo, con qué entradas, qué produce y cómo se mide**, para que el trabajo no dependa de personas concretas.
+
+| Código | Procedimiento | Madurez relacionada | Buenas prácticas |
+|---|---|---|---|
+| [SOP-SOC-01](SOP-SOC-01-monitoreo-y-triage.md) | Monitoreo, triage y escalamiento de alertas | [SOC](../maturity-assessment/soc/) | [NIST/CISA SOC](../best-practices/nist-cisa/soc.md) |
+| [SOP-SOC-02](SOP-SOC-02-gestion-de-casos-de-uso.md) | Gestión de casos de uso y detecciones | [SOC](../maturity-assessment/soc/) | [Detection as Code](../detection-as-code/) |
+| [SOP-CTI-01](SOP-CTI-01-ciclo-de-inteligencia.md) | Ciclo de inteligencia de amenazas | [CTI](../maturity-assessment/cti/) | [NIST/CISA CTI](../best-practices/nist-cisa/cti.md) |
+| [SOP-VUL-01](SOP-VUL-01-gestion-de-vulnerabilidades.md) | Gestión de vulnerabilidades | [Vulnerabilidades](../maturity-assessment/vulnerability-management/) | [NIST/CISA Vulnerabilidades](../best-practices/nist-cisa/vulnerability-management.md) |
+| [SOP-TH-01](SOP-TH-01-caceria-de-amenazas.md) | Cacería de amenazas | [Cacería](../maturity-assessment/threat-hunting/) | [Frameworks de cacería](../threat-hunting/) |
+| [SOP-IR-01](SOP-IR-01-respuesta-a-incidentes.md) | Respuesta a incidentes | [Respuesta a incidentes](../maturity-assessment/incident-response/) | [Playbooks](../incident-response/) |
+| [SOP-COM-01](SOP-COM-01-comunicaciones.md) | Comunicaciones de ciberseguridad y crisis | [Comunicaciones](../maturity-assessment/communications/) | [NIST/CISA Comunicaciones](../best-practices/nist-cisa/communications.md) |
+
+Para crear un SOP nuevo usa la [plantilla](_plantilla-sop.md).
+
+## Cómo se relacionan los procesos
+
+```mermaid
+flowchart LR
+    CTI["Inteligencia de amenazas"] -->|hipótesis y contexto| TH["Cacería de amenazas"]
+    CTI -->|priorización por explotación| VUL["Gestión de vulnerabilidades"]
+    CTI -->|indicadores y TTP| UC["Casos de uso y detecciones"]
+    TH -->|nuevas detecciones| UC
+    UC -->|alertas| SOC["Monitoreo y triage"]
+    SOC -->|incidente confirmado| IR["Respuesta a incidentes"]
+    TH -->|actividad maliciosa| IR
+    IR -->|lecciones y TTP observados| CTI
+    IR -->|brechas de detección| UC
+    IR -->|vulnerabilidad explotada| VUL
+    IR <-->|activación y mensajes| COM["Comunicaciones"]
+    VUL -->|riesgo crítico expuesto| COM
+```
+
+Cada SOP termina con una sección de **traspasos**: qué entrega a otros procesos y qué recibe de ellos.
+
+## Cómo adaptarlos
+
+1. **Roles:** reemplaza los roles genéricos por los cargos reales. En equipos pequeños una persona puede cubrir varios roles; lo importante es que cada responsabilidad tenga un nombre.
+2. **Tiempos:** los plazos son **ejemplos**. Ajústalos a tu capacidad, a tus contratos y a tu regulación.

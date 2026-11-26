@@ -1,0 +1,28 @@
+title: Conexiones periódicas desde DMZ a pool de minería (puerto 3333)
+id: c5d9183f-2a64-4b07-9e31-8f6b0a7d245e
+status: experimental
+description: |
+  Detecta tráfico permitido desde la DMZ hacia INTERNET en el puerto 3333 con
+  duración fija de 300 segundos: patrón de baliza de un minero de criptomonedas.
+  En CIAC-011 aparecen 359 eventos, todos maliciosos (T1496).
+references:
+  - https://attack.mitre.org/techniques/T1496/
+author: CIAC LATAM Community (ejercicio Kaizen)
+date: 2026-11-26
+tags:
+  - attack.impact
+  - attack.t1496
+logsource:
+  product: firewall
+  service: ngfw
+detection:
+  selection:
+    accion: allow
+    zona_origen: DMZ
+    zona_destino: INTERNET
+    puerto_destino: 3333
+    duracion_s: 300
+  condition: selection
+falsepositives:
+  - Servicios legítimos en el puerto 3333 (verificar destino y propietario del activo)
+level: high

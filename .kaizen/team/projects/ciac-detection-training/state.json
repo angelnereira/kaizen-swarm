@@ -1,0 +1,17 @@
+{
+  "slug": "ciac-detection-training",
+  "goal": "Elevar la precision de deteccion del equipo con datasets sinteticos CIAC, con evidencia reproducible y procedencia verificada",
+  "kpi": "precision >= 0.90 y FP=0 en escenario 05 contra verdad-terreno.csv; 100% de hallazgos con evento_id, fuente, tecnica ATT&CK y comando reproducible",
+  "facilitator": "facilitador-equipo",
+  "members": [
+    "facilitador-equipo",
+    "blue-detect",
+    "qa",
+    "security",
+    "verificador-evidencias",
+    "blue-ir"
+  ],
+  "stage": "closed",
+  "created": "2026-11-26T03:51:40Z",
+  "updated": "2026-11-26T04:04:02Z"
+}
